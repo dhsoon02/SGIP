@@ -3,10 +3,10 @@
 <h1>[NeurIPS 2026] Learning Scene-Grounded Interaction Priors for Scene-Aware Human Motion Prediction</h1>
 
 <p>
-  <a href="mailto:dhsoon@dgist.ac.kr"><strong>Donghyeon Soon</strong></a><sup>*</sup> ·
+  <a href="https://dhsoon02.github.io/"><strong>Donghyeon Soon</strong></a><sup>*</sup> ·
   <a href="mailto:wldlf2819@dgist.ac.kr"><strong>Jiil Yoon</strong></a><sup>*</sup> ·
   <a href="mailto:hdkim@dgist.ac.kr"><strong>Hyeondong Kim</strong></a> ·
-  <a href="mailto:dhpark@dgist.ac.kr"><strong>Daehee Park</strong></a><sup>†</sup><br>
+  <a href="https://sites.google.com/view/dhpark/"><strong>Daehee Park</strong></a><sup>†</sup><br>
   DGIST<br>
   <sup>*</sup>Equal contribution &nbsp;·&nbsp; <sup>†</sup>Corresponding author
 </p>

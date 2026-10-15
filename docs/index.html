@@ -8,7 +8,6 @@
   <title>SGIP: Learning Scene-Grounded Interaction Priors for Scene-Aware Human Motion Prediction</title>
 
   <link href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans|Castoro" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/css2?family=Oxanium:wght@700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
@@ -21,8 +20,10 @@
   <link rel="canonical" href="https://dhsoon02.github.io/SGIP/">
   <style>
     :root {
-      --navy: #1B427D;
-      --navy-deep: #112846;
+      --navy: #244C5B;
+      --navy-deep: #17333D;
+      --grounding: #147D73;
+      --grounding-soft: #EAF5F0;
       --accent-red: #C62828;
       --ink: #172536;
       --muted: #5B6878;
@@ -42,9 +43,7 @@
       position: relative;
       z-index: 20;
       padding: 0.95rem 1.5rem 0;
-      background:
-        radial-gradient(circle at 18% 88%, rgba(226, 186, 68, 0.12), transparent 30%),
-        linear-gradient(180deg, rgba(255, 255, 255, 0.98) 0%, rgba(255, 255, 255, 0.9) 100%);
+      background: #F7FAF9;
     }
 
     .research-hub-inner {
@@ -204,7 +203,7 @@
     }
 
     .research-card-amber {
-      background: linear-gradient(135deg, rgba(217, 119, 6, 0.08) 0%, rgba(255, 255, 255, 0.98) 72%);
+      background: #F0F7F4;
     }
 
     .research-card-icon {
@@ -254,45 +253,8 @@
     }
 
     .hero {
-      position: relative;
-      overflow: hidden;
-      isolation: isolate;
-      background:
-        radial-gradient(circle at 18% 16%, rgba(226, 186, 68, 0.10), transparent 24%),
-        linear-gradient(180deg, #FFFFFF 0%, #FFFFFF 100%);
-      border-bottom: 1px solid rgba(27, 66, 125, 0.10);
-    }
-
-    .hero::before,
-    .hero::after {
-      content: "";
-      position: absolute;
-      pointer-events: none;
-    }
-
-    .hero::before {
-      top: -4rem;
-      left: -8%;
-      width: 66%;
-      height: 22rem;
-      background:
-        linear-gradient(116deg, transparent 14%, rgba(226, 186, 68, 0.12) 32%, rgba(90, 143, 222, 0.10) 48%, transparent 66%),
-        linear-gradient(118deg, transparent 42%, rgba(255, 255, 255, 0.58) 48%, transparent 54%);
-      filter: blur(15px);
-      opacity: 0.64;
-      transform: skewX(-18deg);
-      animation: heroStreak 9s ease-in-out infinite;
-    }
-
-    .hero::after {
-      top: 1.4rem;
-      right: 6%;
-      width: 15rem;
-      height: 15rem;
-      background: radial-gradient(circle, rgba(226, 186, 68, 0.16) 0%, rgba(226, 186, 68, 0.08) 34%, transparent 72%);
-      filter: blur(18px);
-      opacity: 0.62;
-      animation: heroPulse 7s ease-in-out infinite;
+      background: #F7FAF9;
+      border-bottom: 1px solid #E2EBE7;
     }
 
     .hero-body {
@@ -313,111 +275,37 @@
       margin-right: auto;
     }
 
-    .title-icon {
+    .sgip-mark {
       display: inline-block;
-      width: 0.92em;
-      height: 0.92em;
-      object-fit: contain;
-      vertical-align: -0.1em;
-      margin-right: 0.14em;
-      filter: drop-shadow(0 0 4px rgba(226, 186, 68, 0.20));
-      animation: iconCharge 3.4s ease-in-out infinite;
+      width: 0.95em;
+      height: 0.95em;
+      vertical-align: -0.12em;
+      margin-right: 0.16em;
+      color: var(--grounding);
     }
 
     .title-line {
       display: block;
     }
 
-    .title-line-bottom {
-      white-space: nowrap;
-    }
-
     .title-accent {
-      position: relative;
-      display: inline-block;
-      padding: 0 0.05em 0.03em 0.02em;
-      isolation: isolate;
-      z-index: 0;
-      font-family: 'Oxanium', 'Google Sans', sans-serif;
+      font-family: 'Google Sans', sans-serif;
       font-weight: 800;
-      font-size: 1.04em;
-      letter-spacing: -0.055em;
-      line-height: 0.92;
-      color: #efc64d;
-      text-shadow:
-        0 0 1px rgba(255, 252, 232, 0.9),
-        0 0 8px rgba(255, 196, 52, 0.32),
-        0 0 18px rgba(242, 180, 30, 0.2);
-      transform: skewX(-9deg) translateY(0.02em);
-      animation: titleSurge 2.9s ease-in-out infinite;
-      filter: saturate(1.08) brightness(1.02);
-      will-change: background-position, text-shadow, filter;
-    }
-
-    @supports ((-webkit-background-clip: text) and (-webkit-text-fill-color: transparent)) {
-      .title-accent {
-        background: linear-gradient(180deg, #fffde7 0%, #fff2b9 14%, #ffd967 34%, #ffc53b 54%, #f0ab22 78%, #ac6708 100%);
-        background-size: 100% 165%;
-        background-position: 50% 12%;
-        -webkit-background-clip: text;
-        background-clip: text;
-        -webkit-text-fill-color: transparent;
-      }
-    }
-
-    @supports (-webkit-text-stroke: 1px rgba(176, 106, 9, 0.92)) {
-      .title-accent {
-        -webkit-text-stroke: 1.2px rgba(176, 106, 9, 0.92);
-        paint-order: stroke fill;
-      }
-    }
-
-    .title-accent::before,
-    .title-accent::after {
-      content: "";
-      position: absolute;
-      pointer-events: none;
-      z-index: -1;
-      background: linear-gradient(90deg, transparent 0%, rgba(255, 250, 219, 0.98) 14%, rgba(255, 213, 94, 0.98) 46%, rgba(214, 140, 25, 0.94) 82%, transparent 100%);
-      filter: drop-shadow(0 0 4px rgba(214, 155, 26, 0.26));
-      mix-blend-mode: normal;
-    }
-
-    .title-accent::before {
-      left: -0.03em;
-      bottom: 0.09em;
-      width: 38%;
-      height: 0.28em;
-      clip-path: polygon(0 70%, 13% 46%, 24% 60%, 37% 22%, 49% 52%, 63% 30%, 78% 66%, 91% 42%, 100% 56%, 100% 70%, 89% 82%, 77% 58%, 63% 76%, 49% 44%, 37% 68%, 24% 40%, 13% 74%, 0 88%);
-      animation: titleCrackleTop 3.2s steps(1, end) infinite;
-    }
-
-    .title-accent::after {
-      right: -0.02em;
-      top: 0.07em;
-      width: 24%;
-      height: 0.24em;
-      clip-path: polygon(0 62%, 15% 36%, 29% 58%, 46% 18%, 61% 46%, 77% 26%, 92% 62%, 100% 46%, 100% 56%, 90% 74%, 77% 48%, 61% 68%, 46% 34%, 29% 70%, 15% 46%, 0 80%);
-      animation: titleCrackleBottom 2.8s steps(1, end) infinite;
+      letter-spacing: -0.035em;
+      color: var(--grounding);
     }
 
     .eyebrow {
       display: inline-flex;
       align-items: center;
-      gap: 0.5rem;
-      position: relative;
-      overflow: hidden;
-      isolation: isolate;
-      padding: 0.52rem 0.86rem;
+      padding: 0.45rem 0.85rem;
       border-radius: 999px;
-      background: rgba(198, 40, 40, 0.10);
-      border: 1px solid rgba(198, 40, 40, 0.18);
-      color: var(--accent-red);
-      font-size: 1.12rem;
-      font-weight: 800;
-      margin-bottom: 1.1rem;
-      box-shadow: 0 10px 24px rgba(198, 40, 40, 0.08);
-      transition: transform 0.18s ease, box-shadow 0.18s ease, background-color 0.18s ease, border-color 0.18s ease;
+      background: var(--grounding-soft);
+      border: 1px solid #CCDFD7;
+      color: #226456;
+      font-size: 0.95rem;
+      font-weight: 700;
+      margin-bottom: 1.3rem;
     }
 
     .publication-venue {
@@ -503,30 +391,86 @@
     }
 
     .hero-summary {
-      position: relative;
-      overflow: hidden;
-      isolation: isolate;
-      max-width: 880px;
-      margin: 1.35rem auto 0;
-      padding: 1.4rem 1.6rem;
-      border-radius: 20px;
-      background: rgba(255, 255, 255, 0.78);
-      border: 1px solid rgba(27, 66, 125, 0.10);
-      box-shadow: 0 18px 50px rgba(17, 40, 70, 0.08);
-      font-size: 1.08rem;
-      line-height: 1.75;
-      color: #26384d;
-      transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease;
+      max-width: 840px;
+      margin: 1.5rem auto 0;
+      font-size: 1.06rem;
+      line-height: 1.8;
+      color: #425765;
     }
 
-    .hero-metrics {
+    .hero-summary strong {
+      color: var(--navy-deep);
+    }
+
+    .publication-links .button.is-dark {
+      background-color: var(--navy-deep);
+      border-color: transparent;
+    }
+
+    .publication-links .button.is-dark:hover,
+    .publication-links .button.is-dark:focus-visible {
+      background-color: var(--grounding);
+    }
+
+    .grounding-flow {
       display: grid;
-      grid-template-columns: repeat(4, minmax(0, 1fr));
-      gap: 1rem;
-      margin-top: 1.35rem;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      max-width: 880px;
+      margin: 1.7rem auto 0;
+      padding: 0;
+      list-style: none;
+      border: 1px solid #DCE7E1;
+      border-radius: 16px;
+      background: #FFFFFF;
     }
 
-    .metric-card,
+    .grounding-stage {
+      position: relative;
+      display: grid;
+      gap: 0.3rem;
+      align-content: center;
+      padding: 1.1rem 0.9rem;
+    }
+
+    .grounding-stage:not(:last-child)::after {
+      content: '→';
+      position: absolute;
+      right: -0.45rem;
+      top: 50%;
+      transform: translateY(-50%);
+      color: #74978A;
+      font-size: 1.25rem;
+      z-index: 1;
+    }
+
+    .grounding-stage.is-grounding {
+      background: var(--grounding-soft);
+    }
+
+    .stage-label {
+      color: #64776F;
+      font-size: 0.69rem;
+      font-weight: 700;
+      letter-spacing: 0.13em;
+      text-transform: uppercase;
+    }
+
+    .stage-title {
+      color: var(--navy-deep);
+      font-size: 1.05rem;
+      line-height: 1.35;
+    }
+
+    .is-grounding .stage-title {
+      color: #176E60;
+    }
+
+    .stage-detail {
+      color: #687B73;
+      font-size: 0.82rem;
+      line-height: 1.45;
+    }
+
     .story-card,
     .step-card,
     .result-card,
@@ -540,12 +484,6 @@
       transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease;
     }
 
-    .metric-card {
-      padding: 1rem 1.05rem;
-      text-align: left;
-    }
-
-    .metric-head,
     .signal-head {
       display: flex;
       align-items: center;
@@ -553,7 +491,6 @@
       margin-bottom: 0.55rem;
     }
 
-    .metric-icon,
     .signal-icon {
       display: inline-flex;
       align-items: center;
@@ -568,7 +505,6 @@
       transition: transform 0.18s ease, box-shadow 0.18s ease, background-color 0.18s ease;
     }
 
-    .metric-card,
     .story-card,
     .step-card,
     .result-card {
@@ -577,7 +513,6 @@
       isolation: isolate;
     }
 
-    .metric-card::before,
     .story-card::before,
     .step-card::before {
       content: "";
@@ -627,7 +562,6 @@
       background: rgba(29, 78, 216, 0.20);
     }
 
-    .accent-blue .metric-label,
     .accent-blue .card-kicker {
       color: #1d4ed8;
     }
@@ -636,7 +570,6 @@
       background: rgba(180, 83, 9, 0.20);
     }
 
-    .accent-amber .metric-label,
     .accent-amber .card-kicker {
       color: #b45309;
     }
@@ -645,7 +578,6 @@
       background: rgba(4, 120, 87, 0.20);
     }
 
-    .accent-emerald .metric-label,
     .accent-emerald .card-kicker {
       color: #047857;
     }
@@ -654,7 +586,6 @@
       background: rgba(67, 56, 202, 0.20);
     }
 
-    .accent-indigo .metric-label,
     .accent-indigo .card-kicker {
       color: #4338ca;
     }
@@ -663,7 +594,6 @@
       background: rgba(15, 118, 110, 0.20);
     }
 
-    .accent-teal .metric-label,
     .accent-teal .card-kicker {
       color: #0f766e;
     }
@@ -672,7 +602,6 @@
       background: rgba(190, 18, 60, 0.18);
     }
 
-    .accent-rose .metric-label,
     .accent-rose .card-kicker {
       color: #be123c;
     }
@@ -681,35 +610,8 @@
       background: rgba(51, 65, 85, 0.20);
     }
 
-    .accent-slate .metric-label,
     .accent-slate .card-kicker {
       color: #334155;
-    }
-
-    .metric-label {
-      font-size: 0.9rem;
-      letter-spacing: 0.01em;
-      text-transform: none;
-      color: var(--muted);
-      font-weight: 700;
-      line-height: 1.1;
-      white-space: nowrap;
-      margin-top: 0.14rem;
-    }
-
-    .metric-value {
-      margin-top: 0.1rem;
-      font-size: 1.45rem;
-      font-weight: 700;
-      color: var(--navy-deep);
-      line-height: 1.15;
-    }
-
-    .metric-note {
-      margin-top: 0.3rem;
-      font-size: 0.9rem;
-      color: var(--muted);
-      line-height: 1.5;
     }
 
     .section {
@@ -899,235 +801,10 @@
       overflow-x: auto;
     }
 
-    .spark-target {
-      isolation: isolate;
-    }
-
-    .spark-target > .spark-canvas {
-      position: absolute;
-      inset: 0;
-      width: 100%;
-      height: 100%;
-      opacity: 0;
-      pointer-events: none;
-      z-index: 4;
-      border-radius: inherit;
-      transition: opacity 0.12s ease;
-    }
-
-    .spark-target.is-sparking > .spark-canvas {
-      opacity: 1;
-    }
-
-    .global-spark-canvas {
-      position: fixed;
-      inset: 0;
-      width: 100%;
-      height: 100%;
-      pointer-events: none;
-      z-index: 120;
-    }
-
-    .eyebrow:hover,
-    .eyebrow:focus-visible {
-      transform: translateY(-1px);
-      box-shadow: 0 14px 30px rgba(198, 40, 40, 0.12);
-    }
-
     .publication-links .button:hover,
     .publication-links .button:focus-visible {
       transform: translateY(-1px);
       box-shadow: 0 14px 30px rgba(17, 40, 70, 0.14);
-    }
-
-    .hero-summary:hover,
-    .hero-summary:focus-within {
-      transform: translateY(-2px);
-      box-shadow: 0 22px 56px rgba(17, 40, 70, 0.10);
-      border-color: rgba(27, 66, 125, 0.16);
-    }
-
-    .metric-card:hover,
-    .metric-card:focus-within,
-    .story-card:hover,
-    .story-card:focus-within,
-    .step-card:hover,
-    .step-card:focus-within,
-    .result-card:hover,
-    .result-card:focus-within,
-    .figure-panel:hover,
-    .figure-panel:focus-within,
-    .table-panel:hover,
-    .table-panel:focus-within {
-      transform: translateY(-2px);
-      box-shadow: 0 20px 52px rgba(17, 40, 70, 0.11);
-      border-color: rgba(27, 66, 125, 0.16);
-    }
-
-    .metric-card:hover,
-    .metric-card:focus-within {
-      transform: translateY(-1px);
-      box-shadow: 0 18px 42px rgba(17, 40, 70, 0.09);
-    }
-
-    .metric-card:hover .metric-icon,
-    .metric-card:focus-within .metric-icon,
-    .story-card:hover .signal-icon,
-    .story-card:focus-within .signal-icon,
-    .step-card:hover .signal-icon,
-    .step-card:focus-within .signal-icon {
-      transform: translateY(-2px) scale(1.03);
-      box-shadow: 0 10px 22px rgba(17, 40, 70, 0.12);
-    }
-
-    .metric-card:hover .metric-icon,
-    .metric-card:focus-within .metric-icon {
-      transform: translateY(-1px) scale(1.015);
-      box-shadow: 0 8px 18px rgba(17, 40, 70, 0.10);
-    }
-
-    @keyframes heroStreak {
-      0%, 100% {
-        transform: translate3d(-8%, 0, 0) skewX(-18deg);
-        opacity: 0.42;
-      }
-      50% {
-        transform: translate3d(10%, -12px, 0) skewX(-18deg);
-        opacity: 0.72;
-      }
-    }
-
-    @keyframes heroPulse {
-      0%, 100% {
-        transform: scale(0.96);
-        opacity: 0.48;
-      }
-      50% {
-        transform: scale(1.05);
-        opacity: 0.74;
-      }
-    }
-
-    @keyframes iconCharge {
-      0%, 100% {
-        transform: translateY(0) scale(1);
-        filter: drop-shadow(0 0 4px rgba(226, 186, 68, 0.18));
-      }
-      45% {
-        transform: translateY(-1px) scale(1.02);
-        filter: drop-shadow(0 0 8px rgba(226, 186, 68, 0.30));
-      }
-      55% {
-        transform: translateY(0) scale(0.995);
-        filter: drop-shadow(0 0 5px rgba(226, 186, 68, 0.22));
-      }
-    }
-
-    @keyframes titleCrackleTop {
-      0%, 100% {
-        opacity: 0.22;
-        transform: translate3d(0, 0, 0) scaleX(0.98) rotate(-2deg);
-      }
-      8% {
-        opacity: 0.82;
-        transform: translate3d(1px, -1px, 0) scaleX(1.02) rotate(-4deg);
-      }
-      13% {
-        opacity: 0.28;
-      }
-      29% {
-        opacity: 0.68;
-        transform: translate3d(-1px, 0, 0) scaleX(1.01) rotate(-1deg);
-      }
-      34% {
-        opacity: 0.16;
-      }
-      61% {
-        opacity: 0.74;
-        transform: translate3d(1px, -1px, 0) scaleX(1.015) rotate(-3deg);
-      }
-      66% {
-        opacity: 0.24;
-      }
-    }
-
-    @keyframes titleSurge {
-      0%, 100% {
-        background-position: 50% 12%;
-        text-shadow:
-          0 0 1px rgba(255, 252, 232, 0.92),
-          0 0 9px rgba(255, 203, 64, 0.34),
-          0 0 18px rgba(242, 180, 30, 0.2);
-        filter: saturate(1.08) brightness(1.03) drop-shadow(0 0 3px rgba(255, 228, 141, 0.14));
-      }
-      18% {
-        background-position: 50% 20%;
-        text-shadow:
-          0 0 1px rgba(255, 252, 232, 0.9),
-          0 0 9px rgba(255, 203, 64, 0.32),
-          0 0 22px rgba(242, 180, 30, 0.2);
-        filter: drop-shadow(0 0 4px rgba(255, 219, 98, 0.16));
-      }
-      27% {
-        background-position: 50% 38%;
-        text-shadow:
-          0 0 1px rgba(255, 252, 232, 0.76),
-          0 0 5px rgba(242, 180, 30, 0.18),
-          0 0 12px rgba(242, 180, 30, 0.12);
-        filter: saturate(1.02) brightness(0.99) drop-shadow(0 0 1px rgba(255, 219, 98, 0.08));
-      }
-      44% {
-        background-position: 50% 62%;
-        text-shadow:
-          0 0 1px rgba(255, 252, 232, 0.92),
-          0 0 11px rgba(255, 203, 64, 0.36),
-          0 0 24px rgba(242, 180, 30, 0.22);
-        filter: saturate(1.1) brightness(1.04) drop-shadow(0 0 5px rgba(255, 219, 98, 0.18));
-      }
-      58% {
-        background-position: 50% 78%;
-        text-shadow:
-          0 0 1px rgba(255, 252, 232, 0.78),
-          0 0 6px rgba(242, 180, 30, 0.22),
-          0 0 14px rgba(242, 180, 30, 0.14);
-        filter: saturate(1.03) brightness(1.01) drop-shadow(0 0 2px rgba(255, 219, 98, 0.10));
-      }
-      76% {
-        background-position: 50% 26%;
-        text-shadow:
-          0 0 1px rgba(255, 252, 232, 0.94),
-          0 0 10px rgba(255, 203, 64, 0.34),
-          0 0 20px rgba(242, 180, 30, 0.2);
-        filter: saturate(1.08) brightness(1.03) drop-shadow(0 0 4px rgba(255, 219, 98, 0.16));
-      }
-    }
-
-    @keyframes titleCrackleBottom {
-      0%, 100% {
-        opacity: 0.16;
-        transform: translate3d(0, 0, 0) scaleX(0.985) rotate(3deg);
-      }
-      6% {
-        opacity: 0.54;
-        transform: translate3d(-1px, 0, 0) scaleX(1.015) rotate(5deg);
-      }
-      11% {
-        opacity: 0.18;
-      }
-      38% {
-        opacity: 0.44;
-        transform: translate3d(1px, 1px, 0) scaleX(1.005) rotate(2deg);
-      }
-      43% {
-        opacity: 0.12;
-      }
-      72% {
-        opacity: 0.58;
-        transform: translate3d(1px, 0, 0) scaleX(1.01) rotate(4deg);
-      }
-      77% {
-        opacity: 0.16;
-      }
     }
 
     .table-panel table {
@@ -1174,30 +851,6 @@
       font-weight: 700;
       letter-spacing: 0.03em;
       text-transform: uppercase;
-    }
-
-    .metric-main {
-      font-size: 1.22rem;
-      font-weight: 700;
-      color: var(--navy-deep);
-      line-height: 1.15;
-    }
-
-    .metric-inline {
-      font-size: 0.92rem;
-      color: var(--muted);
-      font-weight: 600;
-    }
-
-    .metric-stack {
-      display: grid;
-      gap: 0.18rem;
-    }
-
-    .metric-sub {
-      font-size: 0.9rem;
-      color: var(--muted);
-      line-height: 1.45;
     }
 
     .speed-pill {
@@ -1395,7 +1048,7 @@
     }
 
     @media screen and (max-width: 1023px) {
-      .hero-metrics,
+
       .story-grid,
       .qual-grid,
       .step-list {
@@ -1450,7 +1103,6 @@
         padding: 1.15rem;
       }
 
-      .hero-metrics,
       .story-grid,
       .qual-grid,
       .step-list {
@@ -1470,41 +1122,51 @@
         font-size: 2rem;
       }
 
-      .title-accent {
-        -webkit-text-stroke: 0.95px rgba(176, 106, 9, 0.9);
-      }
-
       .title-line-bottom {
         white-space: normal;
       }
 
-      .metric-value,
       .result-number {
         font-size: 1.6rem;
       }
     }
 
+    @media screen and (max-width: 600px) {
+      .grounding-flow {
+        grid-template-columns: 1fr;
+        max-width: 420px;
+      }
+
+      .grounding-stage {
+        padding: 1rem;
+      }
+
+      .grounding-stage:not(:last-child)::after {
+        content: '↓';
+        top: auto;
+        bottom: -0.8rem;
+        left: 50%;
+        right: auto;
+        transform: translateX(-50%);
+      }
+
+      .grounding-stage:first-child {
+        border-radius: 16px 16px 0 0;
+      }
+
+      .grounding-stage:last-child {
+        border-radius: 0 0 16px 16px;
+      }
+    }
+
     @media (prefers-reduced-motion: reduce) {
-      .hero::before,
-      .hero::after,
-      .title-accent::before,
-      .title-accent::after {
-        animation: none !important;
-      }
-
-      .title-icon,
-      .title-accent {
-        animation-duration: 7.5s !important;
-        animation-timing-function: ease-in-out !important;
-      }
-
       .eyebrow,
       .research-home,
       .research-toggle,
       .research-card,
       .publication-links .button,
       .hero-summary,
-      .metric-card,
+
       .story-card,
       .step-card,
       .result-card,
@@ -1561,7 +1223,7 @@
 <section class="hero">
   <div class="hero-body"><div class="container is-max-desktop"><div class="columns is-centered"><div class="column has-text-centered">
     <div class="eyebrow">Accepted to NeurIPS 2026</div>
-    <h1 class="title is-1 publication-title"><span class="title-line"><img src="./images/paper_figures/lightning.png" class="title-icon" alt=""><span class="title-accent">SGIP</span>: Learning Scene-Grounded Interaction Priors</span><span class="title-line title-line-bottom">for Scene-Aware Human Motion Prediction</span></h1>
+    <h1 class="title is-1 publication-title"><span class="title-line"><svg class="sgip-mark" viewBox="0 0 40 40" fill="none" aria-hidden="true" focusable="false"><path d="M5 29V9h28v22H18" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><path d="M8 29c8 0 8-15 18-15" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/><rect x="21" y="9" width="11" height="11" rx="3" fill="#EAF5F0" stroke="currentColor" stroke-width="1.8"/><circle cx="26.5" cy="14.5" r="2.4" fill="currentColor"/><circle cx="8" cy="29" r="3.5" fill="#244C5B"/><circle cx="13" cy="14" r="2" fill="#B8CBC3"/><circle cx="28" cy="28" r="2" fill="#B8CBC3"/></svg><span class="title-accent">SGIP</span>: Learning Scene-Grounded Interaction Priors</span><span class="title-line title-line-bottom">for Scene-Aware Human Motion Prediction</span></h1>
     <div class="is-size-5 publication-authors is-names">
       <span class="author-block"><a href="mailto:dhsoon@dgist.ac.kr">Donghyeon Soon</a><sup>1*</sup>,</span>
       <span class="author-block"><a href="mailto:wldlf2819@dgist.ac.kr">Jiil Yoon</a><sup>1*</sup>,</span>
@@ -1577,25 +1239,25 @@
       <span class="link-block"><a href="#BibTeX" class="external-link button is-normal is-rounded is-dark"><span class="icon"><i class="fas fa-quote-right"></i></span><span>Citation</span></a></span>
     </div>
     <div class="hero-summary">
-      <strong>SGIP</strong> predicts <strong>where future motion will be grounded</strong> before forecasting how a person moves. It learns an explicit interaction prior over <strong>object instances and open navigation space</strong> through intent distillation, then uses the selected scene token to condition future trajectory and full-body pose prediction. At test time, SGIP needs only <strong>observed motion and a 3D scene</strong>, with no gaze, textual intent, or LLM.
+      <strong>SGIP</strong> predicts an explicit interaction prior over <strong>object instances and open navigation space</strong>, then uses the selected scene token to forecast future trajectories and full-body poses. <strong>Intent distillation</strong> supplies training-time guidance; deployment uses only <strong>observed motion and the 3D scene</strong>.
     </div>
-    <div class="hero-metrics">
-<div class="metric-card accent-blue">
-      <div class="metric-head"><span class="metric-icon icon-blue"><i class="fas fa-route"></i></span><div class="metric-label">GIMO · Traj-path</div></div>
-      <div class="metric-value">14.5% Lower</div><div class="metric-note">549 vs. 642 for GAP3DS* in the observation-only setting.</div>
-    </div>
-<div class="metric-card accent-amber">
-      <div class="metric-head"><span class="metric-icon icon-amber"><i class="fas fa-location-dot"></i></span><div class="metric-label">PROX · Traj-dest</div></div>
-      <div class="metric-value">12.6% Lower</div><div class="metric-note">576 vs. 659 for SIF3D* in the observation-only setting.</div>
-    </div>
-<div class="metric-card accent-emerald">
-      <div class="metric-head"><span class="metric-icon icon-emerald"><i class="fas fa-bullseye"></i></span><div class="metric-label">Grounding Accuracy</div></div>
-      <div class="metric-value">76% Top-1</div><div class="metric-note">Student interaction-token accuracy on GIMO.</div>
-    </div>
-<div class="metric-card accent-indigo">
-      <div class="metric-head"><span class="metric-icon icon-indigo"><i class="fas fa-person-walking"></i></span><div class="metric-label">Test-Time Inputs</div></div>
-      <div class="metric-value">Motion + Scene</div><div class="metric-note">Observed motion and 3D geometry; no auxiliary cues.</div>
-    </div></div>
+    <ol class="grounding-flow" aria-label="SGIP prediction pipeline">
+      <li class="grounding-stage">
+        <span class="stage-label">Observe</span>
+        <strong class="stage-title">Motion + 3D Scene</strong>
+        <span class="stage-detail">History and environment</span>
+      </li>
+      <li class="grounding-stage is-grounding">
+        <span class="stage-label">Ground</span>
+        <strong class="stage-title">Interaction Prior</strong>
+        <span class="stage-detail">Objects and open space</span>
+      </li>
+      <li class="grounding-stage">
+        <span class="stage-label">Predict</span>
+        <strong class="stage-title">Trajectory + Pose</strong>
+        <span class="stage-detail">Conditioned on the selected token</span>
+      </li>
+    </ol>
   </div></div></div></div>
 </section>
 <section class="section"><div class="container is-max-desktop">
@@ -1688,7 +1350,7 @@
 
 <section class="section section-soft" id="qualitative"><div class="container is-max-desktop">
   <h2 class="section-title">Qualitative Results</h2>
-  <p class="section-lead">The paper's visualizations show how <strong>explicit scene grounding</strong> guides future trajectories and interaction poses in cluttered indoor scenes. Additional examples compare observation-only and privileged predictions and show predicted motion alongside ground truth.</p>
+  <p class="section-lead">The paper's visualizations show how <strong>explicit scene grounding</strong> guides future trajectories and interaction poses in cluttered indoor scenes. The comparisons include gaze-free baselines and the privileged teacher alongside the deployed observation-only student.</p>
   <div class="qual-stack">
 <div class="figure-panel">
       <div class="minor-title">GIMO: Trajectories and Full-Body Motion</div>
@@ -1698,10 +1360,6 @@
       <div class="minor-title">Observation-Only Prediction and Privileged Guidance</div>
       <img src="./images/paper_figures/fig5.png" alt="The SGIP teacher and student in the top row, compared with SIF3D with and without gaze in the bottom row." loading="lazy" decoding="async">
       <p class="figure-caption"><span class="caption-label">Figure 5.</span> <span class="caption-title">Comparing baselines and SGIP variants.</span> Given the same observed prefix, the top row compares the privileged SGIP teacher and the deployed SGIP student; the bottom row shows SIF3D with and without gaze. Each panel includes a top-down trajectory, a final interaction frame, and a pose sequence. The student uses <strong>neither gaze nor textual intent at inference</strong>.</p>
-    </div><div class="figure-panel">
-      <div class="minor-title">Additional GIMO Scenes: Ground Truth and Predictions</div>
-      <img src="./images/paper_figures/fig6.png" alt="Ground-truth and SGIP trajectories and final interaction poses in a seminar room and a kitchen." loading="lazy" decoding="async">
-      <p class="figure-caption"><span class="caption-label">Figure 6.</span> <span class="caption-title">Additional qualitative results on GIMO.</span> Each scene pairs the ground-truth future on the left with the SGIP prediction on the right. The top panels show trajectories from above, and the bottom panels show final interaction poses in a seminar room and a kitchen. <strong>Red:</strong> ground-truth future; <strong>blue:</strong> predicted future.</p>
     </div></div></div></section>
 
 <section class="section"><div class="container is-max-desktop">
@@ -1813,671 +1471,19 @@
       }
     });
 
-    const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
-    const sparkTargets = [
-      ...document.querySelectorAll(".research-home, .research-toggle, .research-card, .hero-summary, .metric-card, .story-card, .step-card, .result-card, .figure-panel, .table-panel, .publication-links .button, .eyebrow")
-    ];
     const researchDropdowns = [...document.querySelectorAll(".research-dropdown")];
-    const sparkStates = new WeakMap();
-
-    const randomBetween = (min, max) => min + Math.random() * (max - min);
-    const randomInt = (min, max) => Math.floor(randomBetween(min, max + 1));
-    const scheduleNextSparkDelay = (isReducedMotion = prefersReducedMotion.matches) => {
-      let delay = isReducedMotion
-        ? randomBetween(1500, 2600)
-        : randomBetween(650, 1600);
-      if (Math.random() < (isReducedMotion ? 0.58 : 0.42)) {
-        delay += isReducedMotion
-          ? randomBetween(650, 1200)
-          : randomBetween(300, 650);
-      }
-      return delay;
-    };
-
-    const getSparkState = (element) => {
-      if (!sparkStates.has(element)) {
-        sparkStates.set(element, {
-          active: false,
-          rafId: 0,
-          lastTime: 0,
-          nextBurstAt: 0,
-          canvas: null,
-          ctx: null,
-          width: 0,
-          height: 0,
-          dpr: 1,
-          arcs: [],
-          particles: [],
-        });
-      }
-
-      return sparkStates.get(element);
-    };
-
-    const ensureSparkCanvas = (element) => {
-      const state = getSparkState(element);
-      if (state.canvas && state.ctx) return state;
-
-      const canvas = document.createElement("canvas");
-      canvas.className = "spark-canvas";
-      canvas.setAttribute("aria-hidden", "true");
-      element.appendChild(canvas);
-
-      state.canvas = canvas;
-      state.ctx = canvas.getContext("2d");
-      return state;
-    };
-
-    const resizeSparkCanvas = (element) => {
-      const state = ensureSparkCanvas(element);
-      if (!state.ctx) return;
-
-      const width = Math.max(1, Math.round(element.clientWidth));
-      const height = Math.max(1, Math.round(element.clientHeight));
-      const dpr = Math.min(window.devicePixelRatio || 1, 2);
-
-      state.width = width;
-      state.height = height;
-      state.dpr = dpr;
-
-      state.canvas.width = Math.max(1, Math.round(width * dpr));
-      state.canvas.height = Math.max(1, Math.round(height * dpr));
-      state.canvas.style.width = `${width}px`;
-      state.canvas.style.height = `${height}px`;
-      state.ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-      state.ctx.clearRect(0, 0, width, height);
-    };
-
-    const traceSmoothPath = (ctx, points) => {
-      if (!points.length) return;
-
-      ctx.beginPath();
-      ctx.moveTo(points[0].x, points[0].y);
-
-      if (points.length === 2) {
-        ctx.lineTo(points[1].x, points[1].y);
-        return;
-      }
-
-      for (let i = 1; i < points.length - 1; i += 1) {
-        const midX = (points[i].x + points[i + 1].x) / 2;
-        const midY = (points[i].y + points[i + 1].y) / 2;
-        ctx.quadraticCurveTo(points[i].x, points[i].y, midX, midY);
-      }
-
-      const last = points[points.length - 1];
-      ctx.lineTo(last.x, last.y);
-    };
-
-    const buildEdgeSpark = (width, height) => {
-      const edge = randomInt(0, 3);
-      const inset = 2.2;
-      let tangentX = 1;
-      let tangentY = 0;
-      let normalX = 0;
-      let normalY = 1;
-      let startX = 0;
-      let startY = 0;
-      let length = 26;
-
-      if (edge === 0) {
-        tangentX = 1;
-        tangentY = 0;
-        normalX = 0;
-        normalY = 1;
-        length = Math.min(randomBetween(28, 54), Math.max(22, width - 16));
-        startX = randomBetween(8, Math.max(8, width - length - 8));
-        startY = inset;
-      } else if (edge === 1) {
-        tangentX = 0;
-        tangentY = 1;
-        normalX = -1;
-        normalY = 0;
-        length = Math.min(randomBetween(28, 54), Math.max(22, height - 16));
-        startX = width - inset;
-        startY = randomBetween(8, Math.max(8, height - length - 8));
-      } else if (edge === 2) {
-        tangentX = 1;
-        tangentY = 0;
-        normalX = 0;
-        normalY = -1;
-        length = Math.min(randomBetween(28, 54), Math.max(22, width - 16));
-        startX = randomBetween(8, Math.max(8, width - length - 8));
-        startY = height - inset;
-      } else {
-        tangentX = 0;
-        tangentY = 1;
-        normalX = 1;
-        normalY = 0;
-        length = Math.min(randomBetween(28, 54), Math.max(22, height - 16));
-        startX = inset;
-        startY = randomBetween(8, Math.max(8, height - length - 8));
-      }
-
-      const segments = randomInt(6, 8);
-      const step = length / (segments - 1);
-      const points = [];
-
-      for (let i = 0; i < segments; i += 1) {
-        const edgeWeight = i === 0 || i === segments - 1 ? 0.22 : 1;
-        const along = step * i + randomBetween(-1.1, 1.1);
-        const inward = randomBetween(0.8, 5.8) * edgeWeight + (i > 0 && i < segments - 1 ? randomBetween(0.6, 2.1) : 0);
-
-        points.push({
-          x: startX + tangentX * along + normalX * inward,
-          y: startY + tangentY * along + normalY * inward,
-        });
-      }
-
-      const branchIndex = randomInt(2, segments - 2);
-      const branchStart = points[branchIndex];
-      const branch = [
-        branchStart,
-        {
-          x: branchStart.x + normalX * randomBetween(4.4, 8.4) + tangentX * randomBetween(-5.6, 5.6),
-          y: branchStart.y + normalY * randomBetween(4.4, 8.4) + tangentY * randomBetween(-5.6, 5.6),
-        },
-      ];
-
-      const tip = points[points.length - 1];
-      const particles = Array.from({ length: randomInt(3, 5) }, () => ({
-        x: tip.x,
-        y: tip.y,
-        vx: tangentX * randomBetween(0.5, 1.4) + normalX * randomBetween(1.0, 2.9) + randomBetween(-0.7, 0.7),
-        vy: tangentY * randomBetween(0.5, 1.4) + normalY * randomBetween(1.0, 2.9) + randomBetween(-0.7, 0.7),
-        age: 0,
-        life: randomBetween(100, 210),
-        size: randomBetween(1.0, 2.2),
-      }));
-
-      return {
-        points,
-        branch,
-        tip,
-        age: 0,
-        life: randomBetween(90, 160),
-        flash: randomBetween(3.1, 5.4),
-        particles,
-      };
-    };
-
-    const spawnSparkBurst = (element) => {
-      const state = getSparkState(element);
-      if (!state.active || !state.ctx || state.width <= 0 || state.height <= 0) return;
-
-      const spark = buildEdgeSpark(state.width, state.height);
-      state.arcs.push(spark);
-      state.particles.push(...spark.particles);
-    };
-
-    const drawSpark = (ctx, spark) => {
-      const life = Math.max(0, 1 - (spark.age / spark.life));
-      const alpha = spark.age < 18 ? (spark.age / 18) : Math.pow(life, 0.58);
-
-      ctx.save();
-      ctx.lineCap = "round";
-      ctx.lineJoin = "round";
-
-      ctx.strokeStyle = `rgba(255, 207, 94, ${0.14 + 0.12 * alpha})`;
-      ctx.lineWidth = 9.5;
-      ctx.shadowBlur = 12;
-      ctx.shadowColor = `rgba(255, 205, 95, ${0.26 * alpha})`;
-      traceSmoothPath(ctx, spark.points);
-      ctx.stroke();
-
-      ctx.strokeStyle = `rgba(255, 192, 63, ${0.54 * alpha})`;
-      ctx.lineWidth = 3.5;
-      ctx.shadowBlur = 0;
-      traceSmoothPath(ctx, spark.points);
-      ctx.stroke();
-
-      ctx.strokeStyle = `rgba(255, 252, 238, ${0.94 * alpha})`;
-      ctx.lineWidth = 1.28;
-      traceSmoothPath(ctx, spark.points);
-      ctx.stroke();
-
-      ctx.strokeStyle = `rgba(255, 233, 154, ${0.6 * alpha})`;
-      ctx.lineWidth = 1.0;
-      ctx.beginPath();
-      ctx.moveTo(spark.branch[0].x, spark.branch[0].y);
-      ctx.lineTo(spark.branch[1].x, spark.branch[1].y);
-      ctx.stroke();
-
-      const flashRadius = spark.flash * (0.8 + (1 - life) * 0.35);
-      const flash = ctx.createRadialGradient(spark.tip.x, spark.tip.y, 0, spark.tip.x, spark.tip.y, flashRadius);
-      flash.addColorStop(0, `rgba(255, 252, 236, ${0.92 * alpha})`);
-      flash.addColorStop(0.5, `rgba(255, 218, 109, ${0.32 * alpha})`);
-      flash.addColorStop(1, "rgba(255, 218, 109, 0)");
-      ctx.fillStyle = flash;
-      ctx.beginPath();
-      ctx.arc(spark.tip.x, spark.tip.y, flashRadius, 0, Math.PI * 2);
-      ctx.fill();
-
-      ctx.restore();
-    };
-
-    const drawParticle = (ctx, particle) => {
-      const life = Math.max(0, 1 - (particle.age / particle.life));
-      const alpha = Math.pow(life, 0.7);
-
-      ctx.save();
-      ctx.fillStyle = `rgba(255, 227, 142, ${0.72 * alpha})`;
-      ctx.shadowBlur = 7;
-      ctx.shadowColor = `rgba(255, 210, 104, ${0.28 * alpha})`;
-      ctx.beginPath();
-      ctx.arc(particle.x, particle.y, particle.size * (0.75 + life * 0.35), 0, Math.PI * 2);
-      ctx.fill();
-      ctx.restore();
-    };
-
-    const renderSparkFrame = (element, now) => {
-      const state = getSparkState(element);
-      if (!state.ctx || !state.canvas) return;
-
-      if (!state.lastTime) state.lastTime = now;
-      const dt = Math.min(32, now - state.lastTime || 16);
-      state.lastTime = now;
-
-      if (state.active && now >= state.nextBurstAt && state.arcs.length === 0) {
-        spawnSparkBurst(element);
-        state.nextBurstAt = now + scheduleNextSparkDelay(prefersReducedMotion.matches);
-      }
-
-      for (let i = state.arcs.length - 1; i >= 0; i -= 1) {
-        state.arcs[i].age += dt;
-        if (state.arcs[i].age >= state.arcs[i].life) {
-          state.arcs.splice(i, 1);
-        }
-      }
-
-      for (let i = state.particles.length - 1; i >= 0; i -= 1) {
-        const particle = state.particles[i];
-        particle.age += dt;
-        if (particle.age >= particle.life) {
-          state.particles.splice(i, 1);
-          continue;
-        }
-        particle.x += particle.vx * (dt / 16);
-        particle.y += particle.vy * (dt / 16);
-        particle.vx *= 0.965;
-        particle.vy *= 0.965;
-      }
-
-      state.ctx.clearRect(0, 0, state.width, state.height);
-
-      state.arcs.forEach((spark) => drawSpark(state.ctx, spark));
-      state.particles.forEach((particle) => drawParticle(state.ctx, particle));
-
-      if (state.active || state.arcs.length || state.particles.length) {
-        state.rafId = requestAnimationFrame((timestamp) => renderSparkFrame(element, timestamp));
-      } else {
-        state.rafId = 0;
-        state.ctx.clearRect(0, 0, state.width, state.height);
-        element.classList.remove("is-sparking");
-      }
-    };
-
-    const activateSpark = (element) => {
-      const state = ensureSparkCanvas(element);
-      resizeSparkCanvas(element);
-
-      if (state.active) return;
-
-      state.active = true;
-      state.nextBurstAt = performance.now() + (
-        prefersReducedMotion.matches
-          ? randomBetween(480, 920)
-          : randomBetween(180, 420)
-      );
-      element.classList.add("is-sparking");
-
-      if (!state.rafId) {
-        state.lastTime = 0;
-        state.rafId = requestAnimationFrame((timestamp) => renderSparkFrame(element, timestamp));
-      }
-    };
-
-    const deactivateSpark = (element) => {
-      if (element.matches(":hover") || element.contains(document.activeElement)) return;
-      const state = getSparkState(element);
-      state.active = false;
-    };
-
-    const resizeObserver = typeof ResizeObserver === "function"
-      ? new ResizeObserver((entries) => {
-          entries.forEach(({ target }) => {
-            resizeSparkCanvas(target);
-          });
-        })
-      : null;
-
-    const clickSparkState = {
-      canvas: null,
-      ctx: null,
-      width: 0,
-      height: 0,
-      dpr: 1,
-      bursts: [],
-      rafId: 0,
-      lastTime: 0,
-    };
-
-    const ensureGlobalSparkCanvas = () => {
-      if (clickSparkState.canvas && clickSparkState.ctx) return clickSparkState;
-
-      const canvas = document.createElement("canvas");
-      canvas.className = "global-spark-canvas";
-      canvas.setAttribute("aria-hidden", "true");
-      document.body.appendChild(canvas);
-
-      clickSparkState.canvas = canvas;
-      clickSparkState.ctx = canvas.getContext("2d");
-      return clickSparkState;
-    };
-
-    const resizeGlobalSparkCanvas = () => {
-      const state = ensureGlobalSparkCanvas();
-      if (!state.ctx) return;
-
-      const width = Math.max(1, Math.round(window.innerWidth));
-      const height = Math.max(1, Math.round(window.innerHeight));
-      const dpr = Math.min(window.devicePixelRatio || 1, 2);
-
-      state.width = width;
-      state.height = height;
-      state.dpr = dpr;
-      state.canvas.width = Math.max(1, Math.round(width * dpr));
-      state.canvas.height = Math.max(1, Math.round(height * dpr));
-      state.canvas.style.width = `${width}px`;
-      state.canvas.style.height = `${height}px`;
-      state.ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-      state.ctx.clearRect(0, 0, width, height);
-    };
-
-    const buildClickSparkArc = (x, y) => {
-      const angle = randomBetween(0, Math.PI * 2);
-      const length = randomBetween(9, 20);
-      const segments = randomInt(3, 4);
-      const points = [{ x, y }];
-      const dirX = Math.cos(angle);
-      const dirY = Math.sin(angle);
-      const perpX = -dirY;
-      const perpY = dirX;
-
-      for (let i = 1; i <= segments; i += 1) {
-        const progress = i / segments;
-        const radial = length * progress + randomBetween(-0.9, 0.9);
-        const offset = randomBetween(-1.9, 1.9) * (1 - progress * 0.72);
-
-        points.push({
-          x: x + dirX * radial + perpX * offset,
-          y: y + dirY * radial + perpY * offset,
-        });
-      }
-
-      const branchIndex = points.length > 2 ? randomInt(1, points.length - 2) : 1;
-      const branchStart = points[branchIndex];
-      const branchAngle = angle + randomBetween(-0.7, 0.7);
-      const branchLength = randomBetween(4, 8);
-
-      return {
-        points,
-        tip: points[points.length - 1],
-        branch: Math.random() < 0.45 ? [
-          branchStart,
-          {
-            x: branchStart.x + Math.cos(branchAngle) * branchLength,
-            y: branchStart.y + Math.sin(branchAngle) * branchLength,
-          },
-        ] : null,
-      };
-    };
-
-    const spawnClickSparkBurst = (x, y) => {
-      const state = ensureGlobalSparkCanvas();
-      resizeGlobalSparkCanvas();
-
-      const arcs = Array.from({ length: randomInt(3, 4) }, () => buildClickSparkArc(x, y));
-      const particles = Array.from({ length: randomInt(14, 22) }, () => {
-        const angle = randomBetween(0, Math.PI * 2);
-        const velocity = randomBetween(1.8, 4.6);
-        return {
-          x,
-          y,
-          vx: Math.cos(angle) * velocity,
-          vy: Math.sin(angle) * velocity - randomBetween(0.1, 0.8),
-          age: 0,
-          life: randomBetween(120, 220),
-          size: randomBetween(0.8, 1.6),
-          drag: randomBetween(0.94, 0.97),
-          gravity: randomBetween(0.04, 0.085),
-        };
-      });
-
-      state.bursts.push({
-        x,
-        y,
-        age: 0,
-        life: randomBetween(120, 180),
-        flashRadius: randomBetween(7, 12),
-        arcs,
-        particles,
-      });
-
-      if (!state.rafId) {
-        state.lastTime = 0;
-        state.rafId = requestAnimationFrame((timestamp) => renderGlobalSparkFrame(timestamp));
-      }
-    };
-
-    const drawClickSparkArc = (ctx, arc, alpha) => {
-      ctx.save();
-      ctx.lineCap = "round";
-      ctx.lineJoin = "round";
-
-      ctx.strokeStyle = `rgba(255, 210, 118, ${0.18 + alpha * 0.12})`;
-      ctx.lineWidth = 3.2;
-      ctx.shadowBlur = 7;
-      ctx.shadowColor = `rgba(255, 209, 110, ${alpha * 0.22})`;
-      traceSmoothPath(ctx, arc.points);
-      ctx.stroke();
-
-      ctx.strokeStyle = `rgba(255, 184, 52, ${alpha * 0.76})`;
-      ctx.lineWidth = 1.45;
-      ctx.shadowBlur = 0;
-      traceSmoothPath(ctx, arc.points);
-      ctx.stroke();
-
-      ctx.strokeStyle = `rgba(255, 252, 239, ${alpha * 0.96})`;
-      ctx.lineWidth = 0.68;
-      traceSmoothPath(ctx, arc.points);
-      ctx.stroke();
-
-      if (arc.branch) {
-        ctx.strokeStyle = `rgba(255, 232, 150, ${alpha * 0.56})`;
-        ctx.lineWidth = 0.58;
-        ctx.beginPath();
-        ctx.moveTo(arc.branch[0].x, arc.branch[0].y);
-        ctx.lineTo(arc.branch[1].x, arc.branch[1].y);
-        ctx.stroke();
-      }
-
-      const flash = ctx.createRadialGradient(arc.tip.x, arc.tip.y, 0, arc.tip.x, arc.tip.y, 3.4);
-      flash.addColorStop(0, `rgba(255, 252, 238, ${alpha * 0.96})`);
-      flash.addColorStop(0.55, `rgba(255, 218, 106, ${alpha * 0.26})`);
-      flash.addColorStop(1, "rgba(255, 218, 106, 0)");
-      ctx.fillStyle = flash;
-      ctx.beginPath();
-      ctx.arc(arc.tip.x, arc.tip.y, 3.4, 0, Math.PI * 2);
-      ctx.fill();
-
-      ctx.restore();
-    };
-
-    const drawGlobalSparkParticle = (ctx, particle) => {
-      const life = Math.max(0, 1 - (particle.age / particle.life));
-      const alpha = Math.pow(life, 0.75);
-      const tailLength = particle.size * (2.1 + life * 1.8);
-      const tailX = particle.x - particle.vx * tailLength;
-      const tailY = particle.y - particle.vy * tailLength;
-
-      ctx.save();
-      ctx.lineCap = "round";
-      ctx.lineJoin = "round";
-      ctx.strokeStyle = `rgba(255, 180, 72, ${alpha * 0.52})`;
-      ctx.lineWidth = particle.size * 1.45;
-      ctx.shadowBlur = 6;
-      ctx.shadowColor = `rgba(255, 174, 72, ${alpha * 0.28})`;
-      ctx.beginPath();
-      ctx.moveTo(tailX, tailY);
-      ctx.lineTo(particle.x, particle.y);
-      ctx.stroke();
-
-      ctx.strokeStyle = `rgba(255, 246, 222, ${alpha * 0.82})`;
-      ctx.lineWidth = Math.max(0.6, particle.size * 0.72);
-      ctx.shadowBlur = 0;
-      ctx.beginPath();
-      ctx.moveTo(tailX + (particle.x - tailX) * 0.34, tailY + (particle.y - tailY) * 0.34);
-      ctx.lineTo(particle.x, particle.y);
-      ctx.stroke();
-
-      ctx.fillStyle = `rgba(255, 237, 170, ${alpha * 0.74})`;
-      ctx.beginPath();
-      ctx.arc(particle.x, particle.y, particle.size * (0.34 + life * 0.24), 0, Math.PI * 2);
-      ctx.fill();
-      ctx.restore();
-    };
-
-    const renderGlobalSparkFrame = (now) => {
-      const state = ensureGlobalSparkCanvas();
-      if (!state.ctx || !state.canvas) return;
-
-      if (!state.lastTime) state.lastTime = now;
-      const dt = Math.min(32, now - state.lastTime || 16);
-      state.lastTime = now;
-
-      state.ctx.clearRect(0, 0, state.width, state.height);
-      state.ctx.save();
-      state.ctx.globalCompositeOperation = "lighter";
-
-      for (let i = state.bursts.length - 1; i >= 0; i -= 1) {
-        const burst = state.bursts[i];
-        burst.age += dt;
-
-        const life = Math.max(0, 1 - (burst.age / burst.life));
-        const alpha = burst.age < 18 ? (burst.age / 18) : Math.pow(life, 0.62);
-
-        if (burst.age >= burst.life && burst.particles.every((particle) => particle.age >= particle.life)) {
-          state.bursts.splice(i, 1);
-          continue;
-        }
-
-        const centerFlash = state.ctx.createRadialGradient(burst.x, burst.y, 0, burst.x, burst.y, burst.flashRadius);
-        centerFlash.addColorStop(0, `rgba(255, 252, 242, ${alpha * 0.92})`);
-        centerFlash.addColorStop(0.28, `rgba(255, 232, 168, ${alpha * 0.24})`);
-        centerFlash.addColorStop(0.55, `rgba(255, 196, 84, ${alpha * 0.12})`);
-        centerFlash.addColorStop(1, "rgba(255, 222, 124, 0)");
-        state.ctx.fillStyle = centerFlash;
-        state.ctx.beginPath();
-        state.ctx.arc(burst.x, burst.y, burst.flashRadius, 0, Math.PI * 2);
-        state.ctx.fill();
-
-        burst.arcs.forEach((arc) => drawClickSparkArc(state.ctx, arc, alpha));
-
-        burst.particles.forEach((particle) => {
-          particle.age += dt;
-          if (particle.age < particle.life) {
-            particle.x += particle.vx * (dt / 16);
-            particle.y += particle.vy * (dt / 16);
-            particle.vx *= particle.drag;
-            particle.vy = particle.vy * particle.drag + particle.gravity * (dt / 16);
-            drawGlobalSparkParticle(state.ctx, particle);
-          }
-        });
-      }
-
-      state.ctx.restore();
-
-      if (state.bursts.length) {
-        state.rafId = requestAnimationFrame((timestamp) => renderGlobalSparkFrame(timestamp));
-      } else {
-        state.rafId = 0;
-        state.ctx.clearRect(0, 0, state.width, state.height);
-      }
-    };
-
-    sparkTargets.forEach((element) => {
-      element.classList.add("spark-target");
-      ensureSparkCanvas(element);
-      resizeSparkCanvas(element);
-
-      if (resizeObserver) {
-        resizeObserver.observe(element);
-      }
-
-      element.addEventListener("mouseenter", () => activateSpark(element));
-      element.addEventListener("mouseleave", () => {
-        requestAnimationFrame(() => deactivateSpark(element));
-      });
-      element.addEventListener("focusin", () => activateSpark(element));
-      element.addEventListener("focusout", () => {
-        requestAnimationFrame(() => deactivateSpark(element));
-      });
-    });
-
-    ensureGlobalSparkCanvas();
-    resizeGlobalSparkCanvas();
 
     document.addEventListener("click", (event) => {
       researchDropdowns.forEach((dropdown) => {
-        if (!dropdown.contains(event.target)) {
-          dropdown.removeAttribute("open");
-        }
+        if (!dropdown.contains(event.target)) dropdown.removeAttribute("open");
       });
     });
 
     document.addEventListener("keydown", (event) => {
-      if (event.key !== "Escape") return;
-      researchDropdowns.forEach((dropdown) => {
-        dropdown.removeAttribute("open");
-      });
+      if (event.key === "Escape") {
+        researchDropdowns.forEach((dropdown) => dropdown.removeAttribute("open"));
+      }
     });
-
-    document.addEventListener("pointerdown", (event) => {
-      if (event.pointerType === "mouse" && event.button !== 0) return;
-      spawnClickSparkBurst(event.clientX, event.clientY);
-    }, { passive: true });
-
-    window.addEventListener("resize", () => {
-      sparkTargets.forEach((element) => resizeSparkCanvas(element));
-      resizeGlobalSparkCanvas();
-    });
-
-    const handleMotionChange = (event) => {
-      if (!event.matches) return;
-      sparkTargets.forEach((element) => {
-        const state = getSparkState(element);
-        state.active = false;
-        element.classList.remove("is-sparking");
-
-        if (state.rafId) {
-          cancelAnimationFrame(state.rafId);
-          state.rafId = 0;
-        }
-
-        state.arcs = [];
-        state.particles = [];
-        if (state.ctx) {
-          state.ctx.clearRect(0, 0, state.width, state.height);
-        }
-      });
-    };
-
-    if (typeof prefersReducedMotion.addEventListener === "function") {
-      prefersReducedMotion.addEventListener("change", handleMotionChange);
-    } else if (typeof prefersReducedMotion.addListener === "function") {
-      prefersReducedMotion.addListener(handleMotionChange);
-    }
   })();
 </script>
 

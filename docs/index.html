@@ -1,184 +1,2485 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="utf-8">
+  <meta name="description" content="SGIP: Learning Scene-Grounded Interaction Priors for Scene-Aware Human Motion Prediction">
+  <meta name="keywords" content="Human Motion Prediction, Scene Grounding, Interaction Priors, Intent Distillation, DGIST, NeurIPS 2026">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#112d3c">
-  <title>SGIP · Scene-Grounded Interaction Priors · NeurIPS 2026</title>
-  <meta name="description" content="SGIP predicts future human trajectories and full-body poses by learning scene-grounded interaction priors. Observed motion and a 3D scene are all it needs at inference. NeurIPS 2026, DGIST.">
-  <link rel="canonical" href="https://dhsoon02.github.io/SGIP/">
+  <title>SGIP: Learning Scene-Grounded Interaction Priors for Scene-Aware Human Motion Prediction</title>
+
+  <link href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans|Castoro" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Oxanium:wght@700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+
   <meta property="og:type" content="website">
-  <meta property="og:title" content="SGIP · Learning Scene-Grounded Interaction Priors">
-  <meta property="og:description" content="Predicting where people will interact—and how they will move—from observed motion and a 3D scene. NeurIPS 2026.">
+  <meta property="og:title" content="SGIP: Learning Scene-Grounded Interaction Priors for Scene-Aware Human Motion Prediction">
+  <meta property="og:description" content="NeurIPS 2026 · DGIST. Predicting future human motion from observed motion and a 3D scene through distilled interaction priors.">
   <meta property="og:url" content="https://dhsoon02.github.io/SGIP/">
-  <meta property="og:image" content="https://dhsoon02.github.io/SGIP/assets/images/social-preview.jpg">
-  <meta name="twitter:card" content="summary_large_image">
-  <meta name="citation_title" content="Learning Scene-Grounded Interaction Priors for Scene-Aware Human Motion Prediction">
-  <meta name="citation_author" content="Donghyeon Soon">
-  <meta name="citation_author" content="Jiil Yoon">
-  <meta name="citation_author" content="Hyeondong Kim">
-  <meta name="citation_author" content="Daehee Park">
-  <meta name="citation_publication_date" content="2026">
-  <meta name="citation_conference_title" content="Advances in Neural Information Processing Systems">
-  <meta name="citation_pdf_url" content="https://dhsoon02.github.io/SGIP/paper.pdf">
-  <link rel="icon" href="assets/images/favicon.svg" type="image/svg+xml">
-  <link rel="preload" href="assets/fonts/manrope.ttf" as="font" type="font/ttf" crossorigin>
-  <link rel="stylesheet" href="assets/css/style.css">
-  <script src="assets/js/main.js" defer></script>
+  <meta property="og:image" content="https://dhsoon02.github.io/SGIP/images/paper_figures/fig1.png">
+  <link rel="canonical" href="https://dhsoon02.github.io/SGIP/">
+  <style>
+    :root {
+      --navy: #1B427D;
+      --navy-deep: #112846;
+      --accent-red: #C62828;
+      --ink: #172536;
+      --muted: #5B6878;
+      --line: #DCE4EF;
+      --panel: #FFFFFF;
+      --panel-soft: #FAFAFA;
+      --bg: #FFFFFF;
+    }
+
+    body {
+      font-family: 'Noto Sans', sans-serif;
+      color: var(--ink);
+      background: #FFFFFF;
+    }
+
+    .research-hub {
+      position: relative;
+      z-index: 20;
+      padding: 0.95rem 1.5rem 0;
+      background:
+        radial-gradient(circle at 18% 88%, rgba(226, 186, 68, 0.12), transparent 30%),
+        linear-gradient(180deg, rgba(255, 255, 255, 0.98) 0%, rgba(255, 255, 255, 0.9) 100%);
+    }
+
+    .research-hub-inner {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 0.55rem;
+      flex-wrap: wrap;
+    }
+
+    .research-home,
+    .research-toggle {
+      position: relative;
+      overflow: hidden;
+      isolation: isolate;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.38rem;
+      height: 2.45rem;
+      padding: 0 0.82rem;
+      border-radius: 999px;
+      border: 1px solid rgba(27, 66, 125, 0.12);
+      background: rgba(255, 255, 255, 0.88);
+      box-shadow: 0 14px 34px rgba(17, 40, 70, 0.07);
+      color: var(--navy-deep);
+      font-size: 0.92rem;
+      font-weight: 700;
+      line-height: 1;
+      text-decoration: none;
+      box-sizing: border-box;
+      backdrop-filter: blur(16px);
+      transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease, background-color 0.18s ease;
+    }
+
+    .research-home:hover,
+    .research-home:focus-visible,
+    .research-toggle:hover,
+    .research-toggle:focus-visible {
+      transform: translateY(-1px);
+      box-shadow: 0 18px 40px rgba(17, 40, 70, 0.1);
+      border-color: rgba(27, 66, 125, 0.18);
+      background: rgba(255, 255, 255, 0.96);
+      color: var(--navy-deep);
+    }
+
+    .research-home-icon,
+    .research-toggle-icon {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 1.42rem;
+      height: 1.42rem;
+      border-radius: 999px;
+      background: rgba(27, 66, 125, 0.08);
+      color: var(--navy);
+      font-size: 0.8rem;
+      flex: 0 0 auto;
+      transition: transform 0.18s ease, background-color 0.18s ease, color 0.18s ease;
+    }
+
+    .research-home:hover .research-home-icon,
+    .research-home:focus-visible .research-home-icon,
+    .research-toggle:hover .research-toggle-icon,
+    .research-toggle:focus-visible .research-toggle-icon {
+      transform: translateY(-1px);
+      background: rgba(27, 66, 125, 0.12);
+      color: var(--navy-deep);
+    }
+
+    .research-dropdown {
+      position: relative;
+      display: inline-flex;
+      align-items: center;
+    }
+
+    .research-dropdown[open] {
+      z-index: 24;
+    }
+
+    .research-toggle {
+      display: inline-flex;
+      align-items: center;
+      list-style: none;
+      justify-content: center;
+      min-width: 0;
+      margin: 0;
+      appearance: none;
+      -webkit-appearance: none;
+      vertical-align: top;
+      cursor: pointer;
+    }
+
+    .research-toggle::-webkit-details-marker {
+      display: none;
+    }
+
+    .research-toggle::marker {
+      content: "";
+    }
+
+    .research-toggle-copy {
+      display: inline-flex;
+      align-items: center;
+    }
+
+    .research-dropdown[open] .research-toggle-icon {
+      transform: rotate(180deg);
+    }
+
+    .research-menu {
+      position: absolute;
+      top: calc(100% + 0.75rem);
+      left: 50%;
+      width: min(92vw, 540px);
+      padding: 0.9rem;
+      display: grid;
+      gap: 0.78rem;
+      border-radius: 24px;
+      border: 1px solid rgba(27, 66, 125, 0.12);
+      background: rgba(255, 255, 255, 0.96);
+      box-shadow: 0 30px 72px rgba(17, 40, 70, 0.14);
+      backdrop-filter: blur(18px);
+      transform: translateX(-50%) translateY(8px);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.18s ease, transform 0.18s ease;
+    }
+
+    .research-dropdown[open] .research-menu {
+      opacity: 1;
+      pointer-events: auto;
+      transform: translateX(-50%) translateY(0);
+    }
+
+    .research-card {
+      display: grid;
+      grid-template-columns: auto 1fr auto;
+      align-items: center;
+      gap: 0.85rem;
+      padding: 0.95rem 1rem;
+      border-radius: 18px;
+      border: 1px solid rgba(27, 66, 125, 0.1);
+      text-decoration: none;
+      transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease;
+    }
+
+    .research-card:hover,
+    .research-card:focus-visible {
+      transform: translateY(-2px);
+      box-shadow: 0 18px 40px rgba(17, 40, 70, 0.09);
+      border-color: rgba(27, 66, 125, 0.16);
+    }
+
+    .research-card-blue {
+      background: linear-gradient(135deg, rgba(37, 99, 235, 0.08) 0%, rgba(255, 255, 255, 0.98) 72%);
+    }
+
+    .research-card-amber {
+      background: linear-gradient(135deg, rgba(217, 119, 6, 0.08) 0%, rgba(255, 255, 255, 0.98) 72%);
+    }
+
+    .research-card-icon {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 2.7rem;
+      height: 2.7rem;
+      border-radius: 16px;
+      background: rgba(27, 66, 125, 0.08);
+      color: var(--navy);
+      font-size: 1rem;
+      flex: 0 0 auto;
+    }
+
+    .research-card-copy {
+      display: grid;
+      gap: 0.18rem;
+      min-width: 0;
+      text-align: left;
+    }
+
+    .research-card-kicker {
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: 0.02em;
+      color: var(--muted);
+    }
+
+    .research-card-title {
+      font-family: 'Google Sans', sans-serif;
+      font-size: 1.02rem;
+      font-weight: 700;
+      line-height: 1.2;
+      color: var(--navy-deep);
+    }
+
+    .research-card-desc {
+      font-size: 0.9rem;
+      line-height: 1.45;
+      color: var(--muted);
+    }
+
+    .research-card-arrow {
+      color: var(--muted);
+      font-size: 0.94rem;
+    }
+
+    .hero {
+      position: relative;
+      overflow: hidden;
+      isolation: isolate;
+      background:
+        radial-gradient(circle at 18% 16%, rgba(226, 186, 68, 0.10), transparent 24%),
+        linear-gradient(180deg, #FFFFFF 0%, #FFFFFF 100%);
+      border-bottom: 1px solid rgba(27, 66, 125, 0.10);
+    }
+
+    .hero::before,
+    .hero::after {
+      content: "";
+      position: absolute;
+      pointer-events: none;
+    }
+
+    .hero::before {
+      top: -4rem;
+      left: -8%;
+      width: 66%;
+      height: 22rem;
+      background:
+        linear-gradient(116deg, transparent 14%, rgba(226, 186, 68, 0.12) 32%, rgba(90, 143, 222, 0.10) 48%, transparent 66%),
+        linear-gradient(118deg, transparent 42%, rgba(255, 255, 255, 0.58) 48%, transparent 54%);
+      filter: blur(15px);
+      opacity: 0.64;
+      transform: skewX(-18deg);
+      animation: heroStreak 9s ease-in-out infinite;
+    }
+
+    .hero::after {
+      top: 1.4rem;
+      right: 6%;
+      width: 15rem;
+      height: 15rem;
+      background: radial-gradient(circle, rgba(226, 186, 68, 0.16) 0%, rgba(226, 186, 68, 0.08) 34%, transparent 72%);
+      filter: blur(18px);
+      opacity: 0.62;
+      animation: heroPulse 7s ease-in-out infinite;
+    }
+
+    .hero-body {
+      position: relative;
+      z-index: 1;
+    }
+
+    .publication-title,
+    .title.is-1 {
+      font-family: 'Google Sans', sans-serif;
+      font-weight: 700;
+      color: var(--navy-deep);
+      font-size: clamp(2.15rem, 3.25vw, 2.65rem);
+      line-height: 1.08;
+      letter-spacing: -0.03em;
+      max-width: 980px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .title-icon {
+      display: inline-block;
+      width: 0.92em;
+      height: 0.92em;
+      object-fit: contain;
+      vertical-align: -0.1em;
+      margin-right: 0.14em;
+      filter: drop-shadow(0 0 4px rgba(226, 186, 68, 0.20));
+      animation: iconCharge 3.4s ease-in-out infinite;
+    }
+
+    .title-line {
+      display: block;
+    }
+
+    .title-line-bottom {
+      white-space: nowrap;
+    }
+
+    .title-accent {
+      position: relative;
+      display: inline-block;
+      padding: 0 0.05em 0.03em 0.02em;
+      isolation: isolate;
+      z-index: 0;
+      font-family: 'Oxanium', 'Google Sans', sans-serif;
+      font-weight: 800;
+      font-size: 1.04em;
+      letter-spacing: -0.055em;
+      line-height: 0.92;
+      color: #efc64d;
+      text-shadow:
+        0 0 1px rgba(255, 252, 232, 0.9),
+        0 0 8px rgba(255, 196, 52, 0.32),
+        0 0 18px rgba(242, 180, 30, 0.2);
+      transform: skewX(-9deg) translateY(0.02em);
+      animation: titleSurge 2.9s ease-in-out infinite;
+      filter: saturate(1.08) brightness(1.02);
+      will-change: background-position, text-shadow, filter;
+    }
+
+    @supports ((-webkit-background-clip: text) and (-webkit-text-fill-color: transparent)) {
+      .title-accent {
+        background: linear-gradient(180deg, #fffde7 0%, #fff2b9 14%, #ffd967 34%, #ffc53b 54%, #f0ab22 78%, #ac6708 100%);
+        background-size: 100% 165%;
+        background-position: 50% 12%;
+        -webkit-background-clip: text;
+        background-clip: text;
+        -webkit-text-fill-color: transparent;
+      }
+    }
+
+    @supports (-webkit-text-stroke: 1px rgba(176, 106, 9, 0.92)) {
+      .title-accent {
+        -webkit-text-stroke: 1.2px rgba(176, 106, 9, 0.92);
+        paint-order: stroke fill;
+      }
+    }
+
+    .title-accent::before,
+    .title-accent::after {
+      content: "";
+      position: absolute;
+      pointer-events: none;
+      z-index: -1;
+      background: linear-gradient(90deg, transparent 0%, rgba(255, 250, 219, 0.98) 14%, rgba(255, 213, 94, 0.98) 46%, rgba(214, 140, 25, 0.94) 82%, transparent 100%);
+      filter: drop-shadow(0 0 4px rgba(214, 155, 26, 0.26));
+      mix-blend-mode: normal;
+    }
+
+    .title-accent::before {
+      left: -0.03em;
+      bottom: 0.09em;
+      width: 38%;
+      height: 0.28em;
+      clip-path: polygon(0 70%, 13% 46%, 24% 60%, 37% 22%, 49% 52%, 63% 30%, 78% 66%, 91% 42%, 100% 56%, 100% 70%, 89% 82%, 77% 58%, 63% 76%, 49% 44%, 37% 68%, 24% 40%, 13% 74%, 0 88%);
+      animation: titleCrackleTop 3.2s steps(1, end) infinite;
+    }
+
+    .title-accent::after {
+      right: -0.02em;
+      top: 0.07em;
+      width: 24%;
+      height: 0.24em;
+      clip-path: polygon(0 62%, 15% 36%, 29% 58%, 46% 18%, 61% 46%, 77% 26%, 92% 62%, 100% 46%, 100% 56%, 90% 74%, 77% 48%, 61% 68%, 46% 34%, 29% 70%, 15% 46%, 0 80%);
+      animation: titleCrackleBottom 2.8s steps(1, end) infinite;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      position: relative;
+      overflow: hidden;
+      isolation: isolate;
+      padding: 0.52rem 0.86rem;
+      border-radius: 999px;
+      background: rgba(198, 40, 40, 0.10);
+      border: 1px solid rgba(198, 40, 40, 0.18);
+      color: var(--accent-red);
+      font-size: 1.12rem;
+      font-weight: 800;
+      margin-bottom: 1.1rem;
+      box-shadow: 0 10px 24px rgba(198, 40, 40, 0.08);
+      transition: transform 0.18s ease, box-shadow 0.18s ease, background-color 0.18s ease, border-color 0.18s ease;
+    }
+
+    .publication-venue {
+      font-size: 1.55rem;
+      font-weight: 700;
+      color: var(--accent-red);
+      margin-top: 0.75rem;
+    }
+
+    .publication-authors {
+      color: #243447;
+    }
+
+    .publication-authors a {
+      color: var(--navy-deep);
+    }
+
+    .publication-authors.is-names {
+      color: #209CEE;
+    }
+
+    .publication-authors.is-names a,
+    .publication-authors.is-names a:visited {
+      color: #209CEE;
+      position: relative;
+      display: inline-block;
+      text-decoration: none;
+      transition: color 0.18s ease, transform 0.18s ease;
+    }
+
+    .publication-authors.is-names a::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      bottom: -0.08em;
+      width: 100%;
+      height: 2px;
+      border-radius: 999px;
+      background: rgba(32, 156, 238, 0.28);
+      transform: scaleX(0.32);
+      transform-origin: left center;
+      opacity: 0;
+      transition: transform 0.18s ease, opacity 0.18s ease, background 0.18s ease;
+    }
+
+    .publication-authors.is-names a:hover,
+    .publication-authors.is-names a:focus-visible {
+      color: #209CEE;
+      transform: translateY(-1px);
+    }
+
+    .publication-authors.is-names a:hover::after,
+    .publication-authors.is-names a:focus-visible::after {
+      opacity: 1;
+      transform: scaleX(1);
+      background: rgba(32, 156, 238, 0.42);
+    }
+
+    .affiliation-dgist {
+      color: inherit;
+    }
+
+    .publication-footnotes {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 0.9rem 1.25rem;
+      margin-top: 0.45rem;
+      font-size: 0.95rem;
+      color: var(--muted);
+    }
+
+    .publication-links {
+      margin-top: 1.35rem;
+    }
+
+    .publication-links .button {
+      position: relative;
+      overflow: hidden;
+      isolation: isolate;
+      transition: transform 0.18s ease, box-shadow 0.18s ease, background-color 0.18s ease, border-color 0.18s ease;
+      box-shadow: 0 10px 24px rgba(17, 40, 70, 0.08);
+    }
+
+    .hero-summary {
+      position: relative;
+      overflow: hidden;
+      isolation: isolate;
+      max-width: 880px;
+      margin: 1.35rem auto 0;
+      padding: 1.4rem 1.6rem;
+      border-radius: 20px;
+      background: rgba(255, 255, 255, 0.78);
+      border: 1px solid rgba(27, 66, 125, 0.10);
+      box-shadow: 0 18px 50px rgba(17, 40, 70, 0.08);
+      font-size: 1.08rem;
+      line-height: 1.75;
+      color: #26384d;
+      transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease;
+    }
+
+    .hero-metrics {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 1rem;
+      margin-top: 1.35rem;
+    }
+
+    .metric-card,
+    .story-card,
+    .step-card,
+    .result-card,
+    .figure-panel,
+    .table-panel {
+      position: relative;
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 22px;
+      box-shadow: 0 16px 44px rgba(17, 40, 70, 0.08);
+      transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease;
+    }
+
+    .metric-card {
+      padding: 1rem 1.05rem;
+      text-align: left;
+    }
+
+    .metric-head,
+    .signal-head {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      margin-bottom: 0.55rem;
+    }
+
+    .metric-icon,
+    .signal-icon {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 2.45rem;
+      height: 2.45rem;
+      border-radius: 14px;
+      background: rgba(27, 66, 125, 0.08);
+      color: var(--navy);
+      font-size: 1rem;
+      flex: 0 0 auto;
+      transition: transform 0.18s ease, box-shadow 0.18s ease, background-color 0.18s ease;
+    }
+
+    .metric-card,
+    .story-card,
+    .step-card,
+    .result-card {
+      position: relative;
+      overflow: hidden;
+      isolation: isolate;
+    }
+
+    .metric-card::before,
+    .story-card::before,
+    .step-card::before {
+      content: "";
+      position: absolute;
+      inset: 0 auto auto 0;
+      width: 100%;
+      height: 3px;
+      background: transparent;
+    }
+
+    .icon-blue {
+      background: rgba(37, 99, 235, 0.12);
+      color: #1d4ed8;
+    }
+
+    .icon-teal {
+      background: rgba(13, 148, 136, 0.12);
+      color: #0f766e;
+    }
+
+    .icon-emerald {
+      background: rgba(5, 150, 105, 0.12);
+      color: #047857;
+    }
+
+    .icon-amber {
+      background: rgba(217, 119, 6, 0.12);
+      color: #b45309;
+    }
+
+    .icon-indigo {
+      background: rgba(79, 70, 229, 0.12);
+      color: #4338ca;
+    }
+
+    .icon-slate {
+      background: rgba(71, 85, 105, 0.12);
+      color: #334155;
+    }
+
+    .icon-rose {
+      background: rgba(225, 29, 72, 0.11);
+      color: #be123c;
+    }
+
+    .accent-blue::before {
+      background: rgba(29, 78, 216, 0.20);
+    }
+
+    .accent-blue .metric-label,
+    .accent-blue .card-kicker {
+      color: #1d4ed8;
+    }
+
+    .accent-amber::before {
+      background: rgba(180, 83, 9, 0.20);
+    }
+
+    .accent-amber .metric-label,
+    .accent-amber .card-kicker {
+      color: #b45309;
+    }
+
+    .accent-emerald::before {
+      background: rgba(4, 120, 87, 0.20);
+    }
+
+    .accent-emerald .metric-label,
+    .accent-emerald .card-kicker {
+      color: #047857;
+    }
+
+    .accent-indigo::before {
+      background: rgba(67, 56, 202, 0.20);
+    }
+
+    .accent-indigo .metric-label,
+    .accent-indigo .card-kicker {
+      color: #4338ca;
+    }
+
+    .accent-teal::before {
+      background: rgba(15, 118, 110, 0.20);
+    }
+
+    .accent-teal .metric-label,
+    .accent-teal .card-kicker {
+      color: #0f766e;
+    }
+
+    .accent-rose::before {
+      background: rgba(190, 18, 60, 0.18);
+    }
+
+    .accent-rose .metric-label,
+    .accent-rose .card-kicker {
+      color: #be123c;
+    }
+
+    .accent-slate::before {
+      background: rgba(51, 65, 85, 0.20);
+    }
+
+    .accent-slate .metric-label,
+    .accent-slate .card-kicker {
+      color: #334155;
+    }
+
+    .metric-label {
+      font-size: 0.9rem;
+      letter-spacing: 0.01em;
+      text-transform: none;
+      color: var(--muted);
+      font-weight: 700;
+      line-height: 1.1;
+      white-space: nowrap;
+      margin-top: 0.14rem;
+    }
+
+    .metric-value {
+      margin-top: 0.1rem;
+      font-size: 1.45rem;
+      font-weight: 700;
+      color: var(--navy-deep);
+      line-height: 1.15;
+    }
+
+    .metric-note {
+      margin-top: 0.3rem;
+      font-size: 0.9rem;
+      color: var(--muted);
+      line-height: 1.5;
+    }
+
+    .section {
+      padding: 3.35rem 1.5rem;
+    }
+
+    .section-soft {
+      background: #FCFCFC;
+      border-top: 1px solid rgba(27, 66, 125, 0.06);
+      border-bottom: 1px solid rgba(27, 66, 125, 0.06);
+    }
+
+    .section-title {
+      font-family: 'Google Sans', sans-serif;
+      font-weight: 700;
+      font-size: 2rem;
+      margin-bottom: 1rem;
+      color: var(--navy-deep);
+      text-align: left;
+      border-bottom: 2px solid rgba(27, 66, 125, 0.12);
+      padding-bottom: 0.55rem;
+    }
+
+    .section-lead {
+      max-width: 860px;
+      margin-bottom: 1.6rem;
+      font-size: 1.07rem;
+      line-height: 1.75;
+      color: var(--muted);
+    }
+
+    .content p {
+      font-size: 1.08rem;
+      line-height: 1.75;
+      text-align: justify;
+      color: #26384d;
+    }
+
+    .story-grid,
+    .result-grid,
+    .qual-grid {
+      display: grid;
+      gap: 1.1rem;
+    }
+
+    .story-grid {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .qual-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .story-card,
+    .step-card,
+    .result-card {
+      padding: 1.15rem;
+    }
+
+    .card-kicker {
+      display: inline-block;
+      margin-bottom: 0.55rem;
+      font-size: 0.86rem;
+      font-weight: 700;
+      letter-spacing: 0.01em;
+      text-transform: none;
+      color: var(--navy);
+      line-height: 1.1;
+      white-space: nowrap;
+    }
+
+    .signal-head .card-kicker {
+      margin-top: 0.3rem;
+    }
+
+    .card-title,
+    .minor-title {
+      font-family: 'Google Sans', sans-serif;
+      color: var(--navy-deep);
+      font-weight: 700;
+    }
+
+    .card-title {
+      font-size: 1.16rem;
+      margin-bottom: 0.55rem;
+      line-height: 1.2;
+    }
+
+    .minor-title {
+      font-size: 1.3rem;
+      margin-bottom: 0.8rem;
+    }
+
+    .story-card p,
+    .step-card p,
+    .result-card p {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.55;
+    }
+
+    .step-list {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 1rem;
+    }
+
+    .step-number {
+      display: inline-flex;
+      width: 2.15rem;
+      height: 2.15rem;
+      align-items: center;
+      justify-content: center;
+      border-radius: 999px;
+      background: rgba(27, 66, 125, 0.10);
+      color: var(--navy);
+      font-weight: 700;
+      margin-bottom: 0;
+      flex: 0 0 auto;
+    }
+
+    .step-card .card-title,
+    .story-card .card-title {
+      margin-bottom: 0.45rem;
+    }
+
+    .step-card .card-title strong,
+    .story-card .card-title strong {
+      color: var(--navy-deep);
+    }
+
+    .method-figure {
+      max-width: 100%;
+    }
+
+    .figure-panel {
+      position: relative;
+      overflow: hidden;
+      isolation: isolate;
+      padding: 1rem;
+    }
+
+    .teaser-panel {
+      max-width: 820px;
+      margin: 0 auto;
+    }
+
+    .method-columns {
+      align-items: flex-start;
+    }
+
+    .qual-stack {
+      display: grid;
+      gap: 1.15rem;
+    }
+
+    .figure-panel img {
+      width: 100%;
+      height: auto;
+      display: block;
+      border-radius: 16px;
+      background: #fff;
+    }
+
+    .figure-caption {
+      margin-top: 0.95rem;
+      margin-bottom: 0.15rem;
+      color: var(--muted);
+      font-size: 1rem;
+      line-height: 1.7;
+      text-align: justify;
+    }
+
+    .caption-label {
+      font-weight: 700;
+      color: var(--navy-deep);
+    }
+
+    .caption-title {
+      font-style: normal;
+      font-weight: 600;
+      color: #4b5d72;
+    }
+
+    .table-panel {
+      padding: 0.65rem;
+      overflow-x: auto;
+    }
+
+    .spark-target {
+      isolation: isolate;
+    }
+
+    .spark-target > .spark-canvas {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      opacity: 0;
+      pointer-events: none;
+      z-index: 4;
+      border-radius: inherit;
+      transition: opacity 0.12s ease;
+    }
+
+    .spark-target.is-sparking > .spark-canvas {
+      opacity: 1;
+    }
+
+    .global-spark-canvas {
+      position: fixed;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 120;
+    }
+
+    .eyebrow:hover,
+    .eyebrow:focus-visible {
+      transform: translateY(-1px);
+      box-shadow: 0 14px 30px rgba(198, 40, 40, 0.12);
+    }
+
+    .publication-links .button:hover,
+    .publication-links .button:focus-visible {
+      transform: translateY(-1px);
+      box-shadow: 0 14px 30px rgba(17, 40, 70, 0.14);
+    }
+
+    .hero-summary:hover,
+    .hero-summary:focus-within {
+      transform: translateY(-2px);
+      box-shadow: 0 22px 56px rgba(17, 40, 70, 0.10);
+      border-color: rgba(27, 66, 125, 0.16);
+    }
+
+    .metric-card:hover,
+    .metric-card:focus-within,
+    .story-card:hover,
+    .story-card:focus-within,
+    .step-card:hover,
+    .step-card:focus-within,
+    .result-card:hover,
+    .result-card:focus-within,
+    .figure-panel:hover,
+    .figure-panel:focus-within,
+    .table-panel:hover,
+    .table-panel:focus-within {
+      transform: translateY(-2px);
+      box-shadow: 0 20px 52px rgba(17, 40, 70, 0.11);
+      border-color: rgba(27, 66, 125, 0.16);
+    }
+
+    .metric-card:hover,
+    .metric-card:focus-within {
+      transform: translateY(-1px);
+      box-shadow: 0 18px 42px rgba(17, 40, 70, 0.09);
+    }
+
+    .metric-card:hover .metric-icon,
+    .metric-card:focus-within .metric-icon,
+    .story-card:hover .signal-icon,
+    .story-card:focus-within .signal-icon,
+    .step-card:hover .signal-icon,
+    .step-card:focus-within .signal-icon {
+      transform: translateY(-2px) scale(1.03);
+      box-shadow: 0 10px 22px rgba(17, 40, 70, 0.12);
+    }
+
+    .metric-card:hover .metric-icon,
+    .metric-card:focus-within .metric-icon {
+      transform: translateY(-1px) scale(1.015);
+      box-shadow: 0 8px 18px rgba(17, 40, 70, 0.10);
+    }
+
+    @keyframes heroStreak {
+      0%, 100% {
+        transform: translate3d(-8%, 0, 0) skewX(-18deg);
+        opacity: 0.42;
+      }
+      50% {
+        transform: translate3d(10%, -12px, 0) skewX(-18deg);
+        opacity: 0.72;
+      }
+    }
+
+    @keyframes heroPulse {
+      0%, 100% {
+        transform: scale(0.96);
+        opacity: 0.48;
+      }
+      50% {
+        transform: scale(1.05);
+        opacity: 0.74;
+      }
+    }
+
+    @keyframes iconCharge {
+      0%, 100% {
+        transform: translateY(0) scale(1);
+        filter: drop-shadow(0 0 4px rgba(226, 186, 68, 0.18));
+      }
+      45% {
+        transform: translateY(-1px) scale(1.02);
+        filter: drop-shadow(0 0 8px rgba(226, 186, 68, 0.30));
+      }
+      55% {
+        transform: translateY(0) scale(0.995);
+        filter: drop-shadow(0 0 5px rgba(226, 186, 68, 0.22));
+      }
+    }
+
+    @keyframes titleCrackleTop {
+      0%, 100% {
+        opacity: 0.22;
+        transform: translate3d(0, 0, 0) scaleX(0.98) rotate(-2deg);
+      }
+      8% {
+        opacity: 0.82;
+        transform: translate3d(1px, -1px, 0) scaleX(1.02) rotate(-4deg);
+      }
+      13% {
+        opacity: 0.28;
+      }
+      29% {
+        opacity: 0.68;
+        transform: translate3d(-1px, 0, 0) scaleX(1.01) rotate(-1deg);
+      }
+      34% {
+        opacity: 0.16;
+      }
+      61% {
+        opacity: 0.74;
+        transform: translate3d(1px, -1px, 0) scaleX(1.015) rotate(-3deg);
+      }
+      66% {
+        opacity: 0.24;
+      }
+    }
+
+    @keyframes titleSurge {
+      0%, 100% {
+        background-position: 50% 12%;
+        text-shadow:
+          0 0 1px rgba(255, 252, 232, 0.92),
+          0 0 9px rgba(255, 203, 64, 0.34),
+          0 0 18px rgba(242, 180, 30, 0.2);
+        filter: saturate(1.08) brightness(1.03) drop-shadow(0 0 3px rgba(255, 228, 141, 0.14));
+      }
+      18% {
+        background-position: 50% 20%;
+        text-shadow:
+          0 0 1px rgba(255, 252, 232, 0.9),
+          0 0 9px rgba(255, 203, 64, 0.32),
+          0 0 22px rgba(242, 180, 30, 0.2);
+        filter: drop-shadow(0 0 4px rgba(255, 219, 98, 0.16));
+      }
+      27% {
+        background-position: 50% 38%;
+        text-shadow:
+          0 0 1px rgba(255, 252, 232, 0.76),
+          0 0 5px rgba(242, 180, 30, 0.18),
+          0 0 12px rgba(242, 180, 30, 0.12);
+        filter: saturate(1.02) brightness(0.99) drop-shadow(0 0 1px rgba(255, 219, 98, 0.08));
+      }
+      44% {
+        background-position: 50% 62%;
+        text-shadow:
+          0 0 1px rgba(255, 252, 232, 0.92),
+          0 0 11px rgba(255, 203, 64, 0.36),
+          0 0 24px rgba(242, 180, 30, 0.22);
+        filter: saturate(1.1) brightness(1.04) drop-shadow(0 0 5px rgba(255, 219, 98, 0.18));
+      }
+      58% {
+        background-position: 50% 78%;
+        text-shadow:
+          0 0 1px rgba(255, 252, 232, 0.78),
+          0 0 6px rgba(242, 180, 30, 0.22),
+          0 0 14px rgba(242, 180, 30, 0.14);
+        filter: saturate(1.03) brightness(1.01) drop-shadow(0 0 2px rgba(255, 219, 98, 0.10));
+      }
+      76% {
+        background-position: 50% 26%;
+        text-shadow:
+          0 0 1px rgba(255, 252, 232, 0.94),
+          0 0 10px rgba(255, 203, 64, 0.34),
+          0 0 20px rgba(242, 180, 30, 0.2);
+        filter: saturate(1.08) brightness(1.03) drop-shadow(0 0 4px rgba(255, 219, 98, 0.16));
+      }
+    }
+
+    @keyframes titleCrackleBottom {
+      0%, 100% {
+        opacity: 0.16;
+        transform: translate3d(0, 0, 0) scaleX(0.985) rotate(3deg);
+      }
+      6% {
+        opacity: 0.54;
+        transform: translate3d(-1px, 0, 0) scaleX(1.015) rotate(5deg);
+      }
+      11% {
+        opacity: 0.18;
+      }
+      38% {
+        opacity: 0.44;
+        transform: translate3d(1px, 1px, 0) scaleX(1.005) rotate(2deg);
+      }
+      43% {
+        opacity: 0.12;
+      }
+      72% {
+        opacity: 0.58;
+        transform: translate3d(1px, 0, 0) scaleX(1.01) rotate(4deg);
+      }
+      77% {
+        opacity: 0.16;
+      }
+    }
+
+    .table-panel table {
+      width: 100%;
+      border-collapse: collapse;
+      min-width: 0;
+    }
+
+    .table-panel th,
+    .table-panel td {
+      padding: 1rem 1rem;
+      border-bottom: 1px solid var(--line);
+      text-align: left;
+      vertical-align: top;
+      font-size: 0.98rem;
+    }
+
+    .table-panel th {
+      color: var(--navy-deep);
+      font-weight: 700;
+      background: rgba(27, 66, 125, 0.04);
+    }
+
+    .table-panel tr:last-child td {
+      border-bottom: none;
+    }
+
+    .results-table thead th {
+      white-space: nowrap;
+    }
+
+    .results-table tbody tr:hover {
+      background: rgba(27, 66, 125, 0.025);
+    }
+
+    .dataset-badge {
+      display: inline-flex;
+      align-items: center;
+      padding: 0.34rem 0.7rem;
+      border-radius: 999px;
+      background: rgba(27, 66, 125, 0.08);
+      color: var(--navy-deep);
+      font-size: 0.84rem;
+      font-weight: 700;
+      letter-spacing: 0.03em;
+      text-transform: uppercase;
+    }
+
+    .metric-main {
+      font-size: 1.22rem;
+      font-weight: 700;
+      color: var(--navy-deep);
+      line-height: 1.15;
+    }
+
+    .metric-inline {
+      font-size: 0.92rem;
+      color: var(--muted);
+      font-weight: 600;
+    }
+
+    .metric-stack {
+      display: grid;
+      gap: 0.18rem;
+    }
+
+    .metric-sub {
+      font-size: 0.9rem;
+      color: var(--muted);
+      line-height: 1.45;
+    }
+
+    .speed-pill {
+      display: inline-flex;
+      align-items: center;
+      padding: 0.28rem 0.62rem;
+      border-radius: 999px;
+      background: rgba(198, 40, 40, 0.08);
+      color: var(--accent-red);
+      font-size: 0.84rem;
+      font-weight: 700;
+      margin-top: 0.4rem;
+    }
+
+    .table-note {
+      margin-top: 0.95rem;
+      font-size: 0.95rem;
+      color: var(--muted);
+      line-height: 1.65;
+    }
+
+    .table-stack {
+      display: grid;
+      gap: 1.15rem;
+    }
+
+    .paper-table-panel {
+      padding: 1rem 1rem 0.8rem;
+    }
+
+    .paper-table-title {
+      font-family: 'Google Sans', sans-serif;
+      font-size: 1.08rem;
+      font-weight: 600;
+      color: var(--navy-deep);
+      margin-bottom: 0.2rem;
+    }
+
+    .figure-panel .minor-title {
+      color: #465a72;
+      font-weight: 600;
+    }
+
+    .paper-table-subhead {
+      font-size: 0.92rem;
+      color: var(--muted);
+      line-height: 1.6;
+      margin-bottom: 0.85rem;
+    }
+
+    .paper-results-table {
+      min-width: 0;
+      table-layout: fixed;
+    }
+
+    .ablation-results-table {
+      min-width: 640px;
+    }
+
+    .paper-results-table th,
+    .paper-results-table td {
+      font-size: 0.84rem;
+      padding: 0.72rem 0.38rem;
+      text-align: center;
+      vertical-align: middle;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .paper-results-table thead tr:first-child th {
+      background: rgba(27, 66, 125, 0.06);
+    }
+
+    .paper-results-table thead tr:nth-child(2) th {
+      background: rgba(27, 66, 125, 0.03);
+      font-weight: 600;
+    }
+
+    .paper-results-table thead th {
+      text-align: center;
+      vertical-align: middle;
+    }
+
+    .paper-results-table thead th:not(:first-child),
+    .paper-results-table tbody td:not(:first-child) {
+      text-align: center;
+      vertical-align: middle;
+    }
+
+    .header-unit {
+      display: block;
+      margin-top: 0.14rem;
+      font-size: 0.72rem;
+      font-weight: 600;
+      color: var(--muted);
+      letter-spacing: 0;
+    }
+
+    .paper-results-table th:first-child,
+    .paper-results-table td:first-child {
+      text-align: left;
+      width: 10.5rem;
+      white-space: nowrap;
+    }
+
+    .paper-results-table th:last-child,
+    .paper-results-table td:last-child {
+      width: 5.8rem;
+    }
+
+    .ablation-results-table th:first-child,
+    .ablation-results-table td:first-child {
+      width: 15rem;
+    }
+
+    .paper-results-table tbody tr.ours-row td {
+      background: transparent;
+    }
+
+    .paper-results-table tbody tr.ours-row td:first-child {
+      color: var(--navy-deep);
+      font-weight: 600;
+    }
+
+    .mean-cell,
+    .time-cell {
+      font-weight: inherit;
+      color: inherit;
+    }
+
+    .paper-results-table td.best-cell,
+    .paper-results-table td.second-cell {
+      background: transparent !important;
+      color: inherit;
+      font-weight: inherit;
+    }
+
+    .score-mark {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 2.85rem;
+      padding: 0.18rem 0.38rem;
+      border-radius: 999px;
+      font-weight: 700;
+      line-height: 1.15;
+      white-space: nowrap;
+      font-variant-numeric: tabular-nums;
+      letter-spacing: -0.01em;
+      position: relative;
+      z-index: 1;
+      transition: transform 0.18s ease, box-shadow 0.18s ease, background-color 0.18s ease;
+    }
+
+    .score-mark.best {
+      background: rgba(183, 63, 47, 0.10);
+      color: #a73b2a;
+      box-shadow: inset 0 0 0 1px rgba(167, 59, 42, 0.09);
+    }
+
+    .score-mark.second {
+      background: rgba(193, 132, 38, 0.12);
+      color: #9d671d;
+      box-shadow: inset 0 0 0 1px rgba(157, 103, 29, 0.10);
+    }
+
+    .table-panel:hover .score-mark.best,
+    .table-panel:focus-within .score-mark.best {
+      transform: translateY(-1px) scale(1.025);
+      box-shadow:
+        0 6px 14px rgba(167, 59, 42, 0.10),
+        inset 0 0 0 1px rgba(167, 59, 42, 0.10);
+    }
+
+    .bibtex-section {
+      background: #F5F7FA;
+      padding: 20px;
+      font-family: "Courier New", monospace;
+      font-size: 0.95rem;
+      line-height: 1.6;
+      overflow-x: auto;
+      border-radius: 16px;
+      border: 1px solid var(--line);
+    }
+
+    .footer {
+      background: transparent;
+      padding-top: 2rem;
+      padding-bottom: 2.75rem;
+    }
+
+    .footer .content p {
+      text-align: center;
+      color: var(--muted);
+      font-size: 0.95rem;
+    }
+
+    @media screen and (max-width: 1023px) {
+      .hero-metrics,
+      .story-grid,
+      .qual-grid,
+      .step-list {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+
+    @media screen and (max-width: 768px) {
+      .research-hub {
+        padding: 0.85rem 1rem 0;
+      }
+
+      .research-hub-inner,
+      .research-dropdown {
+        width: 100%;
+      }
+
+      .research-home,
+      .research-toggle {
+        width: 100%;
+      }
+
+      .research-menu {
+        position: static;
+        width: 100%;
+        margin-top: 0.75rem;
+        transform: none !important;
+      }
+
+      .research-dropdown:not([open]) .research-menu {
+        display: none;
+      }
+
+      .research-dropdown[open] .research-menu {
+        display: grid;
+      }
+
+      .research-card {
+        grid-template-columns: auto 1fr;
+      }
+
+      .research-card-arrow {
+        display: none;
+      }
+
+      .research-toggle-copy {
+        flex-direction: column;
+        gap: 0.18rem;
+      }
+
+      .hero-summary {
+        padding: 1.15rem;
+      }
+
+      .hero-metrics,
+      .story-grid,
+      .qual-grid,
+      .step-list {
+        grid-template-columns: 1fr;
+      }
+
+      .section {
+        padding: 3rem 1.15rem;
+      }
+
+      .section-title {
+        font-size: 1.7rem;
+      }
+
+      .publication-title,
+      .title.is-1 {
+        font-size: 2rem;
+      }
+
+      .title-accent {
+        -webkit-text-stroke: 0.95px rgba(176, 106, 9, 0.9);
+      }
+
+      .title-line-bottom {
+        white-space: normal;
+      }
+
+      .metric-value,
+      .result-number {
+        font-size: 1.6rem;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .hero::before,
+      .hero::after,
+      .title-accent::before,
+      .title-accent::after {
+        animation: none !important;
+      }
+
+      .title-icon,
+      .title-accent {
+        animation-duration: 7.5s !important;
+        animation-timing-function: ease-in-out !important;
+      }
+
+      .eyebrow,
+      .research-home,
+      .research-toggle,
+      .research-card,
+      .publication-links .button,
+      .hero-summary,
+      .metric-card,
+      .story-card,
+      .step-card,
+      .result-card,
+      .figure-panel,
+      .table-panel,
+      .publication-authors.is-names a {
+        transition: none !important;
+      }
+    }
+    /* Adapt the original table widths to SGIP's four motion-error metrics. */
+    .table-panel .paper-results-table {
+      min-width: 640px;
+    }
+    .paper-results-table th:last-child,
+    .paper-results-table td:last-child {
+      width: auto;
+    }
+    .table-panel .cue-results-table {
+      min-width: 740px;
+    }
+    .cue-results-table th:first-child,
+    .cue-results-table td:first-child {
+      width: 11rem;
+    }
+  </style>
 </head>
 <body>
-  <a class="skip-link" href="#main">Skip to content</a>
-  <header class="site-header">
-    <nav class="nav wrap" aria-label="Main navigation">
-      <a class="wordmark" href="#" aria-label="SGIP home"><img src="assets/images/favicon.svg" width="30" height="30" alt="">SGIP<span class="nav-year"> / 2026</span></a>
-      <div class="nav-links"><a href="#overview">Overview</a><a href="#method">Method</a><a href="#results">Results</a><a href="#citation">Citation</a></div>
-      <a class="nav-repo" href="https://github.com/dhsoon02/SGIP" target="_blank" rel="noopener noreferrer">GitHub <span aria-hidden="true">↗</span></a>
-    </nav>
-  </header>
 
-  <main id="main">
-    <section class="hero wrap" aria-labelledby="paper-title">
-      <div class="venue"><span class="status-dot" aria-hidden="true"></span> NeurIPS 2026 <span class="venue-divider"></span> DGIST</div>
-      <div class="hero-acronym" aria-hidden="true">SGIP</div>
-      <h1 id="paper-title">Learning <span>Scene-Grounded<br class="desktop-break"> Interaction Priors</span><small>for Scene-Aware Human Motion Prediction</small></h1>
-      <p class="hero-tagline">Predicting where people will interact—and how they will move.</p>
-      <div class="authors">
-        <a href="mailto:dhsoon@dgist.ac.kr">Donghyeon Soon<sup>*</sup></a>
-        <a href="mailto:wldlf2819@dgist.ac.kr">Jiil Yoon<sup>*</sup></a>
-        <a href="mailto:hdkim@dgist.ac.kr">Hyeondong Kim</a>
-        <a href="mailto:dhpark@dgist.ac.kr">Daehee Park<sup>†</sup></a>
-      </div>
-      <p class="author-notes"><span>DGIST</span><span><sup>*</sup> Equal contribution</span><span><sup>†</sup> Corresponding author</span></p>
-      <div class="resource-links">
-        <a class="button button-primary" href="paper.pdf" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14 3H6v18h12V7zM14 3v5h5M9 12h6M9 16h6"/></svg>Read the paper</a>
-        <a class="button" href="https://github.com/dhsoon02/SGIP" target="_blank" rel="noopener noreferrer"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m8 7-5 5 5 5m8-10 5 5-5 5m-3-12-2 14"/></svg>GitHub</a>
-        <a class="button" href="#overview"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m9 5 11 7-11 7z"/></svg>Watch overview</a>
-        <a class="button button-text" href="#citation">BibTeX <span aria-hidden="true">↓</span></a>
-      </div>
-      <div class="inference-line"><span class="mini-label">AT INFERENCE</span><span>Observed motion <b>+</b> 3D scene</span><span class="flow-arrow" aria-hidden="true">→</span><strong>Grounded future motion</strong></div>
-      <figure class="teaser">
-        <a class="zoomable" href="assets/images/teaser.png" data-lightbox aria-label="Enlarge SGIP teaser figure"><img src="assets/images/teaser.webp" width="2400" height="1054" fetchpriority="high" alt="Three steps: the same observed motion admits several destinations; a predicted prior ranks bags, sofa, chair, and free space; the selected sofa grounds a future motion sequence."><span class="expand-label" aria-hidden="true">↗ Expand figure</span></a>
-        <figcaption><strong>One observed motion. Several possible futures.</strong> SGIP makes the interaction target explicit, then grounds the predicted trajectory and full-body pose in that target.</figcaption>
-      </figure>
-    </section>
-
-    <section class="section overview-section" id="overview" aria-labelledby="overview-title">
-      <div class="wrap video-layout">
-        <div class="section-copy">
-          <p class="eyebrow">01 / THE IDEA</p>
-          <h2 id="overview-title">A better prediction<br>starts with <em>where.</em></h2>
-          <p>A person approaching a sofa might sit down, turn toward a chair, or keep walking. Motion history alone leaves the next interaction ambiguous.</p>
-          <p>SGIP learns an explicit distribution over scene objects and navigable space to guide what happens next.</p>
-          <a class="inline-link" href="assets/videos/sgip-overview.mp4" download>Download the overview <span aria-hidden="true">↓</span></a>
+<nav class="research-hub" aria-label="Research navigation">
+  <div class="container is-max-desktop">
+    <div class="research-hub-inner">
+      <a href="https://github.com/dhsoon02" class="research-home" target="_blank" rel="noopener">
+        <span class="research-home-icon"><i class="fas fa-house"></i></span><span>Home</span>
+      </a>
+      <details class="research-dropdown">
+        <summary class="research-toggle"><span class="research-toggle-copy"><span>More</span></span><span class="research-toggle-icon"><i class="fas fa-chevron-down"></i></span></summary>
+        <div class="research-menu">
+          <a href="./paper.pdf" class="research-card research-card-blue" target="_blank" rel="noopener">
+            <span class="research-card-icon"><i class="fas fa-file-pdf"></i></span>
+            <span class="research-card-copy"><span class="research-card-kicker">NeurIPS 2026</span><span class="research-card-title">SGIP Paper</span><span class="research-card-desc">Learning Scene-Grounded Interaction Priors</span></span>
+            <span class="research-card-arrow"><i class="fas fa-arrow-up-right-from-square"></i></span>
+          </a>
+          <a href="https://github.com/dhsoon02/SGIP" class="research-card research-card-amber" target="_blank" rel="noopener">
+            <span class="research-card-icon"><i class="fab fa-github"></i></span>
+            <span class="research-card-copy"><span class="research-card-kicker">Project Repository</span><span class="research-card-title">SGIP on GitHub</span><span class="research-card-desc">Scene-Aware Human Motion Prediction</span></span>
+            <span class="research-card-arrow"><i class="fas fa-arrow-up-right-from-square"></i></span>
+          </a>
         </div>
-        <figure class="video-figure">
-          <div class="video-shell"><video id="overview-video" controls playsinline preload="none" poster="assets/images/video-poster.jpg" aria-label="SGIP research overview">
-            <source src="assets/videos/sgip-overview.mp4" type="video/mp4">
-            <track kind="captions" src="assets/videos/sgip-overview.en.vtt" srclang="en" label="English">
-            <p>Your browser does not support embedded video. <a href="assets/videos/sgip-overview.mp4">Download the overview.</a></p>
-          </video></div>
-          <figcaption><span class="video-label">RESEARCH OVERVIEW</span> An illustrated walkthrough using the paper’s figures. English on-screen explanations; no audio.</figcaption>
-        </figure>
-      </div>
-      <div class="wrap idea-grid">
-        <article><span class="idea-number">01</span><h3>Ground the interaction</h3><p>Predict a prior over object instances and a navigation token, making future-motion grounding explicit.</p></article>
-        <article><span class="idea-number">02</span><h3>Distill intent into motion</h3><p>Transfer a teacher’s intent-aware grounding and motion predictions into an observation-only student.</p></article>
-        <article><span class="idea-number">03</span><h3>Deploy from observations</h3><p>Predict trajectory and full-body pose using motion and scene alone—without gaze, textual intent, or an LLM at inference.</p></article>
-      </div>
-      <details class="abstract wrap"><summary><span>Abstract</span><span class="details-symbol" aria-hidden="true">+</span></summary>
-        <div><p>Human motion prediction (HMP) aims to forecast future movement from an observed motion sequence, and recent methods have incorporated 3D scene geometry and object semantics to improve long-term plausibility. However, the destination of future motion remains ambiguous in cluttered scenes: the same observed motion can lead to different interaction targets or navigation modes. Existing methods either handle this ambiguity implicitly or rely on auxiliary signals like gaze that are hard to obtain in practice.</p>
-        <p>To address this, we propose <em>SGIP</em>, which explicitly predicts where in the scene future motion will be grounded across both objects and open navigation regions, and uses it to condition future trajectory and full-body pose prediction. This scene-grounded interaction prior is learned via intent distillation: <em>at training time only</em>, a teacher model scores candidate scene regions by combining an LLM prompted with a textual description of the person’s intent with geometric motion-scene features. A student model learns to reproduce these scores from only the observed motion and 3D scene, making <em>intent and LLM unnecessary at test time</em>.</p>
-        <p>Across multiple benchmark datasets, SGIP outperforms prior scene-aware baselines on both trajectory and pose accuracy in a realistic deployment setting where neither gaze nor intent is available at inference, demonstrating effectiveness of the proposed framework.</p></div>
       </details>
-    </section>
+    </div>
+  </div>
+</nav>
 
-    <section class="section wrap" id="qualitative" aria-labelledby="qualitative-title">
-      <div class="section-heading"><div><p class="eyebrow">02 / SEE THE DIFFERENCE</p><h2 id="qualitative-title">Grounded in the scene.<br>Reflected in the motion.</h2></div><p>Compare predicted paths, final interactions, and body poses across three GIMO scenes.</p></div>
-      <div class="result-toolbar"><div class="tabs" role="tablist" aria-label="Qualitative scene" data-tab-group="scenes">
-        <button type="button" role="tab" id="tab-kitchen" aria-controls="panel-kitchen" aria-selected="true" tabindex="0">Kitchen</button>
-        <button type="button" role="tab" id="tab-living-room" aria-controls="panel-living-room" aria-selected="false" tabindex="-1">Living room</button>
-        <button type="button" role="tab" id="tab-seminar-room" aria-controls="panel-seminar-room" aria-selected="false" tabindex="-1">Seminar room</button>
-      </div><div class="legend" aria-label="Motion color legend"><span><i class="observed"></i>Observed</span><span><i class="gt"></i>Ground truth</span><span><i class="predicted"></i>Predicted</span></div></div>
-      <div id="panel-kitchen" class="scene-panel" role="tabpanel" aria-labelledby="tab-kitchen" tabindex="0">
-        <div class="comparison-grid"><figure class="comparison ours"><img src="assets/images/kitchen-sgip.webp" width="1200" height="873" loading="lazy" alt="SGIP in the kitchen: predicted path approaches the ground-truth interaction area, with the final pose near the counter."></figure><figure class="comparison baseline"><img src="assets/images/kitchen-sif3d.webp" width="1200" height="875" loading="lazy" alt="Gaze-free SIF3D in the same kitchen: comparison of predicted trajectory, final interaction, and pose sequence."></figure></div>
-        <p class="panel-caption">Kitchen <span>·</span> Anticipating an interaction among nearby objects.</p>
-      </div>
-      <div id="panel-living-room" class="scene-panel" role="tabpanel" aria-labelledby="tab-living-room" tabindex="0" hidden>
-        <div class="comparison-grid"><figure class="comparison ours"><img src="assets/images/living-room-sgip.webp" width="1200" height="881" loading="lazy" alt="SGIP in the living room: the predicted motion approaches the ground-truth destination and final body placement."></figure><figure class="comparison baseline"><img src="assets/images/living-room-sif3d.webp" width="1200" height="884" loading="lazy" alt="Gaze-free SIF3D in the living room, using the same observations and scene."></figure></div>
-        <p class="panel-caption">Living room <span>·</span> Resolving competing destinations in a cluttered scene.</p>
-      </div>
-      <div id="panel-seminar-room" class="scene-panel" role="tabpanel" aria-labelledby="tab-seminar-room" tabindex="0" hidden>
-        <div class="comparison-grid"><figure class="comparison ours"><img src="assets/images/seminar-room-sgip.webp" width="1200" height="879" loading="lazy" alt="SGIP in the seminar room: trajectory and final pose follow the ground-truth interaction near the end of the table."></figure><figure class="comparison baseline"><img src="assets/images/seminar-room-sif3d.webp" width="1200" height="881" loading="lazy" alt="Gaze-free SIF3D in the seminar room, with trajectory and final interaction shown for comparison."></figure></div>
-        <p class="panel-caption">Seminar room <span>·</span> Aligning body placement with the interaction target.</p>
-      </div>
-      <p class="figure-note">Original qualitative results from the paper. SIF3D* denotes the gaze-free baseline. <a href="assets/images/qualitative.png" data-lightbox>View the complete figure ↗</a></p>
-    </section>
+<section class="hero">
+  <div class="hero-body"><div class="container is-max-desktop"><div class="columns is-centered"><div class="column has-text-centered">
+    <div class="eyebrow">Accepted to NeurIPS 2026</div>
+    <h1 class="title is-1 publication-title"><span class="title-line"><img src="./images/paper_figures/lightning.png" class="title-icon" alt=""><span class="title-accent">SGIP</span>: Learning Scene-Grounded Interaction Priors</span><span class="title-line title-line-bottom">for Scene-Aware Human Motion Prediction</span></h1>
+    <div class="is-size-5 publication-authors is-names">
+      <span class="author-block"><a href="mailto:dhsoon@dgist.ac.kr">Donghyeon Soon</a><sup>1*</sup>,</span>
+      <span class="author-block"><a href="mailto:wldlf2819@dgist.ac.kr">Jiil Yoon</a><sup>1*</sup>,</span>
+      <span class="author-block"><a href="mailto:hdkim@dgist.ac.kr">Hyeondong Kim</a><sup>1</sup>,</span>
+      <span class="author-block"><a href="mailto:dhpark@dgist.ac.kr">Daehee Park</a><sup>1&dagger;</sup></span>
+    </div>
+    <div class="is-size-5 publication-authors"><span class="author-block affiliation-dgist"><sup>1</sup>DGIST</span></div>
+    <div class="publication-footnotes"><span><sup>*</sup> Equal contribution.</span><span><sup>&dagger;</sup> Corresponding author.</span></div>
+    <div class="publication-links">
+      <span class="link-block"><a href="./paper.pdf" class="external-link button is-normal is-rounded is-dark" target="_blank" rel="noopener"><span class="icon"><i class="fas fa-file-pdf"></i></span><span>Paper</span></a></span>
+      <span class="link-block"><a href="#method" class="external-link button is-normal is-rounded is-dark"><span class="icon"><i class="fas fa-diagram-project"></i></span><span>Method</span></a></span>
+      <span class="link-block"><a href="https://github.com/dhsoon02/SGIP" class="external-link button is-normal is-rounded is-dark" target="_blank" rel="noopener"><span class="icon"><i class="fab fa-github"></i></span><span>Code</span></a></span>
+      <span class="link-block"><a href="#BibTeX" class="external-link button is-normal is-rounded is-dark"><span class="icon"><i class="fas fa-quote-right"></i></span><span>Citation</span></a></span>
+    </div>
+    <div class="hero-summary">
+      <strong>SGIP</strong> predicts <strong>where future motion will be grounded</strong> before forecasting how a person moves. It learns an explicit interaction prior over <strong>object instances and open navigation space</strong> through intent distillation, then uses the selected scene token to condition future trajectory and full-body pose prediction. At test time, SGIP needs only <strong>observed motion and a 3D scene</strong>, with no gaze, textual intent, or LLM.
+    </div>
+    <div class="hero-metrics">
+<div class="metric-card accent-blue">
+      <div class="metric-head"><span class="metric-icon icon-blue"><i class="fas fa-route"></i></span><div class="metric-label">GIMO · Traj-path</div></div>
+      <div class="metric-value">14.5% Lower</div><div class="metric-note">549 vs. 642 for GAP3DS* in the observation-only setting.</div>
+    </div>
+<div class="metric-card accent-amber">
+      <div class="metric-head"><span class="metric-icon icon-amber"><i class="fas fa-location-dot"></i></span><div class="metric-label">PROX · Traj-dest</div></div>
+      <div class="metric-value">12.6% Lower</div><div class="metric-note">576 vs. 659 for SIF3D* in the observation-only setting.</div>
+    </div>
+<div class="metric-card accent-emerald">
+      <div class="metric-head"><span class="metric-icon icon-emerald"><i class="fas fa-bullseye"></i></span><div class="metric-label">Grounding Accuracy</div></div>
+      <div class="metric-value">76% Top-1</div><div class="metric-note">Student interaction-token accuracy on GIMO.</div>
+    </div>
+<div class="metric-card accent-indigo">
+      <div class="metric-head"><span class="metric-icon icon-indigo"><i class="fas fa-person-walking"></i></span><div class="metric-label">Test-Time Inputs</div></div>
+      <div class="metric-value">Motion + Scene</div><div class="metric-note">Observed motion and 3D geometry; no auxiliary cues.</div>
+    </div></div>
+  </div></div></div></div>
+</section>
+<section class="section"><div class="container is-max-desktop">
+<div class="figure-panel teaser-panel">
 
-    <section class="section method-section" id="method" aria-labelledby="method-title">
-      <div class="wrap">
-        <div class="section-heading"><div><p class="eyebrow">03 / HOW IT WORKS</p><h2 id="method-title">Learn with intent.<br>Predict from observations.</h2></div><p>Privileged intent supervises the teacher during training. Its grounding and motion knowledge are distilled into the student.</p></div>
-        <div class="tabs method-tabs" role="tablist" aria-label="Method view" data-tab-group="method">
-          <button type="button" role="tab" id="tab-training" aria-controls="panel-training" aria-selected="true" tabindex="0">Training & inference</button>
-          <button type="button" role="tab" id="tab-inference" aria-controls="panel-inference" aria-selected="false" tabindex="-1">Inference only</button>
-        </div>
-        <div role="tabpanel" id="panel-training" aria-labelledby="tab-training" tabindex="0">
-          <figure class="framework"><a href="assets/images/framework.png" data-lightbox class="zoomable" aria-label="Enlarge the complete SGIP framework"><img src="assets/images/framework.webp" width="2400" height="1101" loading="lazy" alt="SGIP teacher-student pipeline. The privileged teacher combines semantic and geometric scores. Prior and motion distillation supervise the observation-only student. The motion predictor outputs trajectory and full-body pose."><span class="expand-label" aria-hidden="true">↗ Expand figure</span></a></figure>
-          <div class="method-explanation"><p><span class="branch-label teacher-label">TRAINING / TEACHER</span>Textual intent, semantic rubric scores, and motion–scene geometry build an intent-conditioned prior. The teacher also provides intent-aligned motion predictions.</p><p><span class="branch-label student-label">DEPLOYMENT / STUDENT</span>The student learns both <strong>where</strong> future motion is grounded and <strong>how</strong> to move. The teacher and its privileged inputs are used only during training.</p></div>
-        </div>
-        <div role="tabpanel" id="panel-inference" aria-labelledby="tab-inference" tabindex="0" hidden>
-          <div class="inference-flow"><div><span>INPUT</span><strong>Motion history<br>+ 3D scene</strong></div><b aria-hidden="true">→</b><div><span>GROUNDING</span><strong>Student prior<br>+ top-1 token</strong></div><b aria-hidden="true">→</b><div><span>OUTPUT</span><strong>Future trajectory<br>+ full-body pose</strong></div></div>
-          <figure class="framework inference-figure"><img src="assets/images/inference.webp" width="2100" height="717" loading="lazy" alt="The paper’s observation-only student branch encodes motion and scene, predicts a prior with an MLP, and conditions motion prediction on the selected token."></figure>
-          <p class="inference-note">At inference: no gaze, textual intent, or LLM. The standard single-future evaluation uses the highest-probability grounding token.</p>
-        </div>
-      </div>
-    </section>
+      <img src="./images/paper_figures/fig1.png" alt="SGIP resolves ambiguous future motion by predicting a prior over scene tokens and conditioning motion on the selected target." fetchpriority="high" decoding="async">
+      <p class="figure-caption"><span class="caption-label">Figure 1.</span> <span class="caption-title">Overview of SGIP.</span> <strong>(a)</strong> The same observed motion may lead toward different objects or through open space. <strong>(b)</strong> SGIP predicts a scene-grounded interaction prior from observed motion and the 3D scene. <strong>(c)</strong> The selected scene token conditions trajectory and full-body pose prediction; here, the person walks toward and sits on the sofa.</p>
+    </div></div></section>
 
-    <section class="section wrap futures-section" aria-labelledby="futures-title">
-      <div class="section-heading"><div><p class="eyebrow">04 / BEYOND A SINGLE TARGET</p><h2 id="futures-title">Same observations.<br>A different grounded future.</h2></div><p>Keep the observations and predictor fixed. Change the grounding token, and the predicted path and interaction pose change with it.</p></div>
-      <figure class="futures-figure"><a href="assets/images/alternative-futures.png" data-lightbox class="zoomable" aria-label="Enlarge token-conditioned alternative futures"><img src="assets/images/alternative-futures.webp" width="2400" height="635" loading="lazy" alt="Two token-conditioned predictions in the same kitchen: one uses the ground-truth interaction object, and the other uses an alternative high-probability interaction object."><span class="expand-label" aria-hidden="true">↗ Expand figure</span></a><figcaption>This qualitative analysis decodes distinct grounding tokens from the student prior. Reported main benchmark results use hard top-1 selection.</figcaption></figure>
-    </section>
+<section class="section section-soft" id="abstract"><div class="container is-max-desktop"><div class="columns is-centered has-text-centered"><div class="column is-four-fifths">
+  <h2 class="section-title">Abstract</h2>
+  <div class="content has-text-justified">
+    <p>Human motion prediction (HMP) aims to forecast future movement from an observed motion sequence, and recent methods have incorporated 3D scene geometry and object semantics to improve long-term plausibility. However, the destination of future motion remains ambiguous in cluttered scenes: the same observed motion can lead to different interaction targets or navigation modes. Existing methods either handle this ambiguity implicitly or rely on auxiliary signals like gaze that are hard to obtain in practice.</p>
+    <p>To address this, we propose <strong>SGIP</strong>, which explicitly predicts where in the scene future motion will be grounded across both objects and open navigation regions, and uses it to condition future trajectory and full-body pose prediction. This <strong>scene-grounded interaction prior</strong> is learned via <strong>intent distillation</strong>: at training time only, a teacher model scores candidate scene regions by combining an LLM prompted with a textual description of the person's intent with geometric motion-scene features. A student model learns to reproduce these scores from only the observed motion and 3D scene, making intent and LLM unnecessary at test time.</p>
+    <p>Across multiple benchmark datasets, SGIP outperforms prior scene-aware baselines on both trajectory and pose accuracy in a realistic deployment setting where neither gaze nor intent is available at inference, demonstrating effectiveness of the proposed framework.</p>
+  </div>
+</div></div></div></section>
 
-    <section class="section results-section" id="results" aria-labelledby="results-title">
-      <div class="wrap">
-        <div class="section-heading"><div><p class="eyebrow">05 / THE EVIDENCE</p><h2 id="results-title">Better grounding.<br>More accurate predictions.</h2></div><p>Evaluated on GIMO and PROX under observation-only inference. Lower trajectory and joint-position errors are better.</p></div>
-        <div class="metrics"><article><p>GIMO · TRAJECTORY PATH</p><strong>14.5<span>%</span><i>↓</i></strong><h3>lower trajectory error</h3><small>642 → 549 vs. gaze-free GAP3DS*</small></article><article><p>PROX · TRAJECTORY DESTINATION</p><strong>12.6<span>%</span><i>↓</i></strong><h3>lower destination error</h3><small>659 → 576 vs. gaze-free SIF3D*</small></article><article><p>GIMO · GROUNDING</p><strong>76<span>%</span></strong><h3>student top-1 accuracy</h3><small>Interaction-token selection; teacher: 86%</small></article></div>
-        <div class="result-toolbar"><div class="tabs" role="tablist" aria-label="Benchmark dataset" data-tab-group="benchmarks"><button type="button" role="tab" id="tab-gimo" aria-controls="panel-gimo" aria-selected="true" tabindex="0">GIMO</button><button type="button" role="tab" id="tab-prox" aria-controls="panel-prox" aria-selected="false" tabindex="-1">PROX</button></div><span class="table-context">Observation-only comparison <span aria-hidden="true">·</span> Lower is better ↓</span></div>
-        <div role="tabpanel" id="panel-gimo" aria-labelledby="tab-gimo" tabindex="0"><div class="table-scroll" tabindex="0" role="region" aria-label="GIMO observation-only results; scroll horizontally on small screens"><table><caption>GIMO · Observation-only models</caption><thead><tr><th scope="col">Method</th><th scope="col">Traj-path ↓</th><th scope="col">Traj-dest ↓</th><th scope="col">MPJPE-path ↓</th><th scope="col">MPJPE-dest ↓</th></tr></thead><tbody>
-          <tr><th scope="row">LTD</th><td>673</td><td>890</td><td>156.4</td><td>203.0</td></tr>
-          <tr><th scope="row">SPGSN</th><td>700</td><td>893</td><td>157.0</td><td>202.2</td></tr>
-          <tr><th scope="row">AuxFormer</th><td>732</td><td>902</td><td>165.1</td><td>202.4</td></tr>
-          <tr><th scope="row">SIF3D*</th><td>700</td><td>823</td><td>164.2</td><td>199.6</td></tr>
-          <tr><th scope="row">GAP3DS*</th><td>642</td><td>701</td><td>170.1</td><td>206.4</td></tr>
-          <tr class="ours-row"><th scope="row">SGIP <span>Ours</span></th><td><strong>549</strong> <small>± 5.0</small></td><td><strong>681</strong> <small>± 7.6</small></td><td><strong>153.1</strong> <small>± 1.8</small></td><td><strong>195.1</strong> <small>± 2.6</small></td></tr>
-        </tbody></table></div><p class="figure-note">SGIP: mean ± standard deviation over 5 seeds. * Gaze-free re-evaluation of a gaze-using baseline. Bold values are best within this comparison.</p></div>
-        <div role="tabpanel" id="panel-prox" aria-labelledby="tab-prox" tabindex="0" hidden><div class="table-scroll" tabindex="0" role="region" aria-label="PROX observation-only results; scroll horizontally on small screens"><table><caption>PROX · Observation-only models</caption><thead><tr><th scope="col">Method</th><th scope="col">Traj-path ↓</th><th scope="col">Traj-dest ↓</th><th scope="col">MPJPE-path ↓</th><th scope="col">MPJPE-dest ↓</th></tr></thead><tbody>
-          <tr><th scope="row">LTD</th><td>677</td><td>753</td><td>223.4</td><td>226.6</td></tr>
-          <tr><th scope="row">SPGSN</th><td>595</td><td>663</td><td>286.3</td><td>271.3</td></tr>
-          <tr><th scope="row">AuxFormer</th><td>553</td><td>727</td><td>199.2</td><td>240.8</td></tr>
-          <tr><th scope="row">SIF3D*</th><td>488</td><td>659</td><td>228.5</td><td>217.4</td></tr>
-          <tr class="ours-row"><th scope="row">SGIP <span>Ours</span></th><td><strong>470</strong></td><td><strong>576</strong></td><td><strong>194.6</strong></td><td><strong>197.7</strong></td></tr>
-        </tbody></table></div><p class="figure-note">The architecture is trained and evaluated on PROX. * Gaze-free SIF3D. Bold values are best within this comparison.</p></div>
-        <details class="additional-results"><summary>Models with additional or privileged cues <span class="details-symbol" aria-hidden="true">+</span></summary><p class="figure-note">GIMO diagnostic comparison from the paper. These models use gaze or textual intent beyond motion and scene. SGIP’s privileged teacher is not deployed.</p><div class="table-scroll" tabindex="0" role="region" aria-label="GIMO results with additional or privileged cues"><table><caption>GIMO · Additional or privileged cues</caption><thead><tr><th scope="col">Method</th><th scope="col">Extra cue</th><th scope="col">Traj-path ↓</th><th scope="col">Traj-dest ↓</th><th scope="col">MPJPE-path ↓</th><th scope="col">MPJPE-dest ↓</th></tr></thead><tbody>
-          <tr><th scope="row">LTD w/ gaze</th><td>Gaze</td><td>655</td><td>801</td><td>155.6</td><td>202.0</td></tr><tr><th scope="row">SPGSN w/ gaze</th><td>Gaze</td><td>702</td><td>982</td><td>156.0</td><td>202.0</td></tr><tr><th scope="row">AuxFormer w/ gaze</th><td>Gaze</td><td>622</td><td>746</td><td>161.5</td><td>201.1</td></tr><tr><th scope="row">BiFu</th><td>Gaze</td><td>661</td><td>727</td><td>167.8</td><td>205.0</td></tr><tr><th scope="row">SIF3D</th><td>Gaze</td><td>590</td><td>666</td><td>156.6</td><td>195.7</td></tr><tr><th scope="row">GAP3DS</th><td>Gaze</td><td>575</td><td>623</td><td><strong>141.2</strong></td><td><strong>171.4</strong></td></tr><tr><th scope="row">SGIP privileged</th><td>Gaze</td><td>528</td><td>635</td><td>149.9</td><td>190.6</td></tr><tr><th scope="row">SGIP privileged</th><td>Textual intent</td><td><strong>485</strong></td><td><strong>556</strong></td><td>151.2</td><td>187.8</td></tr>
-        </tbody></table></div></details>
-        <div class="ablation-layout"><div><p class="eyebrow">WHAT MAKES THE DIFFERENCE?</p><h3>Transfer the target,<br>then transfer the motion.</h3><p>Prior distillation provides the largest single-component improvement in trajectory error. Motion-only distillation can misalign the teacher’s and student’s grounding.</p><p>Combining both signals improves trajectory and final-pose errors over prior distillation alone.</p></div><div class="table-scroll" tabindex="0" role="region" aria-label="Distillation ablation on GIMO"><table><caption>GIMO · Distillation ablation</caption><thead><tr><th scope="col">Distillation</th><th scope="col">Traj-path ↓</th><th scope="col">MPJPE-dest ↓</th></tr></thead><tbody><tr><th scope="row">None</th><td>740</td><td>204.8</td></tr><tr><th scope="row">Motion only</th><td>856</td><td>198.9</td></tr><tr><th scope="row">Prior only</th><td>574</td><td>198.6</td></tr><tr class="ours-row"><th scope="row">Prior + motion</th><td><strong>549</strong></td><td><strong>195.1</strong></td></tr></tbody></table></div></div>
-      </div>
-    </section>
+<section class="section"><div class="container is-max-desktop">
+  <h2 class="section-title">Why Future Motion Is Ambiguous</h2>
+  <p class="section-lead">A short motion history does not uniquely determine a person's destination. Scene-aware prediction must distinguish among <strong>multiple interaction targets</strong>, reason about <strong>free navigation</strong>, and work with the observations available at deployment.</p>
+  <div class="story-grid">
+<div class="story-card accent-blue">
+      <div class="signal-head"><span class="signal-icon icon-blue"><i class="fas fa-route"></i></span><div class="card-kicker">Problem 1</div></div>
+      <div class="card-title">Multiple Possible Futures</div><p>The same motion prefix can precede approaching a bag, sitting on a chair, or walking through the room.</p>
+    </div>
+<div class="story-card accent-emerald">
+      <div class="signal-head"><span class="signal-icon icon-emerald"><i class="fas fa-cubes"></i></span><div class="card-kicker">Problem 2</div></div>
+      <div class="card-title">Implicit Scene Interaction</div><p>Scene features alone leave the interaction target implicit, without a directly supervised grounding decision.</p>
+    </div>
+<div class="story-card accent-rose">
+      <div class="signal-head"><span class="signal-icon icon-rose"><i class="fas fa-eye"></i></span><div class="card-kicker">Problem 3</div></div>
+      <div class="card-title">Unavailable Auxiliary Cues</div><p>Gaze and textual intent can disambiguate motion, but they are difficult to obtain in practical deployment.</p>
+    </div></div></div></section>
 
-    <section class="section wrap citation-section" id="citation" aria-labelledby="citation-title">
-      <div class="citation-heading"><div><p class="eyebrow">06 / BUILD ON THIS WORK</p><h2 id="citation-title">Citation & resources</h2></div><div class="citation-actions"><a class="inline-link" href="citation.bib" download>Download .bib ↓</a><button type="button" class="button" id="copy-citation">Copy BibTeX</button></div></div>
-      <pre class="citation-code"><code id="bibtex">@inproceedings{soon2026sgip,
+<section class="section section-soft" id="method"><div class="container is-max-desktop">
+  <h2 class="section-title">How SGIP Works</h2>
+  <p class="section-lead">SGIP makes scene interaction an <strong>explicit, supervisable prediction target</strong>. An intent-guided teacher learns a distribution over candidate scene tokens during training. Through <strong>prior-level and motion-level distillation</strong>, an observation-only student learns to select a grounding token and predict the corresponding future motion.</p>
+<div class="figure-panel method-figure">
+      <div class="minor-title">Overall Framework of SGIP</div>
+      <img src="./images/paper_figures/fig2.png" alt="SGIP teacher-student framework with training-only intent guidance, scene-token prior distillation, and trajectory and pose prediction." loading="lazy" decoding="async">
+      <p class="figure-caption"><span class="caption-label">Figure 2.</span> <span class="caption-title">Overall framework of SGIP.</span> Candidate tokens represent <strong>object instances and a scene-global navigation region</strong>. The training-only teacher combines LLM-based intent scoring with geometric compatibility. The student learns from the teacher through <strong>prior and motion distillation</strong>, then conditions trajectory and full-body pose prediction on a selected scene token using only observed motion and the 3D scene at inference.</p>
+    </div><div class="step-list mt-5"><div class="step-card accent-blue">
+      <div class="signal-head"><span class="signal-icon icon-blue"><i class="fas fa-cubes"></i></span><div class="card-kicker">Step 1</div></div>
+      <div class="card-title">Build Scene Tokens</div><p>Represent individual object instances and a scene-global navigation region as candidate grounding tokens.</p>
+    </div>
+<div class="step-card accent-indigo">
+      <div class="signal-head"><span class="signal-icon icon-indigo"><i class="fas fa-comment-dots"></i></span><div class="card-kicker">Step 2</div></div>
+      <div class="card-title">Learn an Intent-Guided Prior</div><p>At training time, combine LLM intent scores with motion-scene geometry to rank candidate tokens.</p>
+    </div>
+<div class="step-card accent-amber">
+      <div class="signal-head"><span class="signal-icon icon-amber"><i class="fas fa-share-nodes"></i></span><div class="card-kicker">Step 3</div></div>
+      <div class="card-title">Distill Prior and Motion</div><p>Transfer the teacher’s token distribution and future-motion predictions to an observation-only student.</p>
+    </div>
+<div class="step-card accent-teal">
+      <div class="signal-head"><span class="signal-icon icon-teal"><i class="fas fa-person-walking"></i></span><div class="card-kicker">Step 4</div></div>
+      <div class="card-title">Ground and Predict Motion</div><p>Select the top-ranked scene token and predict future trajectory and full-body poses without auxiliary cues.</p>
+    </div></div><div class="figure-panel method-figure mt-5">
+      <div class="minor-title">Alternative Futures from Scene Grounding</div>
+      <img src="./images/paper_figures/fig3.png" alt="Two motion futures from a fixed SGIP student conditioned on different scene tokens." loading="lazy" decoding="async">
+      <p class="figure-caption"><span class="caption-label">Figure 3.</span> <span class="caption-title">Token-conditioned alternative futures.</span> With the student, observed motion, and scene held fixed, changing only the grounding token produces different trajectories and final interaction poses. The panels compare the ground-truth interaction object with another high-probability token. Standard benchmark evaluation uses <strong>hard top-1 selection</strong>; these examples illustrate alternative token-conditioned futures.</p>
+    </div></div></section>
+
+<section class="section" id="results"><div class="container is-max-desktop">
+  <h2 class="section-title">Benchmark Results</h2>
+  <p class="section-lead">On <strong>GIMO</strong> and <strong>PROX</strong>, SGIP improves trajectory and full-body pose prediction in the <strong>observation-only setting</strong>. Models that use additional or privileged cues are reported separately. Lower is better for all four metrics; best and second-best results are highlighted within each table.</p>
+  <div class="table-stack">
+<div class="table-panel paper-table-panel">
+      <div class="paper-table-title"><span class="caption-label">Table 1.</span> <span class="caption-title">Observation-Only Human Motion Prediction on GIMO</span></div>
+      <div class="paper-table-subhead">All methods use observed motion and the 3D scene without auxiliary cues. * denotes gaze-free re-evaluation. SGIP reports mean ± standard deviation over five seeds.</div>
+      <table class="results-table paper-results-table" data-lower-cols="1,2,3,4" aria-label="Observation-Only Human Motion Prediction on GIMO">
+        <thead><tr><th scope="col">Method</th><th scope="col">Traj-path ↓</th><th scope="col">Traj-dest ↓</th><th scope="col">MPJPE-path ↓</th><th scope="col">MPJPE-dest ↓</th></tr></thead>
+        <tbody><tr><td>LTD</td><td>673</td><td>890</td><td>156.4</td><td>203.0</td></tr><tr><td>SPGSN</td><td>700</td><td>893</td><td>157.0</td><td>202.2</td></tr><tr><td>AuxFormer</td><td>732</td><td>902</td><td>165.1</td><td>202.4</td></tr><tr><td>SIF3D<sup>*</sup></td><td>700</td><td>823</td><td>164.2</td><td>199.6</td></tr><tr><td>GAP3DS<sup>*</sup></td><td>642</td><td>701</td><td>170.1</td><td>206.4</td></tr><tr class="ours-row"><td>SGIP (Ours)</td><td>549 ± 5.0</td><td>681 ± 7.6</td><td>153.1 ± 1.8</td><td>195.1 ± 2.6</td></tr></tbody>
+      </table>
+    </div><div class="table-panel paper-table-panel">
+      <div class="paper-table-title"><span class="caption-label">Table 2.</span> <span class="caption-title">Observation-Only Human Motion Prediction on PROX</span></div>
+      <div class="paper-table-subhead">All methods use observed motion and the 3D scene without auxiliary cues. * denotes gaze-free re-evaluation.</div>
+      <table class="results-table paper-results-table" data-lower-cols="1,2,3,4" aria-label="Observation-Only Human Motion Prediction on PROX">
+        <thead><tr><th scope="col">Method</th><th scope="col">Traj-path ↓</th><th scope="col">Traj-dest ↓</th><th scope="col">MPJPE-path ↓</th><th scope="col">MPJPE-dest ↓</th></tr></thead>
+        <tbody><tr><td>LTD</td><td>677</td><td>753</td><td>223.4</td><td>226.6</td></tr><tr><td>SPGSN</td><td>595</td><td>663</td><td>286.3</td><td>271.3</td></tr><tr><td>AuxFormer</td><td>553</td><td>727</td><td>199.2</td><td>240.8</td></tr><tr><td>SIF3D<sup>*</sup></td><td>488</td><td>659</td><td>228.5</td><td>217.4</td></tr><tr class="ours-row"><td>SGIP (Ours)</td><td>470</td><td>576</td><td>194.6</td><td>197.7</td></tr></tbody>
+      </table>
+    </div><div class="table-panel paper-table-panel">
+      <div class="paper-table-title"><span class="caption-label">Table 3.</span> <span class="caption-title">Models with Additional or Privileged Cues on GIMO</span></div>
+      <div class="paper-table-subhead">Auxiliary cues are inputs beyond observed motion and the scene. † denotes diagnostic privileged SGIP branches, which are not deployed. These results use different input conditions from the observation-only comparisons above.</div>
+      <table class="results-table paper-results-table cue-results-table" data-lower-cols="2,3,4,5" aria-label="Models with Additional or Privileged Cues on GIMO">
+        <thead><tr><th scope="col">Method</th><th scope="col">Auxiliary cue</th><th scope="col">Traj-path ↓</th><th scope="col">Traj-dest ↓</th><th scope="col">MPJPE-path ↓</th><th scope="col">MPJPE-dest ↓</th></tr></thead>
+        <tbody><tr><td>LTD w/ gaze</td><td>Gaze</td><td>655</td><td>801</td><td>155.6</td><td>202.0</td></tr><tr><td>SPGSN w/ gaze</td><td>Gaze</td><td>702</td><td>982</td><td>156.0</td><td>202.0</td></tr><tr><td>AuxFormer w/ gaze</td><td>Gaze</td><td>622</td><td>746</td><td>161.5</td><td>201.1</td></tr><tr><td>BiFu</td><td>Gaze</td><td>661</td><td>727</td><td>167.8</td><td>205.0</td></tr><tr><td>SIF3D</td><td>Gaze</td><td>590</td><td>666</td><td>156.6</td><td>195.7</td></tr><tr><td>GAP3DS</td><td>Gaze</td><td>575</td><td>623</td><td>141.2</td><td>171.4</td></tr><tr class="ours-row"><td>SGIP<sub>priv</sub><sup>†</sup></td><td>Gaze</td><td>528</td><td>635</td><td>149.9</td><td>190.6</td></tr><tr class="ours-row"><td>SGIP<sub>priv</sub><sup>†</sup></td><td>Textual intent</td><td>485</td><td>556</td><td>151.2</td><td>187.8</td></tr></tbody>
+      </table>
+    </div></div></div></section>
+
+<section class="section section-soft" id="qualitative"><div class="container is-max-desktop">
+  <h2 class="section-title">Qualitative Results</h2>
+  <p class="section-lead">The paper's visualizations show how <strong>explicit scene grounding</strong> guides future trajectories and interaction poses in cluttered indoor scenes. Additional examples compare observation-only and privileged predictions and show predicted motion alongside ground truth.</p>
+  <div class="qual-stack">
+<div class="figure-panel">
+      <div class="minor-title">GIMO: Trajectories and Full-Body Motion</div>
+      <img src="./images/paper_figures/fig4.png" alt="SGIP and gaze-free SIF3D predictions in a kitchen, living room, and seminar room." loading="lazy" decoding="async">
+      <p class="figure-caption"><span class="caption-label">Figure 4.</span> <span class="caption-title">Qualitative comparison across three GIMO scenes.</span> The top row shows SGIP and the bottom row shows the gaze-free baseline SIF3D*. Each scene includes a top-down trajectory, the final interaction frame, and a full-body pose sequence. <strong>Yellow:</strong> observed motion; <strong>red:</strong> ground-truth future; <strong>blue:</strong> predicted future.</p>
+    </div><div class="figure-panel">
+      <div class="minor-title">Observation-Only Prediction and Privileged Guidance</div>
+      <img src="./images/paper_figures/fig5.png" alt="The SGIP teacher and student in the top row, compared with SIF3D with and without gaze in the bottom row." loading="lazy" decoding="async">
+      <p class="figure-caption"><span class="caption-label">Figure 5.</span> <span class="caption-title">Comparing baselines and SGIP variants.</span> Given the same observed prefix, the top row compares the privileged SGIP teacher and the deployed SGIP student; the bottom row shows SIF3D with and without gaze. Each panel includes a top-down trajectory, a final interaction frame, and a pose sequence. The student uses <strong>neither gaze nor textual intent at inference</strong>.</p>
+    </div><div class="figure-panel">
+      <div class="minor-title">Additional GIMO Scenes: Ground Truth and Predictions</div>
+      <img src="./images/paper_figures/fig6.png" alt="Ground-truth and SGIP trajectories and final interaction poses in a seminar room and a kitchen." loading="lazy" decoding="async">
+      <p class="figure-caption"><span class="caption-label">Figure 6.</span> <span class="caption-title">Additional qualitative results on GIMO.</span> Each scene pairs the ground-truth future on the left with the SGIP prediction on the right. The top panels show trajectories from above, and the bottom panels show final interaction poses in a seminar room and a kitchen. <strong>Red:</strong> ground-truth future; <strong>blue:</strong> predicted future.</p>
+    </div></div></div></section>
+
+<section class="section"><div class="container is-max-desktop">
+  <h2 class="section-title">Ablation Study</h2>
+  <p class="section-lead"><strong>Prior distillation</strong> provides explicit supervision for scene grounding, while <strong>motion distillation</strong> transfers the teacher's future-motion predictions. Combining both achieves the lowest trajectory and destination-pose errors in this ablation; prior-only distillation has the lowest MPJPE-path.</p>
+<div class="table-panel paper-table-panel">
+      <div class="paper-table-title"><span class="caption-label">Table 4.</span> <span class="caption-title">Distillation Components on GIMO</span></div>
+      <div class="paper-table-subhead">All variants are observation-only at inference. The full model combines prior-level and motion-level distillation. Lower is better for every metric.</div>
+      <table class="results-table paper-results-table ablation-results-table" data-lower-cols="1,2,3,4" aria-label="Distillation Components on GIMO">
+        <thead><tr><th scope="col">Variant</th><th scope="col">Traj-path ↓</th><th scope="col">Traj-dest ↓</th><th scope="col">MPJPE-path ↓</th><th scope="col">MPJPE-dest ↓</th></tr></thead>
+        <tbody><tr class="ours-row"><td>Prior + motion (full)</td><td>549</td><td>681</td><td>153.1</td><td>195.1</td></tr><tr><td>No distillation</td><td>740</td><td>838</td><td>169.1</td><td>204.8</td></tr><tr><td>Motion only</td><td>856</td><td>896</td><td>164.1</td><td>198.9</td></tr><tr><td>Prior only</td><td>574</td><td>688</td><td>151.8</td><td>198.6</td></tr></tbody>
+      </table>
+    </div></div></section>
+
+<section class="section" id="BibTeX"><div class="container is-max-desktop content">
+  <h2 class="section-title">BibTeX</h2>
+  <pre class="bibtex-section"><code>@inproceedings{soon2026sgip,
   title     = {Learning Scene-Grounded Interaction Priors for Scene-Aware Human Motion Prediction},
   author    = {Soon, Donghyeon and Yoon, Jiil and Kim, Hyeondong and Park, Daehee},
   booktitle = {Advances in Neural Information Processing Systems},
   year      = {2026}
 }</code></pre>
-      <p id="copy-status" role="status" aria-live="polite"></p>
-      <div class="resource-bottom"><a href="paper.pdf" target="_blank" rel="noopener">Paper PDF ↗</a><a href="https://github.com/dhsoon02/SGIP" target="_blank" rel="noopener noreferrer">Project repository ↗</a><a href="assets/videos/sgip-overview.mp4" download>Overview video ↓</a><a href="mailto:dhsoon@dgist.ac.kr">Contact ↗</a></div>
-    </section>
-  </main>
+</div></section>
 
-  <footer class="site-footer"><div class="wrap"><a class="wordmark" href="#"><img src="assets/images/favicon.svg" width="28" height="28" alt="">SGIP</a><p>DGIST · NeurIPS 2026</p><p class="credits">Layout inspired by <a href="https://vision3d-lab.github.io/lightsplat/" target="_blank" rel="noopener noreferrer">LightSplat</a> and <a href="https://nerfies.github.io/" target="_blank" rel="noopener noreferrer">Nerfies</a>.</p></div></footer>
-  <dialog id="figure-dialog" aria-label="Expanded paper figure"><button type="button" class="dialog-close" aria-label="Close expanded figure">Close <span aria-hidden="true">×</span></button><img alt=""><a class="dialog-original" href="#" target="_blank" rel="noopener">Open original image ↗</a></dialog>
+<footer class="footer"><div class="container"><div class="columns is-centered"><div class="column is-8"><div class="content">
+  <p>This website is licensed under a <a rel="license" href="https://creativecommons.org/licenses/by-sa/4.0/">Creative Commons Attribution-ShareAlike 4.0 International License</a>.
+  Adapted from <a href="https://vision3d-lab.github.io/lightsplat/">LightSplat</a>, with SGIP paper content and figures. Original template borrowed from <a href="https://github.com/nerfies/nerfies.github.io">Nerfies</a>.</p>
+</div></div></div></div></footer>
+
+<script>
+  (function () {
+    const parseValue = (text) => {
+      const raw = text.trim();
+      if (!raw || raw === "-") return null;
+
+      const minuteMatch = raw.match(/^([0-9]*\.?[0-9]+)\s*min$/i);
+      if (minuteMatch) return parseFloat(minuteMatch[1]) * 60;
+
+      const secondMatch = raw.match(/^([0-9]*\.?[0-9]+)\s*s$/i);
+      if (secondMatch) return parseFloat(secondMatch[1]);
+
+      // Rank multi-seed results by their mean while retaining the uncertainty.
+      const meanMatch = raw.match(/^(-?[0-9]*\.?[0-9]+)\s*±\s*[0-9]*\.?[0-9]+$/);
+      if (meanMatch) return parseFloat(meanMatch[1]);
+
+      const numericMatch = raw.match(/^-?[0-9]*\.?[0-9]+$/);
+      if (numericMatch) return parseFloat(raw);
+
+      return null;
+    };
+
+    const uniqueSorted = (values, lowerIsBetter) => {
+      const uniq = [...new Set(values)];
+      uniq.sort((a, b) => lowerIsBetter ? a - b : b - a);
+      return uniq;
+    };
+
+    const applyScoreMark = (cell, kind) => {
+      const text = cell.textContent.trim();
+      if (!text) return;
+
+      cell.textContent = "";
+      const mark = document.createElement("span");
+      mark.className = `score-mark ${kind}`;
+      mark.textContent = text;
+      cell.appendChild(mark);
+    };
+
+    document.querySelectorAll(".paper-results-table").forEach((table) => {
+      const lowerCols = new Set(
+        (table.dataset.lowerCols || "")
+          .split(",")
+          .map((v) => v.trim())
+          .filter(Boolean)
+          .map((v) => Number(v))
+      );
+
+      const rows = [...table.querySelectorAll("tbody tr")];
+      if (!rows.length) return;
+
+      const colCount = Math.max(...rows.map((row) => row.cells.length));
+
+      for (let col = 1; col < colCount; col += 1) {
+        const entries = rows
+          .map((row) => {
+            const cell = row.cells[col];
+            if (!cell) return null;
+            const value = parseValue(cell.textContent);
+            if (value === null) return null;
+            return { cell, value };
+          })
+          .filter(Boolean);
+
+        if (!entries.length) continue;
+
+        const ordered = uniqueSorted(entries.map((entry) => entry.value), lowerCols.has(col));
+        const best = ordered[0];
+        const second = ordered.length > 1 ? ordered[1] : null;
+
+        entries.forEach(({ cell, value }) => {
+          if (value === best) {
+            cell.classList.add("best-cell");
+            applyScoreMark(cell, "best");
+          } else if (second !== null && value === second) {
+            cell.classList.add("second-cell");
+            applyScoreMark(cell, "second");
+          }
+        });
+      }
+    });
+
+    const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const sparkTargets = [
+      ...document.querySelectorAll(".research-home, .research-toggle, .research-card, .hero-summary, .metric-card, .story-card, .step-card, .result-card, .figure-panel, .table-panel, .publication-links .button, .eyebrow")
+    ];
+    const researchDropdowns = [...document.querySelectorAll(".research-dropdown")];
+    const sparkStates = new WeakMap();
+
+    const randomBetween = (min, max) => min + Math.random() * (max - min);
+    const randomInt = (min, max) => Math.floor(randomBetween(min, max + 1));
+    const scheduleNextSparkDelay = (isReducedMotion = prefersReducedMotion.matches) => {
+      let delay = isReducedMotion
+        ? randomBetween(1500, 2600)
+        : randomBetween(650, 1600);
+      if (Math.random() < (isReducedMotion ? 0.58 : 0.42)) {
+        delay += isReducedMotion
+          ? randomBetween(650, 1200)
+          : randomBetween(300, 650);
+      }
+      return delay;
+    };
+
+    const getSparkState = (element) => {
+      if (!sparkStates.has(element)) {
+        sparkStates.set(element, {
+          active: false,
+          rafId: 0,
+          lastTime: 0,
+          nextBurstAt: 0,
+          canvas: null,
+          ctx: null,
+          width: 0,
+          height: 0,
+          dpr: 1,
+          arcs: [],
+          particles: [],
+        });
+      }
+
+      return sparkStates.get(element);
+    };
+
+    const ensureSparkCanvas = (element) => {
+      const state = getSparkState(element);
+      if (state.canvas && state.ctx) return state;
+
+      const canvas = document.createElement("canvas");
+      canvas.className = "spark-canvas";
+      canvas.setAttribute("aria-hidden", "true");
+      element.appendChild(canvas);
+
+      state.canvas = canvas;
+      state.ctx = canvas.getContext("2d");
+      return state;
+    };
+
+    const resizeSparkCanvas = (element) => {
+      const state = ensureSparkCanvas(element);
+      if (!state.ctx) return;
+
+      const width = Math.max(1, Math.round(element.clientWidth));
+      const height = Math.max(1, Math.round(element.clientHeight));
+      const dpr = Math.min(window.devicePixelRatio || 1, 2);
+
+      state.width = width;
+      state.height = height;
+      state.dpr = dpr;
+
+      state.canvas.width = Math.max(1, Math.round(width * dpr));
+      state.canvas.height = Math.max(1, Math.round(height * dpr));
+      state.canvas.style.width = `${width}px`;
+      state.canvas.style.height = `${height}px`;
+      state.ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      state.ctx.clearRect(0, 0, width, height);
+    };
+
+    const traceSmoothPath = (ctx, points) => {
+      if (!points.length) return;
+
+      ctx.beginPath();
+      ctx.moveTo(points[0].x, points[0].y);
+
+      if (points.length === 2) {
+        ctx.lineTo(points[1].x, points[1].y);
+        return;
+      }
+
+      for (let i = 1; i < points.length - 1; i += 1) {
+        const midX = (points[i].x + points[i + 1].x) / 2;
+        const midY = (points[i].y + points[i + 1].y) / 2;
+        ctx.quadraticCurveTo(points[i].x, points[i].y, midX, midY);
+      }
+
+      const last = points[points.length - 1];
+      ctx.lineTo(last.x, last.y);
+    };
+
+    const buildEdgeSpark = (width, height) => {
+      const edge = randomInt(0, 3);
+      const inset = 2.2;
+      let tangentX = 1;
+      let tangentY = 0;
+      let normalX = 0;
+      let normalY = 1;
+      let startX = 0;
+      let startY = 0;
+      let length = 26;
+
+      if (edge === 0) {
+        tangentX = 1;
+        tangentY = 0;
+        normalX = 0;
+        normalY = 1;
+        length = Math.min(randomBetween(28, 54), Math.max(22, width - 16));
+        startX = randomBetween(8, Math.max(8, width - length - 8));
+        startY = inset;
+      } else if (edge === 1) {
+        tangentX = 0;
+        tangentY = 1;
+        normalX = -1;
+        normalY = 0;
+        length = Math.min(randomBetween(28, 54), Math.max(22, height - 16));
+        startX = width - inset;
+        startY = randomBetween(8, Math.max(8, height - length - 8));
+      } else if (edge === 2) {
+        tangentX = 1;
+        tangentY = 0;
+        normalX = 0;
+        normalY = -1;
+        length = Math.min(randomBetween(28, 54), Math.max(22, width - 16));
+        startX = randomBetween(8, Math.max(8, width - length - 8));
+        startY = height - inset;
+      } else {
+        tangentX = 0;
+        tangentY = 1;
+        normalX = 1;
+        normalY = 0;
+        length = Math.min(randomBetween(28, 54), Math.max(22, height - 16));
+        startX = inset;
+        startY = randomBetween(8, Math.max(8, height - length - 8));
+      }
+
+      const segments = randomInt(6, 8);
+      const step = length / (segments - 1);
+      const points = [];
+
+      for (let i = 0; i < segments; i += 1) {
+        const edgeWeight = i === 0 || i === segments - 1 ? 0.22 : 1;
+        const along = step * i + randomBetween(-1.1, 1.1);
+        const inward = randomBetween(0.8, 5.8) * edgeWeight + (i > 0 && i < segments - 1 ? randomBetween(0.6, 2.1) : 0);
+
+        points.push({
+          x: startX + tangentX * along + normalX * inward,
+          y: startY + tangentY * along + normalY * inward,
+        });
+      }
+
+      const branchIndex = randomInt(2, segments - 2);
+      const branchStart = points[branchIndex];
+      const branch = [
+        branchStart,
+        {
+          x: branchStart.x + normalX * randomBetween(4.4, 8.4) + tangentX * randomBetween(-5.6, 5.6),
+          y: branchStart.y + normalY * randomBetween(4.4, 8.4) + tangentY * randomBetween(-5.6, 5.6),
+        },
+      ];
+
+      const tip = points[points.length - 1];
+      const particles = Array.from({ length: randomInt(3, 5) }, () => ({
+        x: tip.x,
+        y: tip.y,
+        vx: tangentX * randomBetween(0.5, 1.4) + normalX * randomBetween(1.0, 2.9) + randomBetween(-0.7, 0.7),
+        vy: tangentY * randomBetween(0.5, 1.4) + normalY * randomBetween(1.0, 2.9) + randomBetween(-0.7, 0.7),
+        age: 0,
+        life: randomBetween(100, 210),
+        size: randomBetween(1.0, 2.2),
+      }));
+
+      return {
+        points,
+        branch,
+        tip,
+        age: 0,
+        life: randomBetween(90, 160),
+        flash: randomBetween(3.1, 5.4),
+        particles,
+      };
+    };
+
+    const spawnSparkBurst = (element) => {
+      const state = getSparkState(element);
+      if (!state.active || !state.ctx || state.width <= 0 || state.height <= 0) return;
+
+      const spark = buildEdgeSpark(state.width, state.height);
+      state.arcs.push(spark);
+      state.particles.push(...spark.particles);
+    };
+
+    const drawSpark = (ctx, spark) => {
+      const life = Math.max(0, 1 - (spark.age / spark.life));
+      const alpha = spark.age < 18 ? (spark.age / 18) : Math.pow(life, 0.58);
+
+      ctx.save();
+      ctx.lineCap = "round";
+      ctx.lineJoin = "round";
+
+      ctx.strokeStyle = `rgba(255, 207, 94, ${0.14 + 0.12 * alpha})`;
+      ctx.lineWidth = 9.5;
+      ctx.shadowBlur = 12;
+      ctx.shadowColor = `rgba(255, 205, 95, ${0.26 * alpha})`;
+      traceSmoothPath(ctx, spark.points);
+      ctx.stroke();
+
+      ctx.strokeStyle = `rgba(255, 192, 63, ${0.54 * alpha})`;
+      ctx.lineWidth = 3.5;
+      ctx.shadowBlur = 0;
+      traceSmoothPath(ctx, spark.points);
+      ctx.stroke();
+
+      ctx.strokeStyle = `rgba(255, 252, 238, ${0.94 * alpha})`;
+      ctx.lineWidth = 1.28;
+      traceSmoothPath(ctx, spark.points);
+      ctx.stroke();
+
+      ctx.strokeStyle = `rgba(255, 233, 154, ${0.6 * alpha})`;
+      ctx.lineWidth = 1.0;
+      ctx.beginPath();
+      ctx.moveTo(spark.branch[0].x, spark.branch[0].y);
+      ctx.lineTo(spark.branch[1].x, spark.branch[1].y);
+      ctx.stroke();
+
+      const flashRadius = spark.flash * (0.8 + (1 - life) * 0.35);
+      const flash = ctx.createRadialGradient(spark.tip.x, spark.tip.y, 0, spark.tip.x, spark.tip.y, flashRadius);
+      flash.addColorStop(0, `rgba(255, 252, 236, ${0.92 * alpha})`);
+      flash.addColorStop(0.5, `rgba(255, 218, 109, ${0.32 * alpha})`);
+      flash.addColorStop(1, "rgba(255, 218, 109, 0)");
+      ctx.fillStyle = flash;
+      ctx.beginPath();
+      ctx.arc(spark.tip.x, spark.tip.y, flashRadius, 0, Math.PI * 2);
+      ctx.fill();
+
+      ctx.restore();
+    };
+
+    const drawParticle = (ctx, particle) => {
+      const life = Math.max(0, 1 - (particle.age / particle.life));
+      const alpha = Math.pow(life, 0.7);
+
+      ctx.save();
+      ctx.fillStyle = `rgba(255, 227, 142, ${0.72 * alpha})`;
+      ctx.shadowBlur = 7;
+      ctx.shadowColor = `rgba(255, 210, 104, ${0.28 * alpha})`;
+      ctx.beginPath();
+      ctx.arc(particle.x, particle.y, particle.size * (0.75 + life * 0.35), 0, Math.PI * 2);
+      ctx.fill();
+      ctx.restore();
+    };
+
+    const renderSparkFrame = (element, now) => {
+      const state = getSparkState(element);
+      if (!state.ctx || !state.canvas) return;
+
+      if (!state.lastTime) state.lastTime = now;
+      const dt = Math.min(32, now - state.lastTime || 16);
+      state.lastTime = now;
+
+      if (state.active && now >= state.nextBurstAt && state.arcs.length === 0) {
+        spawnSparkBurst(element);
+        state.nextBurstAt = now + scheduleNextSparkDelay(prefersReducedMotion.matches);
+      }
+
+      for (let i = state.arcs.length - 1; i >= 0; i -= 1) {
+        state.arcs[i].age += dt;
+        if (state.arcs[i].age >= state.arcs[i].life) {
+          state.arcs.splice(i, 1);
+        }
+      }
+
+      for (let i = state.particles.length - 1; i >= 0; i -= 1) {
+        const particle = state.particles[i];
+        particle.age += dt;
+        if (particle.age >= particle.life) {
+          state.particles.splice(i, 1);
+          continue;
+        }
+        particle.x += particle.vx * (dt / 16);
+        particle.y += particle.vy * (dt / 16);
+        particle.vx *= 0.965;
+        particle.vy *= 0.965;
+      }
+
+      state.ctx.clearRect(0, 0, state.width, state.height);
+
+      state.arcs.forEach((spark) => drawSpark(state.ctx, spark));
+      state.particles.forEach((particle) => drawParticle(state.ctx, particle));
+
+      if (state.active || state.arcs.length || state.particles.length) {
+        state.rafId = requestAnimationFrame((timestamp) => renderSparkFrame(element, timestamp));
+      } else {
+        state.rafId = 0;
+        state.ctx.clearRect(0, 0, state.width, state.height);
+        element.classList.remove("is-sparking");
+      }
+    };
+
+    const activateSpark = (element) => {
+      const state = ensureSparkCanvas(element);
+      resizeSparkCanvas(element);
+
+      if (state.active) return;
+
+      state.active = true;
+      state.nextBurstAt = performance.now() + (
+        prefersReducedMotion.matches
+          ? randomBetween(480, 920)
+          : randomBetween(180, 420)
+      );
+      element.classList.add("is-sparking");
+
+      if (!state.rafId) {
+        state.lastTime = 0;
+        state.rafId = requestAnimationFrame((timestamp) => renderSparkFrame(element, timestamp));
+      }
+    };
+
+    const deactivateSpark = (element) => {
+      if (element.matches(":hover") || element.contains(document.activeElement)) return;
+      const state = getSparkState(element);
+      state.active = false;
+    };
+
+    const resizeObserver = typeof ResizeObserver === "function"
+      ? new ResizeObserver((entries) => {
+          entries.forEach(({ target }) => {
+            resizeSparkCanvas(target);
+          });
+        })
+      : null;
+
+    const clickSparkState = {
+      canvas: null,
+      ctx: null,
+      width: 0,
+      height: 0,
+      dpr: 1,
+      bursts: [],
+      rafId: 0,
+      lastTime: 0,
+    };
+
+    const ensureGlobalSparkCanvas = () => {
+      if (clickSparkState.canvas && clickSparkState.ctx) return clickSparkState;
+
+      const canvas = document.createElement("canvas");
+      canvas.className = "global-spark-canvas";
+      canvas.setAttribute("aria-hidden", "true");
+      document.body.appendChild(canvas);
+
+      clickSparkState.canvas = canvas;
+      clickSparkState.ctx = canvas.getContext("2d");
+      return clickSparkState;
+    };
+
+    const resizeGlobalSparkCanvas = () => {
+      const state = ensureGlobalSparkCanvas();
+      if (!state.ctx) return;
+
+      const width = Math.max(1, Math.round(window.innerWidth));
+      const height = Math.max(1, Math.round(window.innerHeight));
+      const dpr = Math.min(window.devicePixelRatio || 1, 2);
+
+      state.width = width;
+      state.height = height;
+      state.dpr = dpr;
+      state.canvas.width = Math.max(1, Math.round(width * dpr));
+      state.canvas.height = Math.max(1, Math.round(height * dpr));
+      state.canvas.style.width = `${width}px`;
+      state.canvas.style.height = `${height}px`;
+      state.ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      state.ctx.clearRect(0, 0, width, height);
+    };
+
+    const buildClickSparkArc = (x, y) => {
+      const angle = randomBetween(0, Math.PI * 2);
+      const length = randomBetween(9, 20);
+      const segments = randomInt(3, 4);
+      const points = [{ x, y }];
+      const dirX = Math.cos(angle);
+      const dirY = Math.sin(angle);
+      const perpX = -dirY;
+      const perpY = dirX;
+
+      for (let i = 1; i <= segments; i += 1) {
+        const progress = i / segments;
+        const radial = length * progress + randomBetween(-0.9, 0.9);
+        const offset = randomBetween(-1.9, 1.9) * (1 - progress * 0.72);
+
+        points.push({
+          x: x + dirX * radial + perpX * offset,
+          y: y + dirY * radial + perpY * offset,
+        });
+      }
+
+      const branchIndex = points.length > 2 ? randomInt(1, points.length - 2) : 1;
+      const branchStart = points[branchIndex];
+      const branchAngle = angle + randomBetween(-0.7, 0.7);
+      const branchLength = randomBetween(4, 8);
+
+      return {
+        points,
+        tip: points[points.length - 1],
+        branch: Math.random() < 0.45 ? [
+          branchStart,
+          {
+            x: branchStart.x + Math.cos(branchAngle) * branchLength,
+            y: branchStart.y + Math.sin(branchAngle) * branchLength,
+          },
+        ] : null,
+      };
+    };
+
+    const spawnClickSparkBurst = (x, y) => {
+      const state = ensureGlobalSparkCanvas();
+      resizeGlobalSparkCanvas();
+
+      const arcs = Array.from({ length: randomInt(3, 4) }, () => buildClickSparkArc(x, y));
+      const particles = Array.from({ length: randomInt(14, 22) }, () => {
+        const angle = randomBetween(0, Math.PI * 2);
+        const velocity = randomBetween(1.8, 4.6);
+        return {
+          x,
+          y,
+          vx: Math.cos(angle) * velocity,
+          vy: Math.sin(angle) * velocity - randomBetween(0.1, 0.8),
+          age: 0,
+          life: randomBetween(120, 220),
+          size: randomBetween(0.8, 1.6),
+          drag: randomBetween(0.94, 0.97),
+          gravity: randomBetween(0.04, 0.085),
+        };
+      });
+
+      state.bursts.push({
+        x,
+        y,
+        age: 0,
+        life: randomBetween(120, 180),
+        flashRadius: randomBetween(7, 12),
+        arcs,
+        particles,
+      });
+
+      if (!state.rafId) {
+        state.lastTime = 0;
+        state.rafId = requestAnimationFrame((timestamp) => renderGlobalSparkFrame(timestamp));
+      }
+    };
+
+    const drawClickSparkArc = (ctx, arc, alpha) => {
+      ctx.save();
+      ctx.lineCap = "round";
+      ctx.lineJoin = "round";
+
+      ctx.strokeStyle = `rgba(255, 210, 118, ${0.18 + alpha * 0.12})`;
+      ctx.lineWidth = 3.2;
+      ctx.shadowBlur = 7;
+      ctx.shadowColor = `rgba(255, 209, 110, ${alpha * 0.22})`;
+      traceSmoothPath(ctx, arc.points);
+      ctx.stroke();
+
+      ctx.strokeStyle = `rgba(255, 184, 52, ${alpha * 0.76})`;
+      ctx.lineWidth = 1.45;
+      ctx.shadowBlur = 0;
+      traceSmoothPath(ctx, arc.points);
+      ctx.stroke();
+
+      ctx.strokeStyle = `rgba(255, 252, 239, ${alpha * 0.96})`;
+      ctx.lineWidth = 0.68;
+      traceSmoothPath(ctx, arc.points);
+      ctx.stroke();
+
+      if (arc.branch) {
+        ctx.strokeStyle = `rgba(255, 232, 150, ${alpha * 0.56})`;
+        ctx.lineWidth = 0.58;
+        ctx.beginPath();
+        ctx.moveTo(arc.branch[0].x, arc.branch[0].y);
+        ctx.lineTo(arc.branch[1].x, arc.branch[1].y);
+        ctx.stroke();
+      }
+
+      const flash = ctx.createRadialGradient(arc.tip.x, arc.tip.y, 0, arc.tip.x, arc.tip.y, 3.4);
+      flash.addColorStop(0, `rgba(255, 252, 238, ${alpha * 0.96})`);
+      flash.addColorStop(0.55, `rgba(255, 218, 106, ${alpha * 0.26})`);
+      flash.addColorStop(1, "rgba(255, 218, 106, 0)");
+      ctx.fillStyle = flash;
+      ctx.beginPath();
+      ctx.arc(arc.tip.x, arc.tip.y, 3.4, 0, Math.PI * 2);
+      ctx.fill();
+
+      ctx.restore();
+    };
+
+    const drawGlobalSparkParticle = (ctx, particle) => {
+      const life = Math.max(0, 1 - (particle.age / particle.life));
+      const alpha = Math.pow(life, 0.75);
+      const tailLength = particle.size * (2.1 + life * 1.8);
+      const tailX = particle.x - particle.vx * tailLength;
+      const tailY = particle.y - particle.vy * tailLength;
+
+      ctx.save();
+      ctx.lineCap = "round";
+      ctx.lineJoin = "round";
+      ctx.strokeStyle = `rgba(255, 180, 72, ${alpha * 0.52})`;
+      ctx.lineWidth = particle.size * 1.45;
+      ctx.shadowBlur = 6;
+      ctx.shadowColor = `rgba(255, 174, 72, ${alpha * 0.28})`;
+      ctx.beginPath();
+      ctx.moveTo(tailX, tailY);
+      ctx.lineTo(particle.x, particle.y);
+      ctx.stroke();
+
+      ctx.strokeStyle = `rgba(255, 246, 222, ${alpha * 0.82})`;
+      ctx.lineWidth = Math.max(0.6, particle.size * 0.72);
+      ctx.shadowBlur = 0;
+      ctx.beginPath();
+      ctx.moveTo(tailX + (particle.x - tailX) * 0.34, tailY + (particle.y - tailY) * 0.34);
+      ctx.lineTo(particle.x, particle.y);
+      ctx.stroke();
+
+      ctx.fillStyle = `rgba(255, 237, 170, ${alpha * 0.74})`;
+      ctx.beginPath();
+      ctx.arc(particle.x, particle.y, particle.size * (0.34 + life * 0.24), 0, Math.PI * 2);
+      ctx.fill();
+      ctx.restore();
+    };
+
+    const renderGlobalSparkFrame = (now) => {
+      const state = ensureGlobalSparkCanvas();
+      if (!state.ctx || !state.canvas) return;
+
+      if (!state.lastTime) state.lastTime = now;
+      const dt = Math.min(32, now - state.lastTime || 16);
+      state.lastTime = now;
+
+      state.ctx.clearRect(0, 0, state.width, state.height);
+      state.ctx.save();
+      state.ctx.globalCompositeOperation = "lighter";
+
+      for (let i = state.bursts.length - 1; i >= 0; i -= 1) {
+        const burst = state.bursts[i];
+        burst.age += dt;
+
+        const life = Math.max(0, 1 - (burst.age / burst.life));
+        const alpha = burst.age < 18 ? (burst.age / 18) : Math.pow(life, 0.62);
+
+        if (burst.age >= burst.life && burst.particles.every((particle) => particle.age >= particle.life)) {
+          state.bursts.splice(i, 1);
+          continue;
+        }
+
+        const centerFlash = state.ctx.createRadialGradient(burst.x, burst.y, 0, burst.x, burst.y, burst.flashRadius);
+        centerFlash.addColorStop(0, `rgba(255, 252, 242, ${alpha * 0.92})`);
+        centerFlash.addColorStop(0.28, `rgba(255, 232, 168, ${alpha * 0.24})`);
+        centerFlash.addColorStop(0.55, `rgba(255, 196, 84, ${alpha * 0.12})`);
+        centerFlash.addColorStop(1, "rgba(255, 222, 124, 0)");
+        state.ctx.fillStyle = centerFlash;
+        state.ctx.beginPath();
+        state.ctx.arc(burst.x, burst.y, burst.flashRadius, 0, Math.PI * 2);
+        state.ctx.fill();
+
+        burst.arcs.forEach((arc) => drawClickSparkArc(state.ctx, arc, alpha));
+
+        burst.particles.forEach((particle) => {
+          particle.age += dt;
+          if (particle.age < particle.life) {
+            particle.x += particle.vx * (dt / 16);
+            particle.y += particle.vy * (dt / 16);
+            particle.vx *= particle.drag;
+            particle.vy = particle.vy * particle.drag + particle.gravity * (dt / 16);
+            drawGlobalSparkParticle(state.ctx, particle);
+          }
+        });
+      }
+
+      state.ctx.restore();
+
+      if (state.bursts.length) {
+        state.rafId = requestAnimationFrame((timestamp) => renderGlobalSparkFrame(timestamp));
+      } else {
+        state.rafId = 0;
+        state.ctx.clearRect(0, 0, state.width, state.height);
+      }
+    };
+
+    sparkTargets.forEach((element) => {
+      element.classList.add("spark-target");
+      ensureSparkCanvas(element);
+      resizeSparkCanvas(element);
+
+      if (resizeObserver) {
+        resizeObserver.observe(element);
+      }
+
+      element.addEventListener("mouseenter", () => activateSpark(element));
+      element.addEventListener("mouseleave", () => {
+        requestAnimationFrame(() => deactivateSpark(element));
+      });
+      element.addEventListener("focusin", () => activateSpark(element));
+      element.addEventListener("focusout", () => {
+        requestAnimationFrame(() => deactivateSpark(element));
+      });
+    });
+
+    ensureGlobalSparkCanvas();
+    resizeGlobalSparkCanvas();
+
+    document.addEventListener("click", (event) => {
+      researchDropdowns.forEach((dropdown) => {
+        if (!dropdown.contains(event.target)) {
+          dropdown.removeAttribute("open");
+        }
+      });
+    });
+
+    document.addEventListener("keydown", (event) => {
+      if (event.key !== "Escape") return;
+      researchDropdowns.forEach((dropdown) => {
+        dropdown.removeAttribute("open");
+      });
+    });
+
+    document.addEventListener("pointerdown", (event) => {
+      if (event.pointerType === "mouse" && event.button !== 0) return;
+      spawnClickSparkBurst(event.clientX, event.clientY);
+    }, { passive: true });
+
+    window.addEventListener("resize", () => {
+      sparkTargets.forEach((element) => resizeSparkCanvas(element));
+      resizeGlobalSparkCanvas();
+    });
+
+    const handleMotionChange = (event) => {
+      if (!event.matches) return;
+      sparkTargets.forEach((element) => {
+        const state = getSparkState(element);
+        state.active = false;
+        element.classList.remove("is-sparking");
+
+        if (state.rafId) {
+          cancelAnimationFrame(state.rafId);
+          state.rafId = 0;
+        }
+
+        state.arcs = [];
+        state.particles = [];
+        if (state.ctx) {
+          state.ctx.clearRect(0, 0, state.width, state.height);
+        }
+      });
+    };
+
+    if (typeof prefersReducedMotion.addEventListener === "function") {
+      prefersReducedMotion.addEventListener("change", handleMotionChange);
+    } else if (typeof prefersReducedMotion.addListener === "function") {
+      prefersReducedMotion.addListener(handleMotionChange);
+    }
+  })();
+</script>
+
 </body>
 </html>

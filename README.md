@@ -22,6 +22,20 @@
 
 - 🎉 Our paper, **“Learning Scene-Grounded Interaction Priors for Scene-Aware Human Motion Prediction,”** has been accepted to **NeurIPS 2026!**
 
+## Teaser
+
+<p align="center">
+  <a href="docs/images/paper_figures/h_teaser.pdf">
+    <img src="docs/images/paper_figures/h_teaser.png" alt="SGIP teaser: ambiguous targets with gaze- and distance-based methods, an explicit interaction prior over objects and free space, and a predicted motion toward the sofa" width="100%">
+  </a>
+</p>
+
+The same observed motion can lead to different objects or through open space,
+making the future interaction target ambiguous. **SGIP** predicts an **explicit
+interaction prior** over these scene regions and uses the selected target—here,
+the sofa—to guide future trajectory and full-body pose prediction, using only
+**observed motion and a 3D scene at inference**.
+
 ## Overview
 
 <p align="center">

@@ -768,6 +768,79 @@
       gap: 1.15rem;
     }
 
+    .video-stack {
+      display: grid;
+      gap: 1.15rem;
+      margin-bottom: 1.75rem;
+      scroll-margin-top: 1.5rem;
+    }
+
+    .video-heading {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 0.3rem 1rem;
+      margin-bottom: 0.8rem;
+    }
+
+    .video-heading .minor-title {
+      margin: 0;
+    }
+
+    .video-comparison {
+      color: var(--muted);
+      font-size: 0.9rem;
+    }
+
+    .video-panel .figure-caption {
+      text-align: left;
+    }
+
+    .result-video {
+      display: block;
+      width: 100%;
+      height: auto;
+      aspect-ratio: 16 / 9;
+      border-radius: 12px;
+      background: #F4F7FB;
+    }
+
+    .motion-legend {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.6rem 1.4rem;
+      margin: -0.5rem 0 1.5rem;
+      font-size: 0.9rem;
+      color: var(--muted);
+    }
+
+    .motion-legend span {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.45rem;
+    }
+
+    .motion-legend span::before {
+      content: '';
+      width: 0.6rem;
+      height: 0.6rem;
+      flex: 0 0 auto;
+      border-radius: 50%;
+    }
+
+    .motion-legend .observed::before {
+      background: #D5A91F;
+    }
+
+    .motion-legend .ground-truth::before {
+      background: #BA3152;
+    }
+
+    .motion-legend .predicted::before {
+      background: #24649E;
+    }
+
     .figure-panel img {
       width: 100%;
       height: auto;
@@ -1235,6 +1308,7 @@
     <div class="publication-links">
       <span class="link-block"><a href="./paper.pdf" class="external-link button is-normal is-rounded is-dark" target="_blank" rel="noopener"><span class="icon"><i class="fas fa-file-pdf"></i></span><span>Paper</span></a></span>
       <span class="link-block"><a href="#method" class="external-link button is-normal is-rounded is-dark"><span class="icon"><i class="fas fa-diagram-project"></i></span><span>Method</span></a></span>
+      <span class="link-block"><a href="#videos" class="external-link button is-normal is-rounded is-dark"><span class="icon"><i class="fas fa-play"></i></span><span>Videos</span></a></span>
       <span class="link-block"><a href="https://github.com/dhsoon02/SGIP" class="external-link button is-normal is-rounded is-dark" target="_blank" rel="noopener"><span class="icon"><i class="fab fa-github"></i></span><span>Code</span></a></span>
       <span class="link-block"><a href="#BibTeX" class="external-link button is-normal is-rounded is-dark"><span class="icon"><i class="fas fa-quote-right"></i></span><span>Citation</span></a></span>
     </div>
@@ -1350,7 +1424,36 @@
 
 <section class="section section-soft" id="qualitative"><div class="container is-max-desktop">
   <h2 class="section-title">Qualitative Results</h2>
-  <p class="section-lead">The paper's visualizations show how <strong>explicit scene grounding</strong> guides future trajectories and interaction poses in cluttered indoor scenes. The comparisons include gaze-free baselines and the privileged teacher alongside the deployed observation-only student.</p>
+  <p class="section-lead">Watch <strong>SGIP</strong> (right) and the gaze-free baseline <strong>SIF3D*</strong> (left) predict future motion in the kitchen and seminar-room scenes from GIMO. Both methods use observed motion and the 3D scene. The figures below include additional comparisons with the privileged teacher.</p>
+  <p class="motion-legend" aria-label="Motion color legend">
+    <span class="observed">Observed motion</span>
+    <span class="ground-truth">Ground-truth future</span>
+    <span class="predicted">Predicted future</span>
+  </p>
+  <div class="video-stack" id="videos" aria-label="Motion prediction videos">
+    <figure class="figure-panel video-panel">
+      <figcaption class="video-heading">
+        <h3 class="minor-title" id="kitchen-video-title">Kitchen</h3>
+        <span class="video-comparison">SIF3D* (no gaze) vs. SGIP</span>
+      </figcaption>
+      <video class="result-video" controls muted loop playsinline preload="none" width="2560" height="1440" poster="./videos/kitchen-poster.jpg" aria-labelledby="kitchen-video-title" aria-describedby="kitchen-video-caption">
+        <source src="./videos/18224_suppl_01_qualitative_kitchen.mp4" type="video/mp4">
+        <p>Your browser does not support embedded video. <a href="./videos/18224_suppl_01_qualitative_kitchen.mp4">Download the kitchen comparison.</a></p>
+      </video>
+      <p class="figure-caption" id="kitchen-video-caption">Top-down comparison of future full-body motion in a cluttered kitchen.</p>
+    </figure>
+    <figure class="figure-panel video-panel">
+      <figcaption class="video-heading">
+        <h3 class="minor-title" id="seminar-video-title">Seminar Room</h3>
+        <span class="video-comparison">SIF3D* (no gaze) vs. SGIP</span>
+      </figcaption>
+      <video class="result-video" controls muted loop playsinline preload="none" width="2560" height="1440" poster="./videos/seminar-room-poster.jpg" aria-labelledby="seminar-video-title" aria-describedby="seminar-video-caption">
+        <source src="./videos/18224_suppl_02_qualitative_seminar_room.mp4" type="video/mp4">
+        <p>Your browser does not support embedded video. <a href="./videos/18224_suppl_02_qualitative_seminar_room.mp4">Download the seminar-room comparison.</a></p>
+      </video>
+      <p class="figure-caption" id="seminar-video-caption">Top-down comparison of future full-body motion around the seminar-room table.</p>
+    </figure>
+  </div>
   <div class="qual-stack">
 <div class="figure-panel">
       <div class="minor-title">GIMO: Trajectories and Full-Body Motion</div>
@@ -1469,6 +1572,28 @@
           }
         });
       }
+    });
+
+    // Play muted comparison clips only while visible; controls remain available.
+    const resultVideos = [...document.querySelectorAll(".result-video")];
+    const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+    if ("IntersectionObserver" in window) {
+      const videoObserver = new IntersectionObserver((entries) => {
+        entries.forEach(({ target: video, isIntersecting, intersectionRatio }) => {
+          if (!isIntersecting || intersectionRatio < 0.35) {
+            video.pause();
+          } else if (!reducedMotion.matches && !document.hidden) {
+            video.play().catch(() => {});
+          }
+        });
+      }, { threshold: 0.35 });
+      resultVideos.forEach((video) => videoObserver.observe(video));
+    }
+    document.addEventListener("visibilitychange", () => {
+      if (document.hidden) resultVideos.forEach((video) => video.pause());
+    });
+    reducedMotion.addEventListener("change", (event) => {
+      if (event.matches) resultVideos.forEach((video) => video.pause());
     });
 
     const researchDropdowns = [...document.querySelectorAll(".research-dropdown")];

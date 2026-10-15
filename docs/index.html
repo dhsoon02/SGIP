@@ -1,0 +1,184 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#112d3c">
+  <title>SGIP · Scene-Grounded Interaction Priors · NeurIPS 2026</title>
+  <meta name="description" content="SGIP predicts future human trajectories and full-body poses by learning scene-grounded interaction priors. Observed motion and a 3D scene are all it needs at inference. NeurIPS 2026, DGIST.">
+  <link rel="canonical" href="https://dhsoon02.github.io/SGIP/">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="SGIP · Learning Scene-Grounded Interaction Priors">
+  <meta property="og:description" content="Predicting where people will interact—and how they will move—from observed motion and a 3D scene. NeurIPS 2026.">
+  <meta property="og:url" content="https://dhsoon02.github.io/SGIP/">
+  <meta property="og:image" content="https://dhsoon02.github.io/SGIP/assets/images/social-preview.jpg">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="citation_title" content="Learning Scene-Grounded Interaction Priors for Scene-Aware Human Motion Prediction">
+  <meta name="citation_author" content="Donghyeon Soon">
+  <meta name="citation_author" content="Jiil Yoon">
+  <meta name="citation_author" content="Hyeondong Kim">
+  <meta name="citation_author" content="Daehee Park">
+  <meta name="citation_publication_date" content="2026">
+  <meta name="citation_conference_title" content="Advances in Neural Information Processing Systems">
+  <meta name="citation_pdf_url" content="https://dhsoon02.github.io/SGIP/paper.pdf">
+  <link rel="icon" href="assets/images/favicon.svg" type="image/svg+xml">
+  <link rel="preload" href="assets/fonts/manrope.ttf" as="font" type="font/ttf" crossorigin>
+  <link rel="stylesheet" href="assets/css/style.css">
+  <script src="assets/js/main.js" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+  <header class="site-header">
+    <nav class="nav wrap" aria-label="Main navigation">
+      <a class="wordmark" href="#" aria-label="SGIP home"><img src="assets/images/favicon.svg" width="30" height="30" alt="">SGIP<span class="nav-year"> / 2026</span></a>
+      <div class="nav-links"><a href="#overview">Overview</a><a href="#method">Method</a><a href="#results">Results</a><a href="#citation">Citation</a></div>
+      <a class="nav-repo" href="https://github.com/dhsoon02/SGIP" target="_blank" rel="noopener noreferrer">GitHub <span aria-hidden="true">↗</span></a>
+    </nav>
+  </header>
+
+  <main id="main">
+    <section class="hero wrap" aria-labelledby="paper-title">
+      <div class="venue"><span class="status-dot" aria-hidden="true"></span> NeurIPS 2026 <span class="venue-divider"></span> DGIST</div>
+      <div class="hero-acronym" aria-hidden="true">SGIP</div>
+      <h1 id="paper-title">Learning <span>Scene-Grounded<br class="desktop-break"> Interaction Priors</span><small>for Scene-Aware Human Motion Prediction</small></h1>
+      <p class="hero-tagline">Predicting where people will interact—and how they will move.</p>
+      <div class="authors">
+        <a href="mailto:dhsoon@dgist.ac.kr">Donghyeon Soon<sup>*</sup></a>
+        <a href="mailto:wldlf2819@dgist.ac.kr">Jiil Yoon<sup>*</sup></a>
+        <a href="mailto:hdkim@dgist.ac.kr">Hyeondong Kim</a>
+        <a href="mailto:dhpark@dgist.ac.kr">Daehee Park<sup>†</sup></a>
+      </div>
+      <p class="author-notes"><span>DGIST</span><span><sup>*</sup> Equal contribution</span><span><sup>†</sup> Corresponding author</span></p>
+      <div class="resource-links">
+        <a class="button button-primary" href="paper.pdf" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14 3H6v18h12V7zM14 3v5h5M9 12h6M9 16h6"/></svg>Read the paper</a>
+        <a class="button" href="https://github.com/dhsoon02/SGIP" target="_blank" rel="noopener noreferrer"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m8 7-5 5 5 5m8-10 5 5-5 5m-3-12-2 14"/></svg>GitHub</a>
+        <a class="button" href="#overview"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m9 5 11 7-11 7z"/></svg>Watch overview</a>
+        <a class="button button-text" href="#citation">BibTeX <span aria-hidden="true">↓</span></a>
+      </div>
+      <div class="inference-line"><span class="mini-label">AT INFERENCE</span><span>Observed motion <b>+</b> 3D scene</span><span class="flow-arrow" aria-hidden="true">→</span><strong>Grounded future motion</strong></div>
+      <figure class="teaser">
+        <a class="zoomable" href="assets/images/teaser.png" data-lightbox aria-label="Enlarge SGIP teaser figure"><img src="assets/images/teaser.webp" width="2400" height="1054" fetchpriority="high" alt="Three steps: the same observed motion admits several destinations; a predicted prior ranks bags, sofa, chair, and free space; the selected sofa grounds a future motion sequence."><span class="expand-label" aria-hidden="true">↗ Expand figure</span></a>
+        <figcaption><strong>One observed motion. Several possible futures.</strong> SGIP makes the interaction target explicit, then grounds the predicted trajectory and full-body pose in that target.</figcaption>
+      </figure>
+    </section>
+
+    <section class="section overview-section" id="overview" aria-labelledby="overview-title">
+      <div class="wrap video-layout">
+        <div class="section-copy">
+          <p class="eyebrow">01 / THE IDEA</p>
+          <h2 id="overview-title">A better prediction<br>starts with <em>where.</em></h2>
+          <p>A person approaching a sofa might sit down, turn toward a chair, or keep walking. Motion history alone leaves the next interaction ambiguous.</p>
+          <p>SGIP learns an explicit distribution over scene objects and navigable space to guide what happens next.</p>
+          <a class="inline-link" href="assets/videos/sgip-overview.mp4" download>Download the overview <span aria-hidden="true">↓</span></a>
+        </div>
+        <figure class="video-figure">
+          <div class="video-shell"><video id="overview-video" controls playsinline preload="none" poster="assets/images/video-poster.jpg" aria-label="SGIP research overview">
+            <source src="assets/videos/sgip-overview.mp4" type="video/mp4">
+            <track kind="captions" src="assets/videos/sgip-overview.en.vtt" srclang="en" label="English">
+            <p>Your browser does not support embedded video. <a href="assets/videos/sgip-overview.mp4">Download the overview.</a></p>
+          </video></div>
+          <figcaption><span class="video-label">RESEARCH OVERVIEW</span> An illustrated walkthrough using the paper’s figures. English on-screen explanations; no audio.</figcaption>
+        </figure>
+      </div>
+      <div class="wrap idea-grid">
+        <article><span class="idea-number">01</span><h3>Ground the interaction</h3><p>Predict a prior over object instances and a navigation token, making future-motion grounding explicit.</p></article>
+        <article><span class="idea-number">02</span><h3>Distill intent into motion</h3><p>Transfer a teacher’s intent-aware grounding and motion predictions into an observation-only student.</p></article>
+        <article><span class="idea-number">03</span><h3>Deploy from observations</h3><p>Predict trajectory and full-body pose using motion and scene alone—without gaze, textual intent, or an LLM at inference.</p></article>
+      </div>
+      <details class="abstract wrap"><summary><span>Abstract</span><span class="details-symbol" aria-hidden="true">+</span></summary>
+        <div><p>Human motion prediction (HMP) aims to forecast future movement from an observed motion sequence, and recent methods have incorporated 3D scene geometry and object semantics to improve long-term plausibility. However, the destination of future motion remains ambiguous in cluttered scenes: the same observed motion can lead to different interaction targets or navigation modes. Existing methods either handle this ambiguity implicitly or rely on auxiliary signals like gaze that are hard to obtain in practice.</p>
+        <p>To address this, we propose <em>SGIP</em>, which explicitly predicts where in the scene future motion will be grounded across both objects and open navigation regions, and uses it to condition future trajectory and full-body pose prediction. This scene-grounded interaction prior is learned via intent distillation: <em>at training time only</em>, a teacher model scores candidate scene regions by combining an LLM prompted with a textual description of the person’s intent with geometric motion-scene features. A student model learns to reproduce these scores from only the observed motion and 3D scene, making <em>intent and LLM unnecessary at test time</em>.</p>
+        <p>Across multiple benchmark datasets, SGIP outperforms prior scene-aware baselines on both trajectory and pose accuracy in a realistic deployment setting where neither gaze nor intent is available at inference, demonstrating effectiveness of the proposed framework.</p></div>
+      </details>
+    </section>
+
+    <section class="section wrap" id="qualitative" aria-labelledby="qualitative-title">
+      <div class="section-heading"><div><p class="eyebrow">02 / SEE THE DIFFERENCE</p><h2 id="qualitative-title">Grounded in the scene.<br>Reflected in the motion.</h2></div><p>Compare predicted paths, final interactions, and body poses across three GIMO scenes.</p></div>
+      <div class="result-toolbar"><div class="tabs" role="tablist" aria-label="Qualitative scene" data-tab-group="scenes">
+        <button type="button" role="tab" id="tab-kitchen" aria-controls="panel-kitchen" aria-selected="true" tabindex="0">Kitchen</button>
+        <button type="button" role="tab" id="tab-living-room" aria-controls="panel-living-room" aria-selected="false" tabindex="-1">Living room</button>
+        <button type="button" role="tab" id="tab-seminar-room" aria-controls="panel-seminar-room" aria-selected="false" tabindex="-1">Seminar room</button>
+      </div><div class="legend" aria-label="Motion color legend"><span><i class="observed"></i>Observed</span><span><i class="gt"></i>Ground truth</span><span><i class="predicted"></i>Predicted</span></div></div>
+      <div id="panel-kitchen" class="scene-panel" role="tabpanel" aria-labelledby="tab-kitchen" tabindex="0">
+        <div class="comparison-grid"><figure class="comparison ours"><img src="assets/images/kitchen-sgip.webp" width="1200" height="873" loading="lazy" alt="SGIP in the kitchen: predicted path approaches the ground-truth interaction area, with the final pose near the counter."></figure><figure class="comparison baseline"><img src="assets/images/kitchen-sif3d.webp" width="1200" height="875" loading="lazy" alt="Gaze-free SIF3D in the same kitchen: comparison of predicted trajectory, final interaction, and pose sequence."></figure></div>
+        <p class="panel-caption">Kitchen <span>·</span> Anticipating an interaction among nearby objects.</p>
+      </div>
+      <div id="panel-living-room" class="scene-panel" role="tabpanel" aria-labelledby="tab-living-room" tabindex="0" hidden>
+        <div class="comparison-grid"><figure class="comparison ours"><img src="assets/images/living-room-sgip.webp" width="1200" height="881" loading="lazy" alt="SGIP in the living room: the predicted motion approaches the ground-truth destination and final body placement."></figure><figure class="comparison baseline"><img src="assets/images/living-room-sif3d.webp" width="1200" height="884" loading="lazy" alt="Gaze-free SIF3D in the living room, using the same observations and scene."></figure></div>
+        <p class="panel-caption">Living room <span>·</span> Resolving competing destinations in a cluttered scene.</p>
+      </div>
+      <div id="panel-seminar-room" class="scene-panel" role="tabpanel" aria-labelledby="tab-seminar-room" tabindex="0" hidden>
+        <div class="comparison-grid"><figure class="comparison ours"><img src="assets/images/seminar-room-sgip.webp" width="1200" height="879" loading="lazy" alt="SGIP in the seminar room: trajectory and final pose follow the ground-truth interaction near the end of the table."></figure><figure class="comparison baseline"><img src="assets/images/seminar-room-sif3d.webp" width="1200" height="881" loading="lazy" alt="Gaze-free SIF3D in the seminar room, with trajectory and final interaction shown for comparison."></figure></div>
+        <p class="panel-caption">Seminar room <span>·</span> Aligning body placement with the interaction target.</p>
+      </div>
+      <p class="figure-note">Original qualitative results from the paper. SIF3D* denotes the gaze-free baseline. <a href="assets/images/qualitative.png" data-lightbox>View the complete figure ↗</a></p>
+    </section>
+
+    <section class="section method-section" id="method" aria-labelledby="method-title">
+      <div class="wrap">
+        <div class="section-heading"><div><p class="eyebrow">03 / HOW IT WORKS</p><h2 id="method-title">Learn with intent.<br>Predict from observations.</h2></div><p>Privileged intent supervises the teacher during training. Its grounding and motion knowledge are distilled into the student.</p></div>
+        <div class="tabs method-tabs" role="tablist" aria-label="Method view" data-tab-group="method">
+          <button type="button" role="tab" id="tab-training" aria-controls="panel-training" aria-selected="true" tabindex="0">Training & inference</button>
+          <button type="button" role="tab" id="tab-inference" aria-controls="panel-inference" aria-selected="false" tabindex="-1">Inference only</button>
+        </div>
+        <div role="tabpanel" id="panel-training" aria-labelledby="tab-training" tabindex="0">
+          <figure class="framework"><a href="assets/images/framework.png" data-lightbox class="zoomable" aria-label="Enlarge the complete SGIP framework"><img src="assets/images/framework.webp" width="2400" height="1101" loading="lazy" alt="SGIP teacher-student pipeline. The privileged teacher combines semantic and geometric scores. Prior and motion distillation supervise the observation-only student. The motion predictor outputs trajectory and full-body pose."><span class="expand-label" aria-hidden="true">↗ Expand figure</span></a></figure>
+          <div class="method-explanation"><p><span class="branch-label teacher-label">TRAINING / TEACHER</span>Textual intent, semantic rubric scores, and motion–scene geometry build an intent-conditioned prior. The teacher also provides intent-aligned motion predictions.</p><p><span class="branch-label student-label">DEPLOYMENT / STUDENT</span>The student learns both <strong>where</strong> future motion is grounded and <strong>how</strong> to move. The teacher and its privileged inputs are used only during training.</p></div>
+        </div>
+        <div role="tabpanel" id="panel-inference" aria-labelledby="tab-inference" tabindex="0" hidden>
+          <div class="inference-flow"><div><span>INPUT</span><strong>Motion history<br>+ 3D scene</strong></div><b aria-hidden="true">→</b><div><span>GROUNDING</span><strong>Student prior<br>+ top-1 token</strong></div><b aria-hidden="true">→</b><div><span>OUTPUT</span><strong>Future trajectory<br>+ full-body pose</strong></div></div>
+          <figure class="framework inference-figure"><img src="assets/images/inference.webp" width="2100" height="717" loading="lazy" alt="The paper’s observation-only student branch encodes motion and scene, predicts a prior with an MLP, and conditions motion prediction on the selected token."></figure>
+          <p class="inference-note">At inference: no gaze, textual intent, or LLM. The standard single-future evaluation uses the highest-probability grounding token.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section wrap futures-section" aria-labelledby="futures-title">
+      <div class="section-heading"><div><p class="eyebrow">04 / BEYOND A SINGLE TARGET</p><h2 id="futures-title">Same observations.<br>A different grounded future.</h2></div><p>Keep the observations and predictor fixed. Change the grounding token, and the predicted path and interaction pose change with it.</p></div>
+      <figure class="futures-figure"><a href="assets/images/alternative-futures.png" data-lightbox class="zoomable" aria-label="Enlarge token-conditioned alternative futures"><img src="assets/images/alternative-futures.webp" width="2400" height="635" loading="lazy" alt="Two token-conditioned predictions in the same kitchen: one uses the ground-truth interaction object, and the other uses an alternative high-probability interaction object."><span class="expand-label" aria-hidden="true">↗ Expand figure</span></a><figcaption>This qualitative analysis decodes distinct grounding tokens from the student prior. Reported main benchmark results use hard top-1 selection.</figcaption></figure>
+    </section>
+
+    <section class="section results-section" id="results" aria-labelledby="results-title">
+      <div class="wrap">
+        <div class="section-heading"><div><p class="eyebrow">05 / THE EVIDENCE</p><h2 id="results-title">Better grounding.<br>More accurate predictions.</h2></div><p>Evaluated on GIMO and PROX under observation-only inference. Lower trajectory and joint-position errors are better.</p></div>
+        <div class="metrics"><article><p>GIMO · TRAJECTORY PATH</p><strong>14.5<span>%</span><i>↓</i></strong><h3>lower trajectory error</h3><small>642 → 549 vs. gaze-free GAP3DS*</small></article><article><p>PROX · TRAJECTORY DESTINATION</p><strong>12.6<span>%</span><i>↓</i></strong><h3>lower destination error</h3><small>659 → 576 vs. gaze-free SIF3D*</small></article><article><p>GIMO · GROUNDING</p><strong>76<span>%</span></strong><h3>student top-1 accuracy</h3><small>Interaction-token selection; teacher: 86%</small></article></div>
+        <div class="result-toolbar"><div class="tabs" role="tablist" aria-label="Benchmark dataset" data-tab-group="benchmarks"><button type="button" role="tab" id="tab-gimo" aria-controls="panel-gimo" aria-selected="true" tabindex="0">GIMO</button><button type="button" role="tab" id="tab-prox" aria-controls="panel-prox" aria-selected="false" tabindex="-1">PROX</button></div><span class="table-context">Observation-only comparison <span aria-hidden="true">·</span> Lower is better ↓</span></div>
+        <div role="tabpanel" id="panel-gimo" aria-labelledby="tab-gimo" tabindex="0"><div class="table-scroll" tabindex="0" role="region" aria-label="GIMO observation-only results; scroll horizontally on small screens"><table><caption>GIMO · Observation-only models</caption><thead><tr><th scope="col">Method</th><th scope="col">Traj-path ↓</th><th scope="col">Traj-dest ↓</th><th scope="col">MPJPE-path ↓</th><th scope="col">MPJPE-dest ↓</th></tr></thead><tbody>
+          <tr><th scope="row">LTD</th><td>673</td><td>890</td><td>156.4</td><td>203.0</td></tr>
+          <tr><th scope="row">SPGSN</th><td>700</td><td>893</td><td>157.0</td><td>202.2</td></tr>
+          <tr><th scope="row">AuxFormer</th><td>732</td><td>902</td><td>165.1</td><td>202.4</td></tr>
+          <tr><th scope="row">SIF3D*</th><td>700</td><td>823</td><td>164.2</td><td>199.6</td></tr>
+          <tr><th scope="row">GAP3DS*</th><td>642</td><td>701</td><td>170.1</td><td>206.4</td></tr>
+          <tr class="ours-row"><th scope="row">SGIP <span>Ours</span></th><td><strong>549</strong> <small>± 5.0</small></td><td><strong>681</strong> <small>± 7.6</small></td><td><strong>153.1</strong> <small>± 1.8</small></td><td><strong>195.1</strong> <small>± 2.6</small></td></tr>
+        </tbody></table></div><p class="figure-note">SGIP: mean ± standard deviation over 5 seeds. * Gaze-free re-evaluation of a gaze-using baseline. Bold values are best within this comparison.</p></div>
+        <div role="tabpanel" id="panel-prox" aria-labelledby="tab-prox" tabindex="0" hidden><div class="table-scroll" tabindex="0" role="region" aria-label="PROX observation-only results; scroll horizontally on small screens"><table><caption>PROX · Observation-only models</caption><thead><tr><th scope="col">Method</th><th scope="col">Traj-path ↓</th><th scope="col">Traj-dest ↓</th><th scope="col">MPJPE-path ↓</th><th scope="col">MPJPE-dest ↓</th></tr></thead><tbody>
+          <tr><th scope="row">LTD</th><td>677</td><td>753</td><td>223.4</td><td>226.6</td></tr>
+          <tr><th scope="row">SPGSN</th><td>595</td><td>663</td><td>286.3</td><td>271.3</td></tr>
+          <tr><th scope="row">AuxFormer</th><td>553</td><td>727</td><td>199.2</td><td>240.8</td></tr>
+          <tr><th scope="row">SIF3D*</th><td>488</td><td>659</td><td>228.5</td><td>217.4</td></tr>
+          <tr class="ours-row"><th scope="row">SGIP <span>Ours</span></th><td><strong>470</strong></td><td><strong>576</strong></td><td><strong>194.6</strong></td><td><strong>197.7</strong></td></tr>
+        </tbody></table></div><p class="figure-note">The architecture is trained and evaluated on PROX. * Gaze-free SIF3D. Bold values are best within this comparison.</p></div>
+        <details class="additional-results"><summary>Models with additional or privileged cues <span class="details-symbol" aria-hidden="true">+</span></summary><p class="figure-note">GIMO diagnostic comparison from the paper. These models use gaze or textual intent beyond motion and scene. SGIP’s privileged teacher is not deployed.</p><div class="table-scroll" tabindex="0" role="region" aria-label="GIMO results with additional or privileged cues"><table><caption>GIMO · Additional or privileged cues</caption><thead><tr><th scope="col">Method</th><th scope="col">Extra cue</th><th scope="col">Traj-path ↓</th><th scope="col">Traj-dest ↓</th><th scope="col">MPJPE-path ↓</th><th scope="col">MPJPE-dest ↓</th></tr></thead><tbody>
+          <tr><th scope="row">LTD w/ gaze</th><td>Gaze</td><td>655</td><td>801</td><td>155.6</td><td>202.0</td></tr><tr><th scope="row">SPGSN w/ gaze</th><td>Gaze</td><td>702</td><td>982</td><td>156.0</td><td>202.0</td></tr><tr><th scope="row">AuxFormer w/ gaze</th><td>Gaze</td><td>622</td><td>746</td><td>161.5</td><td>201.1</td></tr><tr><th scope="row">BiFu</th><td>Gaze</td><td>661</td><td>727</td><td>167.8</td><td>205.0</td></tr><tr><th scope="row">SIF3D</th><td>Gaze</td><td>590</td><td>666</td><td>156.6</td><td>195.7</td></tr><tr><th scope="row">GAP3DS</th><td>Gaze</td><td>575</td><td>623</td><td><strong>141.2</strong></td><td><strong>171.4</strong></td></tr><tr><th scope="row">SGIP privileged</th><td>Gaze</td><td>528</td><td>635</td><td>149.9</td><td>190.6</td></tr><tr><th scope="row">SGIP privileged</th><td>Textual intent</td><td><strong>485</strong></td><td><strong>556</strong></td><td>151.2</td><td>187.8</td></tr>
+        </tbody></table></div></details>
+        <div class="ablation-layout"><div><p class="eyebrow">WHAT MAKES THE DIFFERENCE?</p><h3>Transfer the target,<br>then transfer the motion.</h3><p>Prior distillation provides the largest single-component improvement in trajectory error. Motion-only distillation can misalign the teacher’s and student’s grounding.</p><p>Combining both signals improves trajectory and final-pose errors over prior distillation alone.</p></div><div class="table-scroll" tabindex="0" role="region" aria-label="Distillation ablation on GIMO"><table><caption>GIMO · Distillation ablation</caption><thead><tr><th scope="col">Distillation</th><th scope="col">Traj-path ↓</th><th scope="col">MPJPE-dest ↓</th></tr></thead><tbody><tr><th scope="row">None</th><td>740</td><td>204.8</td></tr><tr><th scope="row">Motion only</th><td>856</td><td>198.9</td></tr><tr><th scope="row">Prior only</th><td>574</td><td>198.6</td></tr><tr class="ours-row"><th scope="row">Prior + motion</th><td><strong>549</strong></td><td><strong>195.1</strong></td></tr></tbody></table></div></div>
+      </div>
+    </section>
+
+    <section class="section wrap citation-section" id="citation" aria-labelledby="citation-title">
+      <div class="citation-heading"><div><p class="eyebrow">06 / BUILD ON THIS WORK</p><h2 id="citation-title">Citation & resources</h2></div><div class="citation-actions"><a class="inline-link" href="citation.bib" download>Download .bib ↓</a><button type="button" class="button" id="copy-citation">Copy BibTeX</button></div></div>
+      <pre class="citation-code"><code id="bibtex">@inproceedings{soon2026sgip,
+  title     = {Learning Scene-Grounded Interaction Priors for Scene-Aware Human Motion Prediction},
+  author    = {Soon, Donghyeon and Yoon, Jiil and Kim, Hyeondong and Park, Daehee},
+  booktitle = {Advances in Neural Information Processing Systems},
+  year      = {2026}
+}</code></pre>
+      <p id="copy-status" role="status" aria-live="polite"></p>
+      <div class="resource-bottom"><a href="paper.pdf" target="_blank" rel="noopener">Paper PDF ↗</a><a href="https://github.com/dhsoon02/SGIP" target="_blank" rel="noopener noreferrer">Project repository ↗</a><a href="assets/videos/sgip-overview.mp4" download>Overview video ↓</a><a href="mailto:dhsoon@dgist.ac.kr">Contact ↗</a></div>
+    </section>
+  </main>
+
+  <footer class="site-footer"><div class="wrap"><a class="wordmark" href="#"><img src="assets/images/favicon.svg" width="28" height="28" alt="">SGIP</a><p>DGIST · NeurIPS 2026</p><p class="credits">Layout inspired by <a href="https://vision3d-lab.github.io/lightsplat/" target="_blank" rel="noopener noreferrer">LightSplat</a> and <a href="https://nerfies.github.io/" target="_blank" rel="noopener noreferrer">Nerfies</a>.</p></div></footer>
+  <dialog id="figure-dialog" aria-label="Expanded paper figure"><button type="button" class="dialog-close" aria-label="Close expanded figure">Close <span aria-hidden="true">×</span></button><img alt=""><a class="dialog-original" href="#" target="_blank" rel="noopener">Open original image ↗</a></dialog>
+</body>
+</html>

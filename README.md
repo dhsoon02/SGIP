@@ -13,7 +13,7 @@
 
 <p>
   <a href="docs/paper.pdf"><img alt="Paper" src="https://img.shields.io/badge/Paper-PDF-2f80ed?style=flat-square&logo=adobeacrobatreader&logoColor=white"></a>
-  <a href="https://dhsoon02.github.io/SGIP/"><img alt="Project Page" src="https://img.shields.io/badge/Project-Page-1b427d?style=flat-square&logo=googlechrome&logoColor=white"></a>
+  <a href="https://sgip2026.github.io/"><img alt="Project Page" src="https://img.shields.io/badge/Project-Page-1b427d?style=flat-square&logo=googlechrome&logoColor=white"></a>
 </p>
 
 </div>
@@ -61,11 +61,13 @@ We evaluate SGIP on **GIMO** and **PROX** for future trajectory and full-body po
 prediction. SGIP outperforms the compared scene-aware baselines on both datasets
 in the observation-only setting. Full quantitative and qualitative results are
 available in the [paper](docs/paper.pdf) and on the
-[project page](https://dhsoon02.github.io/SGIP/).
+[project page](https://sgip2026.github.io/).
 
 ## Code
 
 *Code will be released soon.*
+
+The project website is maintained in [SGIP2026/sgip2026.github.io](https://github.com/SGIP2026/sgip2026.github.io).
 
 ## Citation
 

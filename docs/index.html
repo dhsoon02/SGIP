@@ -18,7 +18,6 @@
   <meta property="og:image" content="https://dhsoon02.github.io/SGIP/images/paper_figures/fig1.png">
   <link rel="canonical" href="https://dhsoon02.github.io/SGIP/">
   <link rel="stylesheet" href="./assets/css/project.css">
-  <link rel="preload" as="image" href="./videos/SGIP_NeurIPS2026_demo-poster.jpg">
 </head>
 <body>
 
@@ -33,7 +32,7 @@
         <div class="research-menu">
           <a href="#demo" class="research-card">
             <span class="research-card-icon"><i class="fas fa-play"></i></span>
-            <span class="research-card-copy"><span class="research-card-kicker">NeurIPS 2026</span><span class="research-card-title">Video Overview</span><span class="research-card-desc">Method and qualitative results</span></span>
+            <span class="research-card-copy"><span class="research-card-kicker">NeurIPS 2026</span><span class="research-card-title">SGIP Overview</span><span class="research-card-desc">Method and qualitative results</span></span>
             <span class="research-card-arrow"><i class="fas fa-arrow-down"></i></span>
           </a>
           <a href="https://github.com/dhsoon02/SGIP" class="research-card" target="_blank" rel="noopener">
@@ -70,24 +69,10 @@
   </div></div></div></div>
 </section>
 
-<section class="section demo-section demo-intro" id="demo" aria-labelledby="demo-heading">
-  <div class="container is-max-desktop">
-    <h2 class="section-title" id="demo-heading">Video Overview</h2>
-    <figure class="demo-panel">
-      <video class="result-video demo-video" controls muted loop playsinline preload="none" width="1920" height="1080" poster="./videos/SGIP_NeurIPS2026_demo-poster.jpg" aria-label="SGIP video overview" aria-describedby="demo-caption">
-        <source src="./videos/SGIP_NeurIPS2026_demo.mp4" type="video/mp4">
-        <p>Your browser does not support embedded video. <a href="./videos/SGIP_NeurIPS2026_demo.mp4">Download the SGIP overview video.</a></p>
-      </video>
-      <figcaption class="figure-caption" id="demo-caption"><strong>Scene-grounded human motion prediction.</strong> SGIP learns an interaction prior over objects and open space to predict future trajectories and full-body poses from observed motion and the 3D scene.</figcaption>
-    </figure>
-  </div>
-</section>
-
-
 <section class="section"><div class="container is-max-desktop">
 <div class="figure-panel teaser-panel">
 
-      <img src="./images/paper_figures/fig1.png" alt="SGIP resolves ambiguous future motion by predicting a prior over scene tokens and conditioning motion on the selected target." loading="lazy" decoding="async">
+      <img src="./images/paper_figures/fig1.png" alt="SGIP resolves ambiguous future motion by predicting a prior over scene tokens and conditioning motion on the selected target." fetchpriority="high" decoding="async">
       <p class="figure-caption"><span class="caption-label">Figure 1.</span> <span class="caption-title">Overview of SGIP.</span> <strong>(a)</strong> The same observed motion may lead toward different objects or through open space. <strong>(b)</strong> SGIP predicts a scene-grounded interaction prior from observed motion and the 3D scene. <strong>(c)</strong> The selected scene token conditions trajectory and full-body pose prediction; here, the person walks toward and sits on the sofa.</p>
     </div></div></section>
 
@@ -100,7 +85,18 @@
   </div>
 </div></div></div></section>
 
-
+<section class="section demo-section" id="demo" aria-labelledby="demo-heading">
+  <div class="container is-max-desktop">
+    <h2 class="section-title" id="demo-heading">SGIP Overview</h2>
+    <figure class="demo-panel">
+      <video class="result-video demo-video" controls muted loop playsinline preload="none" width="1920" height="1080" poster="./videos/SGIP_NeurIPS2026_demo-poster.jpg" aria-label="SGIP video overview" aria-describedby="demo-caption">
+        <source src="./videos/SGIP_NeurIPS2026_demo.mp4" type="video/mp4">
+        <p>Your browser does not support embedded video. <a href="./videos/SGIP_NeurIPS2026_demo.mp4">Download the SGIP overview video.</a></p>
+      </video>
+      <figcaption class="figure-caption" id="demo-caption"><strong>Scene-grounded human motion prediction.</strong> SGIP learns an interaction prior over objects and open space to predict future trajectories and full-body poses from observed motion and the 3D scene.</figcaption>
+    </figure>
+  </div>
+</section>
 
 <section class="section"><div class="container is-max-desktop">
   <h2 class="section-title">Why Future Motion Is Ambiguous</h2>

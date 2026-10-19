@@ -25,8 +25,8 @@
 ## Teaser
 
 <p align="center">
-  <a href="docs/images/paper_figures/h_teaser.pdf">
-    <img src="docs/images/paper_figures/h_teaser.png" alt="SGIP teaser: ambiguous targets with gaze- and distance-based methods, an explicit interaction prior over objects and free space, and a predicted motion toward the sofa" width="100%">
+  <a href="docs/images/paper_figures/teaser_camready.pdf">
+    <img src="docs/images/paper_figures/teaser_camready.png" alt="SGIP teaser: previous gaze- and distance-based methods leave future grounding ambiguous; SGIP predicts an explicit interaction prior over objects and open space to ground future motion without extra sensing at inference" width="100%">
   </a>
 </p>
 

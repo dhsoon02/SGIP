@@ -3,11 +3,11 @@
 <h1>[NeurIPS 2026] Learning Scene-Grounded Interaction Priors for Scene-Aware Human Motion Prediction</h1>
 
 <p>
-  <a href="https://dhsoon02.github.io/"><strong>Donghyeon Soon</strong></a><sup>*</sup> ·
-  <a href="mailto:wldlf2819@dgist.ac.kr"><strong>Jiil Yoon</strong></a><sup>*</sup> ·
-  <a href="mailto:hdkim@dgist.ac.kr"><strong>Hyeondong Kim</strong></a> ·
-  <a href="https://sites.google.com/view/dhpark/"><strong>Daehee Park</strong></a><sup>†</sup><br>
-  DGIST<br>
+  <a href="https://dhsoon02.github.io/"><strong>Donghyeon Soon</strong></a><sup>1*</sup> ·
+  <a href="mailto:wldlf2819@dgist.ac.kr"><strong>Jiil Yoon</strong></a><sup>1*</sup> ·
+  <a href="mailto:hdkim@dgist.ac.kr"><strong>Hyeondong Kim</strong></a><sup>1</sup> ·
+  <a href="https://sites.google.com/view/dhpark/"><strong>Daehee Park</strong></a><sup>1,2†</sup><br>
+  <sup>1</sup>DGIST &nbsp;·&nbsp; <sup>2</sup><a href="https://univa.ai/">UNIVA</a><br>
   <sup>*</sup>Equal contribution &nbsp;·&nbsp; <sup>†</sup>Corresponding author
 </p>
 

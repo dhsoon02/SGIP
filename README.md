@@ -7,7 +7,7 @@
   <a href="mailto:wldlf2819@dgist.ac.kr"><strong>Jiil Yoon</strong></a><sup>1*</sup> ·
   <a href="mailto:hdkim@dgist.ac.kr"><strong>Hyeondong Kim</strong></a><sup>1</sup> ·
   <a href="https://sites.google.com/view/dhpark/"><strong>Daehee Park</strong></a><sup>1,2†</sup><br>
-  <sup>1</sup>DGIST &nbsp;·&nbsp; <sup>2</sup><a href="https://univa.ai/">UNIVA</a><br>
+  <sup>1</sup>DGIST &nbsp;·&nbsp; <sup>2</sup>UNIVA<br>
   <sup>*</sup>Equal contribution &nbsp;·&nbsp; <sup>†</sup>Corresponding author
 </p>
 

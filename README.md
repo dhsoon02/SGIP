@@ -15,7 +15,7 @@
 
 <p>
   <a href="https://sgip2026.github.io/"><img alt="Project Page" src="https://img.shields.io/badge/Project-Page-2ea44f?style=flat-square"></a>
-  <a href="https://openreview.net/forum?id=R5YfoOMi5B"><img alt="Paper on OpenReview" src="https://img.shields.io/badge/Paper-OpenReview-2f80ed?style=flat-square"></a>
+  <a href="docs/paper.pdf"><img alt="Paper PDF" src="https://img.shields.io/badge/Paper-PDF-2f80ed?style=flat-square"></a>
   <a href="https://neurips.cc/virtual/2026/loc/sydney/poster/152697"><img alt="NeurIPS 2026" src="https://img.shields.io/badge/NeurIPS-2026-6843b5?style=flat-square"></a>
 </p>
 

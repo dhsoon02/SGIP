@@ -1,6 +1,6 @@
 <div align="center">
 
-<h2>SGIP: Learning Scene-Grounded Interaction Priors<br>for Scene-Aware Human Motion Prediction</h2>
+<h1>SGIP: Learning Scene-Grounded Interaction Priors<br>for Scene-Aware Human Motion Prediction</h1>
 
 <p><strong>NeurIPS 2026</strong></p>
 

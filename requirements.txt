@@ -1,0 +1,6 @@
+# Install the appropriate CUDA build of PyTorch separately (docs/code/setup.md).
+numpy
+pandas
+einops
+smplx
+# PointNet2 and the VPoser v1 snapshot loader require separate installation.

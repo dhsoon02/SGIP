@@ -1,0 +1,46 @@
+{
+  "source_repository": "https://github.com/Yoon-Ji-Il/NeurIPS2026-SGIP",
+  "source_commit": "823c019ce7bd48449ba02bcb2b0ce0d98e03100a",
+  "files": [
+    {
+      "source": "config/config_dual.py",
+      "destination": "configs/motion.py",
+      "source_sha256": "9cec151c2418f01cd5225d89e6206f434da52033a179762378723e45df21b2db"
+    },
+    {
+      "source": "dataset/gimo_dataset_dual.py",
+      "destination": "datasets/gimo.py",
+      "source_sha256": "2fad1311910945cac945bb732e67fb921f391975fd04cd934ff659e01a4925b1"
+    },
+    {
+      "source": "eval_dual.py",
+      "destination": "evaluate.py",
+      "source_sha256": "d72a306ced83b729cec7e18f4df1e5b328f0f9a9241713b57dc4fda2e8e332d4"
+    },
+    {
+      "source": "model/base_cross_model.py",
+      "destination": "models/base_cross_model.py",
+      "source_sha256": "3262b828b2b35494ac35b72fede22c9afaa815848550d3baccf37c6489c69c60"
+    },
+    {
+      "source": "model/gcn.py",
+      "destination": "models/gcn.py",
+      "source_sha256": "bae6fc28c9d3a06f1d6f9c12571a81ae7a6f927d348d8597ebc2c87c3082eb21"
+    },
+    {
+      "source": "model/pointnet_plus2.py",
+      "destination": "models/pointnet_plus2.py",
+      "source_sha256": "627b6c362596733219dfab56afd98f9668f8fbe79dbf373d54053beaea4cdad7"
+    },
+    {
+      "source": "model/sif3d_final.py",
+      "destination": "models/sgip.py",
+      "source_sha256": "3d2bb035d96dfd606d646c1d6ace4570cff9f526b8dfdc61b816b41298ed8d75"
+    },
+    {
+      "source": "utils/vis_utils.py",
+      "destination": "utils/vis_utils.py",
+      "source_sha256": "787a5f012c9586c7b5f07ac0ab288ce29698f745ed7183dbc5939fe9c5a8284c"
+    }
+  ]
+}

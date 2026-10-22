@@ -7,3 +7,32 @@ __pycache__/
 *.blg
 *.out
 *.synctex.gz
+
+# Local data, checkpoints, and generated predictions
+*.pth
+*.pt
+*.ckpt
+*.safetensors
+*.pkl
+*.pickle
+*.npy
+*.npz
+/data/
+/checkpoints/
+/pretrained_models/
+/vposer_v1_0/
+/runs/
+/results/
+/outputs/
+
+# Local environment and test artifacts
+.env
+.env.*
+*.pem
+*.key
+.pytest_cache/
+.ruff_cache/
+*.py[cod]
+*.egg-info/
+build/
+dist/

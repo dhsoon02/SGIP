@@ -36,14 +36,38 @@ teacher to an observation-only student, with **no gaze, textual intent, or LLM a
 ## 📢 News
 
 - 🎉 SGIP is accepted to **NeurIPS 2026!** See you in Sydney!
-- **Code release:** Code and pretrained checkpoints will be released soon. Please ⭐ star or watch this repository for updates.
+- **Code release:** Core motion inference and evaluation code is now available. Pretrained checkpoints, final training recipes, and the interaction-prior pipeline will be released after cleanup. Please ⭐ star or watch this repository for updates.
 
 ## 🗂️ Release Plan
 
-- [ ] Inference code
+- [x] Core motion inference and evaluation code
+- [x] Setup and input/output documentation
 - [ ] Pretrained checkpoints
-- [ ] Training code
-- [ ] Data preprocessing and evaluation instructions
+- [ ] Final teacher/student training code and configurations
+- [ ] Interaction-prior generation and data preprocessing
+
+## Code
+
+This initial release provides the motion model and tools for inference and
+evaluation on prepared inputs. **Checkpoints are not included yet.** The
+selected-region point clouds must already be available; the final prior
+generation and training pipeline will follow.
+
+| Entry point | Purpose |
+| --- | --- |
+| [`predict.py`](predict.py) | Predict future motion from observed inputs |
+| [`evaluate.py`](evaluate.py) | Evaluate a compatible checkpoint |
+| [`models/`](models/) | Motion model, attention blocks, and backbones |
+| [`datasets/`](datasets/) | Prepared GIMO-format cache loader |
+
+Start with **[Setup](docs/code/setup.md)** → **[Input data](docs/code/data.md)**
+→ **[Inference and evaluation](docs/code/inference.md)**.
+See [release scope](docs/code/release.md) for included components and provenance.
+
+```bash
+python predict.py --help
+python evaluate.py --help
+```
 
 ## 📖 Citation
 

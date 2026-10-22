@@ -16,6 +16,7 @@
 <p>
   <a href="docs/paper.pdf"><img alt="Paper PDF" src="https://img.shields.io/badge/Paper-PDF-2f80ed?style=flat-square"></a>
   <a href="https://sgip2026.github.io/"><img alt="Project Page" src="https://img.shields.io/badge/Project-Page-2ea44f?style=flat-square"></a>
+  <a href="docs/images/SGIP_Poster_Preview.png"><img alt="Poster Preview" src="https://img.shields.io/badge/Poster-Preview-75529b?style=flat-square"></a>
   <a href="https://neurips.cc/virtual/2026/loc/sydney/poster/152697"><img alt="NeurIPS 2026" src="https://img.shields.io/badge/NeurIPS-2026-6843b5?style=flat-square"></a>
 </p>
 
@@ -43,6 +44,16 @@ teacher to an observation-only student, with **no gaze, textual intent, or LLM a
 - [ ] Pretrained checkpoints
 - [ ] Training code
 - [ ] Data preprocessing and evaluation instructions
+
+## Poster
+
+<p align="center">
+  <a href="docs/images/SGIP_Poster_Preview.png">
+    <img src="docs/images/SGIP_Poster_Preview.png" alt="SGIP NeurIPS 2026 poster presenting motivation, contributions, method, results, and ablation studies" width="100%">
+  </a>
+</p>
+
+[View full-resolution poster](docs/images/SGIP_Poster_Preview.png).
 
 ## 📖 Citation
 

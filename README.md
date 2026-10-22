@@ -34,8 +34,8 @@ teacher to an observation-only student, with **no gaze, textual intent, or LLM a
 
 ## 📢 News
 
-- 🎉 SGIP is accepted to **[NeurIPS 2026](https://neurips.cc/virtual/2026/loc/sydney/poster/152697)!** See you in Sydney!
-- **Code release:** 🚧 Code and pretrained checkpoints will be released soon. Please ⭐ star or watch this repository for updates.
+- 🎉 SGIP is accepted to **NeurIPS 2026!** See you in Sydney!
+- **Code release:** Code and pretrained checkpoints will be released soon. Please ⭐ star or watch this repository for updates.
 
 ## 🗂️ Release Plan
 

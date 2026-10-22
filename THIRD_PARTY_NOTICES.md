@@ -1,5 +1,12 @@
 # Third-party dependencies and attribution
 
+- Setup and dataset documentation reference
+  [GIMO](https://github.com/y-zheng18/GIMO) and
+  [SIF3D](https://github.com/kjle6/SIF3D-master), including their coordinate
+  conventions and PointNet++ compatibility instructions. The GIMO dataset is
+  obtained through its [official access process](https://github.com/y-zheng18/GIMO#dataset).
+  Raw and processed dataset files are not redistributed here.
+
 - `models/pointnet_plus2.py` acknowledges code from
   [Erik Wijmans' Pointnet2_PyTorch](https://github.com/erikwijmans/Pointnet2_PyTorch).
   Install that project's Python package and compiled operations separately.

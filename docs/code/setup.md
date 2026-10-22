@@ -8,8 +8,13 @@ checkpoint and prepared inputs.
 
 ## Environment
 
-Use Python 3.10 or newer in a separate environment. Install a CUDA-enabled
-PyTorch build appropriate for your machine using the
+The setup follows the public [GIMO](https://github.com/y-zheng18/GIMO#quickstart)
+and [SIF3D](https://github.com/kjle6/SIF3D-master#setup) environments. Use a
+separate environment with versions compatible with their legacy PointNet2 and
+VPoser interfaces. An exact GPU environment lock will accompany the confirmed
+checkpoint release.
+
+Install a CUDA-enabled PyTorch build appropriate for your machine using the
 [official PyTorch instructions](https://pytorch.org/get-started/locally/), then:
 
 ```bash
@@ -18,29 +23,82 @@ cd SGIP
 python -m pip install -r requirements.txt
 ```
 
-Two external dependencies require additional setup:
+## PointNet++
 
-1. **PointNet2:** install both `pointnet2_ops` and the `pointnet2` Python
-   package from [Pointnet2_PyTorch](https://github.com/erikwijmans/Pointnet2_PyTorch).
-   The backbone inherits `PointNet2ClassificationSSG` and uses compiled CUDA
-   operations. A CPU-only PyTorch installation cannot run the full model.
-2. **VPoser and SMPL-X:** install a compatible
-   [human_body_prior](https://github.com/nghorbani/human_body_prior) version
-   that exposes `human_body_prior.tools.model_loader.load_vposer`. Obtain the
-   complete **VPoser v1.0 snapshot** and **neutral SMPL-X NPZ model** from the
-   [SMPL-X project](https://smpl-x.is.tue.mpg.de/). These assets are not included.
-
-The upstream code uses legacy PointNet2/VPoser interfaces. The requirements
-file lists direct dependencies; it is not a verified full GPU environment
-lock. Use the dependency versions matching your checkpoint. In particular,
-the upstream research VPoser snapshot includes a rotation-conversion
-compatibility adjustment; an arbitrary newer VPoser model is not a substitute.
-
-Check the installed interfaces before inference:
+SGIP needs both the compiled `pointnet2_ops` extension and the `pointnet2`
+Python package: its backbone inherits `PointNet2ClassificationSSG`.
+Start from [Pointnet2_PyTorch](https://github.com/erikwijmans/Pointnet2_PyTorch)
+(the [o2oafford setup](https://github.com/daerduoCarey/o2oafford/tree/main/exps)
+is the reference linked by GIMO and SIF3D):
 
 ```bash
-python -c "import pointnet2_ops; from pointnet2.models.pointnet2_ssg_cls import PointNet2ClassificationSSG"
+# Run from the SGIP repository root.
+git clone --recursive https://github.com/erikwijmans/Pointnet2_PyTorch ../Pointnet2_PyTorch
+cd ../Pointnet2_PyTorch
+```
+
+Before building, apply the two compatibility edits described by GIMO/SIF3D.
+Locate the code by function rather than by the line numbers in older READMEs:
+
+1. In
+   [`sampling_gpu.cu`](https://github.com/erikwijmans/Pointnet2_PyTorch/blob/master/pointnet2_ops_lib/pointnet2_ops/_ext-src/src/sampling_gpu.cu),
+   find `furthest_point_sampling_kernel` and disable the magnitude check that
+   skips points near the origin:
+
+   ```cpp
+   // float mag = (x2 * x2) + (y2 * y2) + (z2 * z2);
+   // if (mag <= 1e-3) continue;
+   ```
+
+2. In
+   [`pointnet2_modules.py`](https://github.com/erikwijmans/Pointnet2_PyTorch/blob/master/pointnet2_ops_lib/pointnet2_ops/pointnet2_modules.py),
+   find `PointnetFPModule.forward`. In the `known is None` branch, replace
+   the `known_feats.expand(...)` expression with:
+
+   ```python
+   interpolated_feats = known_feats.repeat(1, 1, unknown.shape[1])
+   ```
+
+   Keep the three-neighbor interpolation in the `known is not None` branch.
+
+Then install the extension and Python package from that checkout:
+
+```bash
+python -m pip install -r requirements.txt
+python -m pip install -e .
+cd ../SGIP
+```
+
+These commands use PointNet2's own requirements, which include legacy
+Lightning/Hydra versions. Installing only `pointnet2_ops` is insufficient.
+Use a CUDA toolkit/compiler compatible with your PyTorch installation.
+Check which module is imported before inference:
+
+```bash
+python -c "import pointnet2_ops.pointnet2_modules as m; print(m.__file__)"
+python -c "from pointnet2.models.pointnet2_ssg_cls import PointNet2ClassificationSSG"
+```
+
+The imported module should contain the edits above. Changes to CUDA source
+require rebuilding the extension. Full GPU compatibility of this installation
+has not yet been validated against a released SGIP checkpoint.
+
+## VPoser and SMPL-X
+
+Install a compatible [human_body_prior](https://github.com/nghorbani/human_body_prior)
+version exposing `human_body_prior.tools.model_loader.load_vposer` and the
+[SMPL-X Python package](https://github.com/vchoutas/smplx) (included in our
+`requirements.txt`). Obtain the complete **VPoser v1.0 snapshot** and
+**neutral SMPL-X NPZ model** through the [SMPL-X project](https://smpl-x.is.tue.mpg.de/).
+The model assets are separate downloads and are not bundled here.
+
+The research VPoser snapshot includes a rotation-conversion compatibility
+adjustment; use the snapshot matching your checkpoint. A newer VPoser model
+with a different interface cannot be substituted directly.
+
+```bash
 python -c "from human_body_prior.tools.model_loader import load_vposer"
+python -c "import smplx"
 ```
 
 ## External assets

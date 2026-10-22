@@ -46,28 +46,113 @@ teacher to an observation-only student, with **no gaze, textual intent, or LLM a
 - [ ] Final teacher/student training code and configurations
 - [ ] Interaction-prior generation and data preprocessing
 
-## Code
+## Setup
 
-This initial release provides the motion model and tools for inference and
-evaluation on prepared inputs. **Checkpoints are not included yet.** The
-selected-region point clouds must already be available; the final prior
-generation and training pipeline will follow.
+Our environment and data conventions build on
+[GIMO](https://github.com/y-zheng18/GIMO) and
+[SIF3D](https://github.com/kjle6/SIF3D-master).
 
-| Entry point | Purpose |
+Install a CUDA-enabled [PyTorch](https://pytorch.org/get-started/locally/) build
+for your machine, then install the Python dependencies:
+
+```bash
+git clone https://github.com/dhsoon02/SGIP.git
+cd SGIP
+python -m pip install -r requirements.txt
+```
+
+Install **PointNet++**, **VPoser**, and **SMPL-X** following our
+[setup guide](docs/code/setup.md). It includes the PointNet++ compatibility
+edits used by GIMO/SIF3D and the required body-model assets.
+
+## Dataset
+
+### Download GIMO
+
+Request the raw dataset through the official
+[GIMO download instructions](https://github.com/y-zheng18/GIMO#dataset).
+Please follow the dataset's usage agreement. Raw data and processed dataset
+files are not distributed in this repository.
+
+The download contains `dataset.csv`, scene scans, and per-sequence motion
+files. See the [official data description](https://github.com/y-zheng18/GIMO/blob/main/demo_data/README.md)
+for their organization and our [data guide](docs/code/data.md) for the files
+used by SGIP.
+
+### Prepare SGIP inputs
+
+The released motion model uses **6 observed frames and 10 future frames at
+2 fps**. Evaluation expects the following prepared caches:
+
+```text
+data/GIMO/
+├── dataset.csv
+└── SLICES_888s/test/
+    ├── poses_input.pth
+    ├── poses_label.pth
+    ├── joints_input.pth
+    ├── joints_label.pth
+    ├── scene_points_32768.pth
+    ├── student_object_points.pth
+    └── student_object_points_mask.pth
+```
+
+SGIP additionally needs the **student-selected region points and validity
+mask**. Gaze files are not used by the released motion model. Motion, scene,
+and region caches must have matching sample order and coordinates.
+
+**The current loader reads prepared caches.** Automatic raw-data preprocessing
+and interaction-prior generation will be released with the confirmed pipeline.
+The [data guide](docs/code/data.md#using-existing-gimo-or-sif3d-caches) explains
+what to check when starting from GIMO/SIF3D data.
+
+## Quickstart
+
+**Pretrained SGIP checkpoints are coming later.** The examples below require
+a compatible SGIP checkpoint, body-model assets, and prepared inputs. Checkpoint
+paths are placeholders for your local files.
+
+### Evaluation
+
+```bash
+python evaluate.py \
+  --dataroot /path/to/GIMO \
+  --checkpoint /path/to/sgip_motion.pth \
+  --smplx_path /path/to/body_models \
+  --vposer_path /path/to/vposer_v1_0 \
+  --output results/gimo_metrics.json
+```
+
+### Inference
+
+Create an observed-input tensor bundle as described in the
+[inference guide](docs/code/inference.md), then run:
+
+```bash
+python predict.py \
+  --input data/observed_inputs.pt \
+  --output outputs/predictions.pt \
+  --checkpoint /path/to/sgip_motion.pth \
+  --smplx_path /path/to/body_models \
+  --vposer_path /path/to/vposer_v1_0
+```
+
+Training scripts, final configurations, and interaction-prior generation will
+follow. See the [release scope](docs/code/release.md) for the current coverage.
+
+| Code | Purpose |
 | --- | --- |
-| [`predict.py`](predict.py) | Predict future motion from observed inputs |
-| [`evaluate.py`](evaluate.py) | Evaluate a compatible checkpoint |
+| [`predict.py`](predict.py) / [`evaluate.py`](evaluate.py) | Inference and evaluation |
 | [`models/`](models/) | Motion model, attention blocks, and backbones |
 | [`datasets/`](datasets/) | Prepared GIMO-format cache loader |
 
-Start with **[Setup](docs/code/setup.md)** → **[Input data](docs/code/data.md)**
-→ **[Inference and evaluation](docs/code/inference.md)**.
-See [release scope](docs/code/release.md) for included components and provenance.
+## Acknowledgements
 
-```bash
-python predict.py --help
-python evaluate.py --help
-```
+We thank the authors of [GIMO](https://github.com/y-zheng18/GIMO),
+[SIF3D](https://github.com/kjle6/SIF3D-master), and
+[PointNet++](https://github.com/erikwijmans/Pointnet2_PyTorch) for their public
+implementations and documentation. See [third-party notices](THIRD_PARTY_NOTICES.md)
+for additional dependencies.
 
 ## 📖 Citation
 

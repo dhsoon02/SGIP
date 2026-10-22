@@ -45,16 +45,6 @@ teacher to an observation-only student, with **no gaze, textual intent, or LLM a
 - [ ] Training code
 - [ ] Data preprocessing and evaluation instructions
 
-## Poster
-
-<p align="center">
-  <a href="docs/images/SGIP_Poster_Preview.png">
-    <img src="docs/images/SGIP_Poster_Preview.png" alt="SGIP NeurIPS 2026 poster presenting motivation, contributions, method, results, and ablation studies" width="100%">
-  </a>
-</p>
-
-[View full-resolution poster](docs/images/SGIP_Poster_Preview.png).
-
 ## 📖 Citation
 
 ```bibtex

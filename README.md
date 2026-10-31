@@ -154,6 +154,12 @@ We thank the authors of [GIMO](https://github.com/y-zheng18/GIMO),
 implementations and documentation. See [third-party notices](THIRD_PARTY_NOTICES.md)
 for additional dependencies.
 
+## License
+
+Code written by the SGIP authors is released under the [MIT License](LICENSE).
+Files adapted from third-party projects remain subject to their original terms;
+see the [third-party notices](THIRD_PARTY_NOTICES.md).
+
 ## 📖 Citation
 
 ```bibtex

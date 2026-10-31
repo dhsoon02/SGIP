@@ -17,5 +17,6 @@
 - Dataset assets and prepared scene/object caches are external inputs.
   Obtain them from their providers and follow their terms.
 
-Existing attribution in source files is preserved. No new repository-wide
-license is assigned by this source-packaging step.
+Existing attribution in source files is preserved. Code written by the SGIP
+authors is released under the MIT License (see [LICENSE](LICENSE)); the
+third-party components listed above remain subject to their original terms.
